@@ -1,0 +1,2039 @@
+RCSTM8 COMPILER V2.26.09.317,  HYPERTERMINAL      02/16/10  16:40:06
+
+QCW(0x009638A0)
+
+RCSTM8 COMPILER V2.26.09.317, COMPILATION OF MODULE HYPERTERMINAL
+OBJECT MODULE PLACED IN Debug\hyperterminal.o
+COMPILER INVOKED BY: OBJECT(Debug\hyperterminal.o) PIN(C:\Program Files\Raisonance\Ride\inc\ST7) PIN(C:\Program Files\Raisonance\Ride\inc) WRV(0) STM8(SMALL) DEBUG DGC(page0) AUTO OT(0) PR(Debug\hyperterminal.lst) CD CO SB LAOB PIN(..\..\includes) PIN(..\..\..\..\libraries\stm8s_stdperiph_driver\inc) 
+
+stmt level    source
+   1          /******************** (C) COPYRIGHT 2009 STMicroelectronics ********************
+   2          * File Name          : hyperterminal.c
+   3          * Author             : MCD Application Team
+   4          * Date First Issued  : 10/25/2004
+   5          * Description        : This file provides all the Hyperterminal driver functions.
+   6          ********************************************************************************
+   7          * History:
+   8          *  09/15/2006 : Hyperterminal V1.00
+   9          ********************************************************************************
+  10          * THE PRESENT SOFTWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
+  11          * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE TIME.
+  12          * AS A RESULT, STMICROELECTRONICS SHALL NOT BE HELD LIABLE FOR ANY DIRECT,
+  13          * INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING FROM THE
+  14          * CONTENT OF SUCH SOFTWARE AND/OR THE USE MADE BY CUSTOMERS OF THE CODING
+  15          * INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
+  16          *******************************************************************************/
+  17          
+  18          /* Includes ------------------------------------------------------------------*/
+  19          #include "hyperterminal.h"
+  20          #include "stm8s.h"
+  21          /* Private typedef -----------------------------------------------------------*/
+  22          /* Private define ------------------------------------------------------------*/
+  23          /* Private macro -------------------------------------------------------------*/
+  24          /* Private variables ---------------------------------------------------------*/
+  25          /* Private function prototypes -----------------------------------------------*/
+  26          /* Private functions ---------------------------------------------------------*/
+  27          
+  28          
+  29          /*******************************************************************************
+  30          * Function Name  : Int2Str
+  31          * Description    : Convert an Integer to a string
+  32          * Input          : - str: The string
+  33          *                  - intnum: The intger to be converted
+  34          * Output         : None
+  35          * Return         : None
+  36          *******************************************************************************/
+  37          void Int2Str(char *str, u32 intnum)
+  38          {
+  39   1          int i, Div = 1000000000, j = 0, Status = 0;
+  40   1          for (i = 0; i < 10; i++)
+  41   1          {
+  42   2              str[j++] = (intnum / Div) + 48;
+  43   2              intnum = intnum % Div;
+  44   2              Div /= 10;
+  45   2              if ((str[j-1] == '0') & (Status == 0))
+  46   2              {
+  47   3                  j = 0;
+  48   3              }
+  49   2              else
+  50   2              {
+  51   3                  Status++;
+  52   3              }
+  53   2          }
+  54   1      }
+  55          
+  56          /*******************************************************************************
+  57          * Function Name  : Str2Int
+  58          * Description    : Convert a string to an integer
+  59          * Input 1        : - inputstr: The string to be converted
+  60          *                  - intnum: The intger value
+  61          * Output         : None
+  62          * Return         : 1: Correct
+  63          *                  0: Error
+  64          *******************************************************************************/
+  65          u8 Str2Int(char *inputstr, u32 *intnum)
+  66          {
+  67   1          u8 i = 0, res = 0;
+  68   1          u32 val = 0;
+  69   1          if (inputstr[0] == '0' && (inputstr[1] == 'x' || inputstr[1] == 'X'))
+  70   1          {
+  71   2              if (inputstr[2] == '\0')
+  72   2              {
+  73   3                  return 0;
+  74   3              }
+  75   2              for (i = 2; i < 11; i++)
+  76   2              {
+  77   3                  if (inputstr[i] == '\0')
+  78   3                  {
+  79   4                      *intnum = val;
+  80   4                      res = 1; /* return 1; */
+  81   4                      break;
+  82   4                  }
+  83   3                  if (ISVALIDHEX(inputstr[i]))
+  84   3                  {
+  85   4                      val = (val << 4) + CONVERTHEX(inputstr[i]);
+  86   4                  }
+  87   3                  else
+  88   3                  {
+  89   4                      /* return 0; Invalid input */
+  90   4                      res = 0;
+  91   4                      break;
+  92   4                  }
+  93   3              }
+  94   2              if (i >= 11) res = 0; /* over 8 digit hex --invalid */
+  95   2          }
+  96   1          else /* max 10-digit decimal input */
+  97   1          {
+  98   2              for (i = 0;i < 11;i++)
+  99   2              {
+ 100   3                  if (inputstr[i] == '\0')
+ 101   3                  {
+ 102   4                      *intnum = val;
+ 103   4                      /* return 1; */
+ 104   4                      res = 1;
+ 105   4                      break;
+ 106   4                  }
+ 107   3                  else if ((inputstr[i] == 'k' || inputstr[i] == 'K') && (i > 0))
+ 108   3                  {
+ 109   4                      val = val << 10;
+ 110   4                      *intnum = val;
+ 111   4                      res = 1;
+ 112   4                      break;
+ 113   4                  }
+ 114   3                  else if ((inputstr[i] == 'm' || inputstr[i] == 'M') && (i > 0))
+ 115   3                  {
+ 116   4                      val = val << 20;
+ 117   4                      *intnum = val;
+ 118   4                      res = 1;
+ 119   4                      break;
+ 120   4                  }
+ 121   3                  else if (ISVALIDDEC(inputstr[i]))
+ 122   3                      val = val * 10 + CONVERTDEC(inputstr[i]);
+ 123   3                  else
+ 124   3                  {
+ 125   4                      /* return 0; Invalid input */
+ 126   4                      res = 0;
+ 127   4                      break;
+ 128   4                  }
+ 129   3              }
+ 130   2              if (i >= 11) res = 0; /* Over 10 digit decimal --invalid */
+ 131   2          }
+ 132   1          return res;
+ 133   1      }
+ 134          
+ 135          /*******************************************************************************
+ 136          * Function Name  : GetIntegerInput
+ 137          * Description    : Get an integer from the HyperTerminal
+ 138          * Input          : - num: The inetger
+ 139          * Output         : None
+ 140          * Return         : 1: Correct
+ 141          *                  0: Error
+ 142          *******************************************************************************/
+ 143          u8 GetIntegerInput(u32 *num)
+ 144          {
+ 145   1          char inputstr[16];
+ 146   1          while (1)
+ 147   1          {
+ 148   2              GetInputString(inputstr);
+ 149   2              if (inputstr[0] == '\0') continue;
+ 150   2              if ((inputstr[0] == 'a' || inputstr[0] == 'A') && inputstr[1] == '\0')
+ 151   2              {
+ 152   3                  SerialPutString("User Cancelled \r\n");
+ 153   3                  return 0;
+ 154   3              }
+ 155   2              if (Str2Int(inputstr, num) == 0)
+ 156   2              {
+ 157   3                  SerialPutString("Error, Input again: \r\n");
+ 158   3              }
+ 159   2              else
+ 160   2              {
+ 161   3                  return 1;
+ 162   3              }
+ 163   2          }
+ 164   1      }
+ 165          
+ 166          /*******************************************************************************
+ 167          * Function Name  : SerialKeyPressed
+ 168          * Description    : Test to see if a key has been pressed on the HyperTerminal
+ 169          * Input          : - key: The key pressed
+ 170          * Output         : None
+ 171          * Return         : 1: Correct
+ 172          *                  0: Error
+ 173          *******************************************************************************/
+ 174          u8 SerialKeyPressed(char *key)
+ 175          {
+ 176   1      	FlagStatus flag  ;
+ 177   1      	/* First clear Rx buffer */
+ 178   1      	flag = UART2_GetFlagStatus(UART2_FLAG_RXNE);
+ 179   1      	if ( flag == SET)
+ 180   1      	{
+ 181   2      		*key = (char)UART2->DR;
+ 182   2      		return 1;
+ 183   2      	}
+ 184   1      	else
+ 185   1      	{
+ 186   2      		return 0;
+ 187   2      	}
+ 188   1      }
+ 189          
+ 190          /*******************************************************************************
+ 191          * Function Name  : GetKey
+ 192          * Description    : Get a key from the HyperTerminal
+ 193          * Input          : None
+ 194          * Output         : None
+ 195          * Return         : The Key Pressed
+ 196          *******************************************************************************/
+ 197          char GetKey(void)
+ 198          {
+ 199   1      	char key = 0;
+ 200   1      	/* Waiting for user input */
+ 201   1      	while (1)
+ 202   1      	{
+ 203   2      		if (SerialKeyPressed((char*)&key)) break;
+ 204   2      	}
+ 205   1      	return key;
+ 206   1      }
+ 207          
+ 208          /*******************************************************************************
+ 209          * Function Name  : SerialPutChar
+ 210          * Description    : Print a character on the HyperTerminal
+ 211          * Input          : - c: The character to be printed
+ 212          * Output         : None
+ 213          * Return         : None
+ 214          *******************************************************************************/
+ 215          void SerialPutChar(char c)
+ 216          {
+ 217   1          UART2_SendData8(c);
+ 218   1          while ((UART2->SR & UART2_SR_TXE ) != UART2_SR_TXE );
+ 219   1      }
+ 220          
+ 221          /*******************************************************************************
+ 222          * Function Name  : SerialPutString
+ 223          * Description    : Print a string on the HyperTerminal
+ 224          * Input          : - s: The string to be printed
+ 225          * Output         : None
+ 226          * Return         : None
+ 227          *******************************************************************************/
+ 228          void SerialPutString(char *s)
+ 229          {
+ 230   1      	while (*s != '\0')
+ 231   1      	{
+ 232   2      		SerialPutChar(*s);
+ 233   2      		s ++;
+ 234   2      	}
+ 235   1      }
+ 236          
+ 237          /*******************************************************************************
+ 238          * Function Name  : GetInputString
+ 239          * Description    : Get Input string from the HyperTerminal
+ 240          * Input          : - buffP: The input string
+ 241          * Output         : None
+ 242          * Return         : None
+ 243          *******************************************************************************/
+ 244          void GetInputString (char *buffP)
+ 245          {
+ 246   1      	int bytes_read = 0;
+ 247   1      	char c = 0;
+ 248   1      	do
+ 249   1      	{
+ 250   2      		c = GetKey();
+ 251   2      		if (c == '\r')
+ 252   2            break;
+ 253   2          if (c == '\b') /* Backspace */
+ 254   2          {
+ 255   3            if (bytes_read > 0)
+ 256   3            {
+ 257   4              SerialPutString("\b \b");
+ 258   4              bytes_read --;
+ 259   4            }
+ 260   3            continue;
+ 261   3          }
+ 262   2          if (bytes_read >= CMD_STRING_SIZE )
+ 263   2          {
+ 264   3            SerialPutString("Command string size overflow\r\n");
+ 265   3            bytes_read = 0;
+ 266   3            continue;
+ 267   3          }
+ 268   2          if (c >= 0x20 && c <= 0x7E)
+ 269   2          {
+ 270   3            buffP[bytes_read++] = c;
+ 271   3            SerialPutChar(c);
+ 272   3      		}
+ 273   2      	}
+ 274   1        while (1);
+ 275   1        SerialPutString("\n\r");
+ 276   1        buffP[bytes_read] = '\0';
+ 277   1      }
+ 278          
+ 279          
+ 280          /*******************************************************************************
+ 281          * Function Name  : Main_Menu
+ 282          * Description    : Display/Manage a Menu on HyperTerminal Window
+ 283          * Input          : None
+ 284          * Output         : None
+ 285          * Return         : None
+ 286          *******************************************************************************/
+ 287          void Main_Menu(void)
+ 288          {
+ 289   1      	char choice [70];
+ 290   1      	char msg [70];
+ 291   1      	bool bTreat;
+ 292   1      	bool freq_error = RESET;
+ 293   1      	u8 freq;
+ 294   1      	u32 freq_choice;
+ 295   1        while (1)
+ 296   1        {
+ 297   2      		/* Display Menu on HyperTerminal Window */
+ 298   2      		bTreat = RESET ;
+ 299   2          SerialPutString("\r\n====================== STM8S-Discovery ===================\r\n");
+ 300   2      		SerialPutString("This Application is basic example of UART interface with\r\n");
+ 301   2      		SerialPutString("Windows Hyper Terminal. \r\n");
+ 302   2      		SerialPutString("\r\n==========================================================\r\n");
+ 303   2      		SerialPutString("                          APPLICATION MENU :\r\n");
+ 304   2      		SerialPutString("\r\n==========================================================\r\n\n");
+ 305   2      		SerialPutString(" 1 - Set LD1 on \r\n");
+ 306   2      		SerialPutString(" 2 - Set LD1 off \r\n");
+ 307   2      		SerialPutString(" 3 - Set LD1 blink \r\n");
+ 308   2      		SerialPutString(" 4 - BEEPER ON \r\n");
+ 309   2      		SerialPutString(" 5 - BEEPER OFF \r\n\n");
+ 310   2      		SerialPutString("Enter your choice : ");
+ 311   2      		GetInputString(choice);
+ 312   2      	   /* Set LD1 on */
+ 313   2      		if (strcmp(choice,"1")== 0)
+ 314   2      		{
+ 315   3      		  bTreat = SET;
+ 316   3      			/* Disable TIM3 */
+ 317   3      			TIM3_Cmd(DISABLE);
+ 318   3      			GPIO_WriteLow(GPIOD, 0x01 );
+ 319   3      		}
+ 320   2      		/* Set LD1 off */
+ 321   2      		if ((strcmp(choice,"2") == 0))
+ 322   2      		{
+ 323   3      		  bTreat = SET;
+ 324   3      			/* Disable TIM3 */
+ 325   3      			TIM3_Cmd(DISABLE);
+ 326   3      			GPIO_WriteHigh(GPIOD, 0x01 );
+ 327   3      		}
+ 328   2      		/* Set LD1 blink */
+ 329   2      		if (strcmp(choice,"3") == 0)
+ 330   2      		{
+ 331   3      		  bTreat = SET;
+ 332   3      			/* Enable TIM3 */
+ 333   3      			TIM3_Cmd(ENABLE);
+ 334   3      		}
+ 335   2      		/* BEEPER ON */
+ 336   2      		if (strcmp(choice,"4") == 0)
+ 337   2      		{
+ 338   3      		  bTreat = SET;
+ 339   3      			freq_error = RESET ;
+ 340   3      			SerialPutString("\r\nPlease select a BEEP frequency :\r\n");
+ 341   3      			SerialPutString("1 -  1KHz\r\n");
+ 342   3      			SerialPutString("2 -  2KHz\r\n");
+ 343   3      			SerialPutString("3 -  4KHz\r\n");
+ 344   3      			SerialPutString("Choice : ");
+ 345   3      			GetIntegerInput(&freq_choice);
+ 346   3      			switch(freq_choice)
+ 347   3      			{
+ 348   4      				case 1 : freq = 0; break;
+ 349   4      				case 2 : freq = 64; break;
+ 350   4      				case 3 : freq = 128; break;
+ 351   4      				default : SerialPutString("\n Selection ERROR "); freq_error = SET; break;
+ 352   4      			}
+ 353   3      			if (!freq_error)
+ 354   3      			{
+ 355   4      				BEEP_Cmd(DISABLE);
+ 356   4      				BEEP_Init(freq);
+ 357   4      				BEEP_Cmd(ENABLE);
+ 358   4      			}
+ 359   3      		}
+ 360   2      		/* BEEPER OFF */
+ 361   2      		if (strcmp(choice,"5") == 0)
+ 362   2      		{
+ 363   3      		  bTreat = SET;
+ 364   3      			BEEP_Cmd(DISABLE);
+ 365   3      		}
+ 366   2      		/* OTHERS CHOICE*/
+ 367   2      		if (bTreat == RESET)
+ 368   2      		{
+ 369   3      			SerialPutString(" wrong choice  \r\n");
+ 370   3      		}			
+ 371   2      	} /* While(1)*/
+ 372   1      }/* Main_Menu */
+
+*** WARNING C092 IN LINE 290 OF ..\..\sources\hyperterminal.c : 'msg' is declared but not used
+ 373          
+ 374          /*******************(C)COPYRIGHT 2009 STMicroelectronics *****END OF FILE****/
+ 375          
+ 376          
+ 377          
+RCSTM8 COMPILER V2.26.09.317
+ASSEMBLY LISTING OF GENERATED OBJECT CODE
+
+              ; FUNCTION ?Int2Str (BEGIN)
+              ; Register-parameter str (XW) is relocated (auto)
+              ; SOURCE LINE # 37 
+0000 89                                PUSHW  X
+0001 5208                              SUB    SP,#008H
+              ; SOURCE LINE # 39 
+0003 AECA00                            LDW    X,#0CA00H
+0006 1F03       F                      LDW    (003H,SP),X   ; [ Div ]
+0008 AE0000                            LDW    X,#00000H
+000B 1F05       F                      LDW    (005H,SP),X   ; [ j ]
+000D AE0000                            LDW    X,#00000H
+0010 1F07       F                      LDW    (007H,SP),X   ; [ Status ]
+              ; SOURCE LINE # 40 
+0012 AE0000                            LDW    X,#00000H
+0015 1F01       F                      LDW    (001H,SP),X   ; [ i ]
+0017         ?FOR_0001:
+              ; SOURCE LINE # 42 
+0017 1E03       F                      LDW    X,(003H,SP)   ; [ Div ]
+0019 CD0000     F                      CALL   ?C?inttol
+001C CD0000     F DNF                  CALL   ?C?mv4_bc2sk
+001F 96           DNF                  LDW    X,SP
+0020 1C0011     F                      ADDW   X,#00011H
+0023 CD0000     F DNF                  CALL   ?C?divuix32
+0026 A630                              LD     A,#030H
+0028 BB06       F                      ADD    A,?CL
+002A 1E05       F                      LDW    X,(005H,SP)   ; [ j ]
+002C 5C                                INCW   X
+002D 1F05       F                      LDW    (005H,SP),X   ; [ j ]
+002F 5A                                DECW   X
+0030 72FB09     F                      ADDW   X,(009H,SP)   ; [ str ]
+0033 F7                                LD     (X),A
+              ; SOURCE LINE # 43 
+0034 1E0F       F                      LDW    X,(00FH,SP)   ; [ intnum + 02H ]
+0036 89                                PUSHW  X
+0037 1E0F       F                      LDW    X,(00FH,SP)   ; [ intnum ]
+0039 89                                PUSHW  X
+003A 1E07       F                      LDW    X,(007H,SP)   ; [ Div ]
+003C CD0000     F                      CALL   ?C?inttol
+003F CD0000     F                      CALL   ?C?swap_skbc
+0042 CD0000     F DNF                  CALL   ?C?modu3232
+0045 A60C       F                      LD     A,#00CH
+0047 CD0000     F                      CALL   ?C?mv4_bc2isa
+              ; SOURCE LINE # 44 
+004A 1E03       F                      LDW    X,(003H,SP)   ; [ Div ]
+004C 90AE000A                          LDW    Y,#0000AH
+0050 CD0000     F                      CALL   ?C?divs1616
+0053 1F03       F                      LDW    (003H,SP),X   ; [ Div ]
+              ; SOURCE LINE # 45 
+0055 AE0000                            LDW    X,#00000H
+0058 1307       F                      CPW    X,(007H,SP)   ; [ Status ]
+005A 2604                              JRNE   ?LAB_0004
+005C 5F                                CLRW   X
+005D 5C                                INCW   X
+005E 2001                              JRA    ?LAB_0005
+0060         ?LAB_0004:
+0060 5F                                CLRW   X
+0061         ?LAB_0005:
+0061 89                                PUSHW  X
+0062 1E07       F                      LDW    X,(007H,SP)   ; [ j ]
+0064 1CFFFF                            ADDW   X,#0FFFFH
+0067 72FB0B     F                      ADDW   X,(00BH,SP)   ; [ str ]
+006A A630                              LD     A,#030H
+006C F1                                CP     A,(X)
+006D 2604                              JRNE   ?LAB_0006
+006F 4F                                CLR    A
+0070 4C                                INC    A
+0071 2001                              JRA    ?LAB_0007
+0073         ?LAB_0006:
+0073 4F                                CLR    A
+0074         ?LAB_0007:
+0074 88                                PUSH   A
+0075 B704       F                      LD     ?BL,A
+0077 3F03       F                      CLR    ?BH
+0079 84                                POP    A
+007A 85                                POPW   X
+007B BF03       F                      LDW    ?CH.w,X
+007D B606       F                      LD     A,?CL
+007F B404       F                      AND    A,?BL
+0081 88                                PUSH   A
+0082 B605       F                      LD     A,?CH
+0084 B403       F                      AND    A,?BH
+0086 B703       F                      LD     ?BH,A
+0088 84                                POP    A
+0089 B704       F                      LD     ?BL,A
+008B BE02       F                      LDW    X,?BH.w
+008D 2707                              JREQ   ?ELSE_0001
+008F         ?NXT_0007:
+              ; SOURCE LINE # 47 
+008F AE0000                            LDW    X,#00000H
+0092 1F05       F                      LDW    (005H,SP),X   ; [ j ]
+0094 2005                              JRA    ?NXT_0006
+0096         ?ELSE_0001:
+              ; SOURCE LINE # 51 
+0096 1E07       F                      LDW    X,(007H,SP)   ; [ Status ]
+0098 5C                                INCW   X
+0099 1F07       F                      LDW    (007H,SP),X   ; [ Status ]
+009B         ?NXT_0006:
+
+009B         ?NXT_0005:
+              ; SOURCE LINE # 40 
+009B 1E01       F                      LDW    X,(001H,SP)   ; [ i ]
+009D 5C                                INCW   X
+009E 1F01       F                      LDW    (001H,SP),X   ; [ i ]
+00A0 5A                                DECW   X
+00A1 AE000A                            LDW    X,#0000AH
+00A4 1301       F                      CPW    X,(001H,SP)   ; [ i ]
+00A6 2D03                              JRSLE  ?LAB_0008
+00A8 CC0000     F                      JP     ?FOR_0001
+00AB         ?LAB_0008:
+
+00AB         ?NXT_0004:
+
+00AB         ?EPILOG_0000:
+00AB 5B0A                              ADD    SP,#00AH
+00AD 81                                RET    
+              ; str          pointer to (unsigned char   in )(size=2).  parameter in AUTO
+              ; intnum       unsigned long  (size=4-Alg).  parameter in AUTO
+              ; i            short  (size=2-Alg). Automatic variable  in AUTO
+              ; Div          short  (size=2-Alg). Automatic variable  in AUTO
+              ; j            short  (size=2-Alg). Automatic variable  in AUTO
+              ; Status       short  (size=2-Alg). Automatic variable  in AUTO
+
+              ; FUNCTION ?Int2Str (END)
+
+              ; FUNCTION ?Str2Int (BEGIN)
+              ; Register-parameter inputstr (XW) is relocated (auto)
+              ; SOURCE LINE # 65 
+0000 89                                PUSHW  X
+0001 5206                              SUB    SP,#006H
+              ; SOURCE LINE # 67 
+0003 A600                              LD     A,#000H
+0005 6B01       F                      LD     (001H,SP),A   ; [ i ]
+0007 A600                              LD     A,#000H
+0009 6B02       F                      LD     (002H,SP),A   ; [ res ]
+              ; SOURCE LINE # 68 
+000B 5F                                CLRW   X
+000C 1F03       F                      LDW    (003H,SP),X   ; [ val ]
+000E 1F05       F                      LDW    (005H,SP),X   ; [ val + 02H ]
+              ; SOURCE LINE # 69 
+0010 1E07       F                      LDW    X,(007H,SP)   ; [ inputstr ]
+0012 A630                              LD     A,#030H
+0014 F1                                CP     A,(X)
+0015 2703                              JREQ   ?LAB_0037
+0017 CC0000     F                      JP     ?ELSE_0014
+001A         ?LAB_0037:
+001A 1E07       F                      LDW    X,(007H,SP)   ; [ inputstr ]
+001C 1C0001                            ADDW   X,#00001H
+001F A678                              LD     A,#078H
+0021 F1                                CP     A,(X)
+0022 270D                              JREQ   ?LAB_0024
+0024 1E07       F                      LDW    X,(007H,SP)   ; [ inputstr ]
+0026 1C0001                            ADDW   X,#00001H
+0029 A658                              LD     A,#058H
+002B F1                                CP     A,(X)
+002C 2703                              JREQ   ?LAB_0038
+002E CC0000     F                      JP     ?ELSE_0014
+0031         ?LAB_0038:
+
+0031         ?LAB_0024:
+
+0031         ?LAB_0023:
+              ; SOURCE LINE # 71 
+0031 1E07       F                      LDW    X,(007H,SP)   ; [ inputstr ]
+0033 1C0002                            ADDW   X,#00002H
+0036 7D                                TNZ    (X)
+0037 2605                              JRNE   ?NXT_0025
+              ; SOURCE LINE # 73 
+0039 A600                              LD     A,#000H
+003B CC0000     F                      JP     ?EPILOG_0001
+003E         ?NXT_0025:
+              ; SOURCE LINE # 75 
+003E A602                              LD     A,#002H
+0040 6B01       F                      LD     (001H,SP),A   ; [ i ]
+0042         ?FOR_0004:
+              ; SOURCE LINE # 77 
+0042 5F                                CLRW   X
+0043 7B01       F                      LD     A,(001H,SP)   ; [ i ]
+0045 97                                LD     XL,A
+0046 72FB07     F                      ADDW   X,(007H,SP)   ; [ inputstr ]
+0049 7D                                TNZ    (X)
+004A 2612                              JRNE   ?NXT_0028
+              ; SOURCE LINE # 79 
+004C 1E0B       F                      LDW    X,(00BH,SP)   ; [ intnum ]
+004E 1603       F                      LDW    Y,(003H,SP)   ; [ val ]
+0050 FF                                LDW    (X),Y
+0051 1605       F                      LDW    Y,(005H,SP)   ; [ val + 02H ]
+0053 1C0002                            ADDW   X,#00002H
+0056 FF                                LDW    (X),Y
+              ; SOURCE LINE # 80 
+0057 A601                              LD     A,#001H
+0059 6B02       F                      LD     (002H,SP),A   ; [ res ]
+              ; SOURCE LINE # 81 
+005B CC0000     F                      JP     ?NXT_0026
+005E         ?NXT_0028:
+              ; SOURCE LINE # 83 
+005E 5F                                CLRW   X
+005F 7B01       F                      LD     A,(001H,SP)   ; [ i ]
+0061 97                                LD     XL,A
+0062 72FB07     F                      ADDW   X,(007H,SP)   ; [ inputstr ]
+0065 A641                              LD     A,#041H
+0067 F1                                CP     A,(X)
+0068 220C                              JRUGT  ?LAB_0027
+006A 5F                                CLRW   X
+006B 7B01       F                      LD     A,(001H,SP)   ; [ i ]
+006D 97                                LD     XL,A
+006E 72FB07     F                      ADDW   X,(007H,SP)   ; [ inputstr ]
+0071 A646                              LD     A,#046H
+0073 F1                                CP     A,(X)
+0074 2436                              JRUGE  ?LAB_0025
+0076         ?LAB_0027:
+0076 5F                                CLRW   X
+0077 7B01       F                      LD     A,(001H,SP)   ; [ i ]
+0079 97                                LD     XL,A
+007A 72FB07     F                      ADDW   X,(007H,SP)   ; [ inputstr ]
+007D A661                              LD     A,#061H
+007F F1                                CP     A,(X)
+0080 220C                              JRUGT  ?LAB_0028
+0082 5F                                CLRW   X
+0083 7B01       F                      LD     A,(001H,SP)   ; [ i ]
+0085 97                                LD     XL,A
+0086 72FB07     F                      ADDW   X,(007H,SP)   ; [ inputstr ]
+0089 A666                              LD     A,#066H
+008B F1                                CP     A,(X)
+008C 241E                              JRUGE  ?LAB_0025
+008E         ?LAB_0028:
+
+008E         ?LAB_0026:
+008E 5F                                CLRW   X
+008F 7B01       F                      LD     A,(001H,SP)   ; [ i ]
+0091 97                                LD     XL,A
+0092 72FB07     F                      ADDW   X,(007H,SP)   ; [ inputstr ]
+0095 A630                              LD     A,#030H
+0097 F1                                CP     A,(X)
+0098 2303                              JRULE  ?LAB_0039
+009A CC0000     F                      JP     ?ELSE_0017
+009D         ?LAB_0039:
+009D 5F                                CLRW   X
+009E 7B01       F                      LD     A,(001H,SP)   ; [ i ]
+00A0 97                                LD     XL,A
+00A1 72FB07     F                      ADDW   X,(007H,SP)   ; [ inputstr ]
+00A4 A639                              LD     A,#039H
+00A6 F1                                CP     A,(X)
+00A7 2403                              JRUGE  ?LAB_0040
+00A9 CC0000     F                      JP     ?ELSE_0017
+00AC         ?LAB_0040:
+
+00AC         ?LAB_0029:
+
+00AC         ?LAB_0025:
+              ; SOURCE LINE # 85 
+00AC A602       F                      LD     A,#002H
+00AE CD0000     F DNF                  CALL   ?C?mv4_isa2bc
+00B1 A604                              LD     A,#004H
+00B3 CD0000     F                      CALL   ?C?sll328
+00B6 CD0000     F DNF                  CALL   ?C?mv4_bc2sk
+00B9 5F                                CLRW   X
+00BA 7B05       F                      LD     A,(005H,SP)   ; [ i ]
+00BC 97                                LD     XL,A
+00BD 72FB0B     F                      ADDW   X,(00BH,SP)   ; [ inputstr ]
+00C0 905F                              CLRW   Y
+00C2 F6                                LD     A,(X)
+00C3 9097                              LD     YL,A
+00C5 AE0030                            LDW    X,#00030H
+00C8 90BF02     F                      LDW    ?BH.w,Y
+00CB B302       F                      CPW    X,?BH.w
+00CD 2C28                              JRSGT  ?ELSE_0018
+00CF 5F                                CLRW   X
+00D0 7B05       F                      LD     A,(005H,SP)   ; [ i ]
+00D2 97                                LD     XL,A
+00D3 72FB0B     F                      ADDW   X,(00BH,SP)   ; [ inputstr ]
+00D6 905F                              CLRW   Y
+00D8 F6                                LD     A,(X)
+00D9 9097                              LD     YL,A
+00DB AE0039                            LDW    X,#00039H
+00DE 90BF02     F                      LDW    ?BH.w,Y
+00E1 B302       F                      CPW    X,?BH.w
+00E3 2F12                              JRSLT  ?ELSE_0018
+00E5         ?LAB_0030:
+00E5 5F                                CLRW   X
+00E6 7B05       F                      LD     A,(005H,SP)   ; [ i ]
+00E8 97                                LD     XL,A
+00E9 72FB0B     F                      ADDW   X,(00BH,SP)   ; [ inputstr ]
+00EC 905F                              CLRW   Y
+00EE F6                                LD     A,(X)
+00EF 9097                              LD     YL,A
+00F1 93                                LDW    X,Y
+00F2 1CFFD0                            ADDW   X,#0FFD0H
+00F5 205A                              JRA    ?NXT_0030
+00F7         ?ELSE_0018:
+00F7 5F                                CLRW   X
+00F8 7B05       F                      LD     A,(005H,SP)   ; [ i ]
+00FA 97                                LD     XL,A
+00FB 72FB0B     F                      ADDW   X,(00BH,SP)   ; [ inputstr ]
+00FE 905F                              CLRW   Y
+0100 F6                                LD     A,(X)
+0101 9097                              LD     YL,A
+0103 AE0041                            LDW    X,#00041H
+0106 90BF02     F                      LDW    ?BH.w,Y
+0109 B302       F                      CPW    X,?BH.w
+010B 2C2E                              JRSGT  ?ELSE_0019
+010D 5F                                CLRW   X
+010E 7B05       F                      LD     A,(005H,SP)   ; [ i ]
+0110 97                                LD     XL,A
+0111 72FB0B     F                      ADDW   X,(00BH,SP)   ; [ inputstr ]
+0114 905F                              CLRW   Y
+0116 F6                                LD     A,(X)
+0117 9097                              LD     YL,A
+0119 AE0046                            LDW    X,#00046H
+011C 90BF02     F                      LDW    ?BH.w,Y
+011F B302       F                      CPW    X,?BH.w
+0121 2F18                              JRSLT  ?ELSE_0019
+0123         ?LAB_0031:
+0123 5F                                CLRW   X
+0124 7B05       F                      LD     A,(005H,SP)   ; [ i ]
+0126 97                                LD     XL,A
+0127 72FB0B     F                      ADDW   X,(00BH,SP)   ; [ inputstr ]
+012A 905F                              CLRW   Y
+012C F6                                LD     A,(X)
+012D 9097                              LD     YL,A
+012F AEFFC9                            LDW    X,#0FFC9H
+0132 BF02       F                      LDW    ?BH.w,X
+0134 72B90002   F                      ADDW   Y,?BH.w
+0138 93                                LDW    X,Y
+0139 2016                              JRA    ?NXT_0031
+013B         ?ELSE_0019:
+013B 5F                                CLRW   X
+013C 7B05       F                      LD     A,(005H,SP)   ; [ i ]
+013E 97                                LD     XL,A
+013F 72FB0B     F                      ADDW   X,(00BH,SP)   ; [ inputstr ]
+0142 905F                              CLRW   Y
+0144 F6                                LD     A,(X)
+0145 9097                              LD     YL,A
+0147 AEFFA9                            LDW    X,#0FFA9H
+014A BF02       F                      LDW    ?BH.w,X
+014C 72B90002   F                      ADDW   Y,?BH.w
+0150 93                                LDW    X,Y
+0151         ?NXT_0031:
+
+0151         ?NXT_0030:
+0151 CD0000     F                      CALL   ?C?inttol
+0154 CD0000     F DNF                  CALL   ?C?add3232
+0157 A602       F                      LD     A,#002H
+0159 CD0000     F                      CALL   ?C?mv4_bc2isa
+015C 2006                              JRA    ?NXT_0029
+015E         ?ELSE_0017:
+              ; SOURCE LINE # 90 
+015E A600                              LD     A,#000H
+0160 6B02       F                      LD     (002H,SP),A   ; [ res ]
+              ; SOURCE LINE # 91 
+0162 200D                              JRA    ?NXT_0026
+0164         ?NXT_0029:
+
+0164         ?NXT_0027:
+              ; SOURCE LINE # 75 
+0164 7B01       F                      LD     A,(001H,SP)   ; [ i ]
+0166 0C01       F                      INC    (001H,SP)   ; [ i ]
+0168 A60B                              LD     A,#00BH
+016A 1101       F                      CP     A,(001H,SP)   ; [ i ]
+016C 2303                              JRULE  ?LAB_0041
+016E CC0000     F                      JP     ?FOR_0004
+0171         ?LAB_0041:
+
+0171         ?NXT_0026:
+              ; SOURCE LINE # 94 
+0171 A60B                              LD     A,#00BH
+0173 1101       F                      CP     A,(001H,SP)   ; [ i ]
+0175 2204                              JRUGT  ?NXT_0032
+0177 A600                              LD     A,#000H
+0179 6B02       F                      LD     (002H,SP),A   ; [ res ]
+017B         ?NXT_0032:
+017B CC0000     F                      JP     ?NXT_0024
+017E         ?ELSE_0014:
+              ; SOURCE LINE # 98 
+017E A600                              LD     A,#000H
+0180 6B01       F                      LD     (001H,SP),A   ; [ i ]
+0182         ?FOR_0005:
+              ; SOURCE LINE # 100 
+0182 5F                                CLRW   X
+0183 7B01       F                      LD     A,(001H,SP)   ; [ i ]
+0185 97                                LD     XL,A
+0186 72FB07     F                      ADDW   X,(007H,SP)   ; [ inputstr ]
+0189 7D                                TNZ    (X)
+018A 2612                              JRNE   ?ELSE_0021
+              ; SOURCE LINE # 102 
+018C 1E0B       F                      LDW    X,(00BH,SP)   ; [ intnum ]
+018E 1603       F                      LDW    Y,(003H,SP)   ; [ val ]
+0190 FF                                LDW    (X),Y
+0191 1605       F                      LDW    Y,(005H,SP)   ; [ val + 02H ]
+0193 1C0002                            ADDW   X,#00002H
+0196 FF                                LDW    (X),Y
+              ; SOURCE LINE # 104 
+0197 A601                              LD     A,#001H
+0199 6B02       F                      LD     (002H,SP),A   ; [ res ]
+              ; SOURCE LINE # 105 
+019B CC0000     F                      JP     ?NXT_0033
+019E         ?ELSE_0021:
+              ; SOURCE LINE # 107 
+019E 5F                                CLRW   X
+019F 7B01       F                      LD     A,(001H,SP)   ; [ i ]
+01A1 97                                LD     XL,A
+01A2 72FB07     F                      ADDW   X,(007H,SP)   ; [ inputstr ]
+01A5 A66B                              LD     A,#06BH
+01A7 F1                                CP     A,(X)
+01A8 270C                              JREQ   ?LAB_0033
+01AA 5F                                CLRW   X
+01AB 7B01       F                      LD     A,(001H,SP)   ; [ i ]
+01AD 97                                LD     XL,A
+01AE 72FB07     F                      ADDW   X,(007H,SP)   ; [ inputstr ]
+01B1 A64B                              LD     A,#04BH
+01B3 F1                                CP     A,(X)
+01B4 2627                              JRNE   ?ELSE_0022
+01B6         ?LAB_0033:
+01B6 A600                              LD     A,#000H
+01B8 1101       F                      CP     A,(001H,SP)   ; [ i ]
+01BA 2421                              JRUGE  ?ELSE_0022
+01BC         ?LAB_0032:
+              ; SOURCE LINE # 109 
+01BC A602       F                      LD     A,#002H
+01BE CD0000     F DNF                  CALL   ?C?mv4_isa2bc
+01C1 A60A                              LD     A,#00AH
+01C3 CD0000     F                      CALL   ?C?sll328
+01C6 A602       F                      LD     A,#002H
+01C8 CD0000     F                      CALL   ?C?mv4_bc2isa
+              ; SOURCE LINE # 110 
+01CB 1E0B       F                      LDW    X,(00BH,SP)   ; [ intnum ]
+01CD 1603       F                      LDW    Y,(003H,SP)   ; [ val ]
+01CF FF                                LDW    (X),Y
+01D0 1605       F                      LDW    Y,(005H,SP)   ; [ val + 02H ]
+01D2 1C0002                            ADDW   X,#00002H
+01D5 FF                                LDW    (X),Y
+              ; SOURCE LINE # 111 
+01D6 A601                              LD     A,#001H
+01D8 6B02       F                      LD     (002H,SP),A   ; [ res ]
+              ; SOURCE LINE # 112 
+01DA CC0000     F                      JP     ?NXT_0033
+01DD         ?ELSE_0022:
+              ; SOURCE LINE # 114 
+01DD 5F                                CLRW   X
+01DE 7B01       F                      LD     A,(001H,SP)   ; [ i ]
+01E0 97                                LD     XL,A
+01E1 72FB07     F                      ADDW   X,(007H,SP)   ; [ inputstr ]
+01E4 A66D                              LD     A,#06DH
+01E6 F1                                CP     A,(X)
+01E7 270C                              JREQ   ?LAB_0035
+01E9 5F                                CLRW   X
+01EA 7B01       F                      LD     A,(001H,SP)   ; [ i ]
+01EC 97                                LD     XL,A
+01ED 72FB07     F                      ADDW   X,(007H,SP)   ; [ inputstr ]
+01F0 A64D                              LD     A,#04DH
+01F2 F1                                CP     A,(X)
+01F3 2626                              JRNE   ?ELSE_0023
+01F5         ?LAB_0035:
+01F5 A600                              LD     A,#000H
+01F7 1101       F                      CP     A,(001H,SP)   ; [ i ]
+01F9 2420                              JRUGE  ?ELSE_0023
+01FB         ?LAB_0034:
+              ; SOURCE LINE # 116 
+01FB A602       F                      LD     A,#002H
+01FD CD0000     F DNF                  CALL   ?C?mv4_isa2bc
+0200 A614                              LD     A,#014H
+0202 CD0000     F                      CALL   ?C?sll328
+0205 A602       F                      LD     A,#002H
+0207 CD0000     F                      CALL   ?C?mv4_bc2isa
+              ; SOURCE LINE # 117 
+020A 1E0B       F                      LDW    X,(00BH,SP)   ; [ intnum ]
+020C 1603       F                      LDW    Y,(003H,SP)   ; [ val ]
+020E FF                                LDW    (X),Y
+020F 1605       F                      LDW    Y,(005H,SP)   ; [ val + 02H ]
+0211 1C0002                            ADDW   X,#00002H
+0214 FF                                LDW    (X),Y
+              ; SOURCE LINE # 118 
+0215 A601                              LD     A,#001H
+0217 6B02       F                      LD     (002H,SP),A   ; [ res ]
+              ; SOURCE LINE # 119 
+0219 2056                              JRA    ?NXT_0033
+021B         ?ELSE_0023:
+              ; SOURCE LINE # 121 
+021B 5F                                CLRW   X
+021C 7B01       F                      LD     A,(001H,SP)   ; [ i ]
+021E 97                                LD     XL,A
+021F 72FB07     F                      ADDW   X,(007H,SP)   ; [ inputstr ]
+0222 A630                              LD     A,#030H
+0224 F1                                CP     A,(X)
+0225 2237                              JRUGT  ?ELSE_0024
+0227 5F                                CLRW   X
+0228 7B01       F                      LD     A,(001H,SP)   ; [ i ]
+022A 97                                LD     XL,A
+022B 72FB07     F                      ADDW   X,(007H,SP)   ; [ inputstr ]
+022E A639                              LD     A,#039H
+0230 F1                                CP     A,(X)
+0231 252B                              JRULT  ?ELSE_0024
+0233         ?LAB_0036:
+              ; SOURCE LINE # 122 
+0233 CD0000     F DNF            M(04)  CALL  ?C?mv4_pg2sk1
+0236         ?DATASTART_0001:
+0236 0A                             M  DB     00AH
+0237         ?DATAEND_0001:
+0237 96           DNF                  LDW    X,SP
+0238 1C0007     F                      ADDW   X,#00007H
+023B CD0000     F DNF                  CALL   ?C?muluix32
+023E CD0000     F DNF                  CALL   ?C?mv4_bc2sk
+0241 5F                                CLRW   X
+0242 7B05       F                      LD     A,(005H,SP)   ; [ i ]
+0244 97                                LD     XL,A
+0245 72FB0B     F                      ADDW   X,(00BH,SP)   ; [ inputstr ]
+0248 905F                              CLRW   Y
+024A F6                                LD     A,(X)
+024B 9097                              LD     YL,A
+024D 93                                LDW    X,Y
+024E 1CFFD0                            ADDW   X,#0FFD0H
+0251 CD0000     F                      CALL   ?C?inttol
+0254 CD0000     F DNF                  CALL   ?C?add3232
+0257 A602       F                      LD     A,#002H
+0259 CD0000     F                      CALL   ?C?mv4_bc2isa
+025C 2006                              JRA    ?NXT_0038
+025E         ?ELSE_0024:
+              ; SOURCE LINE # 126 
+025E A600                              LD     A,#000H
+0260 6B02       F                      LD     (002H,SP),A   ; [ res ]
+              ; SOURCE LINE # 127 
+0262 200D                              JRA    ?NXT_0033
+0264         ?NXT_0038:
+
+0264         ?NXT_0034:
+              ; SOURCE LINE # 98 
+0264 7B01       F                      LD     A,(001H,SP)   ; [ i ]
+0266 0C01       F                      INC    (001H,SP)   ; [ i ]
+0268 A60B                              LD     A,#00BH
+026A 1101       F                      CP     A,(001H,SP)   ; [ i ]
+026C 2303                              JRULE  ?LAB_0042
+026E CC0000     F                      JP     ?FOR_0005
+0271         ?LAB_0042:
+
+0271         ?NXT_0033:
+              ; SOURCE LINE # 130 
+0271 A60B                              LD     A,#00BH
+0273 1101       F                      CP     A,(001H,SP)   ; [ i ]
+0275 2204                              JRUGT  ?NXT_0039
+0277 A600                              LD     A,#000H
+0279 6B02       F                      LD     (002H,SP),A   ; [ res ]
+027B         ?NXT_0039:
+
+027B         ?NXT_0024:
+              ; SOURCE LINE # 132 
+027B 7B02       F                      LD     A,(002H,SP)   ; [ res ]
+027D         ?EPILOG_0001:
+027D 5B08                              ADD    SP,#008H
+027F 81                                RET    
+              ; inputstr     pointer to (unsigned char   in )(size=2).  parameter in AUTO
+              ; intnum       pointer to (unsigned long   in )(size=2).  parameter in AUTO
+              ; i            unsigned char  (size=1). Automatic variable  in AUTO
+              ; res          unsigned char  (size=1). Automatic variable  in AUTO
+              ; val          unsigned long  (size=4-Alg). Automatic variable  in AUTO
+
+              ; FUNCTION ?Str2Int (END)
+
+              ; FUNCTION ?GetIntegerInput (BEGIN)
+              ; Register-parameter num (XW) is relocated (auto)
+              ; SOURCE LINE # 143 
+0000 89                                PUSHW  X
+0001 5210                              SUB    SP,#010H
+0003         ?WHILE_0001:
+              ; SOURCE LINE # 148 
+0003 96           DNF                  LDW    X,SP
+0004 1C0001     F                      ADDW   X,#00001H
+0007 CD0000     F                      CALL   ?GetInputString
+              ; SOURCE LINE # 149 
+000A 0D01       F                      TNZ    (001H,SP)   ; [ inputstr ]
+000C 2602                              JRNE   ?NXT_0045
+000E 20F3                              JRA    ?WHILE_0001
+0010         ?NXT_0045:
+              ; SOURCE LINE # 150 
+0010 A661                              LD     A,#061H
+0012 1101       F                      CP     A,(001H,SP)   ; [ inputstr ]
+0014 2706                              JREQ   ?LAB_0046
+0016 A641                              LD     A,#041H
+0018 1101       F                      CP     A,(001H,SP)   ; [ inputstr ]
+001A 260E                              JRNE   ?NXT_0046
+001C         ?LAB_0046:
+001C 0D02       F                      TNZ    (002H,SP)   ; [ inputstr + 01H ]
+001E 260A                              JRNE   ?NXT_0046
+0020         ?LAB_0045:
+              ; SOURCE LINE # 152 
+0020 AE0000     F                      LDW    X,#HIGH(?STR?HYPERTERMINAL?BASE)
+0023 CD0000     F                      CALL   ?SerialPutString
+              ; SOURCE LINE # 153 
+0026 A600                              LD     A,#000H
+0028 201C                              JRA    ?EPILOG_0002
+002A         ?NXT_0046:
+              ; SOURCE LINE # 155 
+002A 1E11       F                      LDW    X,(011H,SP)   ; [ num ]
+002C 89                                PUSHW  X
+002D 96           DNF                  LDW    X,SP
+002E 1C0003     F                      ADDW   X,#00003H
+0031 CD0000     F                      CALL   ?Str2Int
+0034 85                                POPW   X
+0035 4D                                TNZ    A
+0036 2608                              JRNE   ?ELSE_0031
+              ; SOURCE LINE # 157 
+0038 AE0000     F                      LDW    X,#HIGH(?STR?HYPERTERMINAL?BASE + 012H)
+003B CD0000     F                      CALL   ?SerialPutString
+003E 2004                              JRA    ?NXT_0047
+0040         ?ELSE_0031:
+              ; SOURCE LINE # 161 
+0040 A601                              LD     A,#001H
+0042 2002                              JRA    ?EPILOG_0002
+0044         ?NXT_0047:
+0044 20BD                              JRA    ?WHILE_0001
+0046         ?NXT_0044:
+
+0046         ?EPILOG_0002:
+0046 5B12                              ADD    SP,#012H
+0048 81                                RET    
+              ; num          pointer to (unsigned long   in )(size=2).  parameter in AUTO
+              ; inputstr     array of unsigned char  (size=16). Automatic variable  in AUTO
+
+              ; FUNCTION ?GetIntegerInput (END)
+
+              ; FUNCTION ?SerialKeyPressed (BEGIN)
+              ; Register-parameter key (XW) is relocated (auto)
+              ; SOURCE LINE # 174 
+0000 89                                PUSHW  X
+0001 89                                PUSHW  X
+              ; SOURCE LINE # 178 
+0002 AE0020                            LDW    X,#00020H
+0005 CD0000     F                      CALL   ?UART2_GetFlagStatus
+0008 1F01       F                      LDW    (001H,SP),X   ; [ flag ]
+              ; SOURCE LINE # 179 
+000A AE0001                            LDW    X,#00001H
+000D 1301       F                      CPW    X,(001H,SP)   ; [ flag ]
+000F 260A                              JRNE   ?ELSE_0033
+              ; SOURCE LINE # 181 
+0011 1E03       F                      LDW    X,(003H,SP)   ; [ key ]
+0013 C65241                            LD     A,05241H
+0016 F7                                LD     (X),A
+              ; SOURCE LINE # 182 
+0017 A601                              LD     A,#001H
+0019 2002                              JRA    ?EPILOG_0003
+001B         ?ELSE_0033:
+              ; SOURCE LINE # 186 
+001B A600                              LD     A,#000H
+001D         ?EPILOG_0003:
+001D 5B04                              ADD    SP,#004H
+001F 81                                RET    
+              ; key          pointer to (unsigned char   in )(size=2).  parameter in AUTO
+              ; flag         (size=2). Automatic variable  in AUTO
+
+              ; FUNCTION ?SerialKeyPressed (END)
+
+              ; FUNCTION ?GetKey (BEGIN)
+              ; SOURCE LINE # 197 
+0000 88                                PUSH   A
+              ; SOURCE LINE # 199 
+0001 A600                              LD     A,#000H
+0003 6B01       F                      LD     (001H,SP),A   ; [ key ]
+0005         ?WHILE_0003:
+              ; SOURCE LINE # 203 
+0005 96           DNF                  LDW    X,SP
+0006 1C0001     F                      ADDW   X,#00001H
+0009 CD0000     F                      CALL   ?SerialKeyPressed
+000C 4D                                TNZ    A
+000D 2702                              JREQ   ?NXT_0053
+000F 2002                              JRA    ?NXT_0052
+0011         ?NXT_0053:
+0011 20F2                              JRA    ?WHILE_0003
+0013         ?NXT_0052:
+              ; SOURCE LINE # 205 
+0013 7B01       F                      LD     A,(001H,SP)   ; [ key ]
+0015         ?EPILOG_0004:
+0015 5B01                              ADD    SP,#001H
+0017 81                                RET    
+              ; key          unsigned char  (size=1). Automatic variable  in AUTO
+
+              ; FUNCTION ?GetKey (END)
+
+              ; FUNCTION ?SerialPutChar (BEGIN)
+              ; Register-parameter c (A) is relocated (auto)
+              ; SOURCE LINE # 215 
+0000 88                                PUSH   A
+              ; SOURCE LINE # 217 
+0001 7B01       F                      LD     A,(001H,SP)   ; [ c ]
+0003 CD0000     F                      CALL   ?UART2_SendData8
+0006         ?WHILE_0005:
+              ; SOURCE LINE # 218 
+0006 5F                                CLRW   X
+0007 C65240                            LD     A,05240H
+000A 97                                LD     XL,A
+000B 9F                                LD     A,XL
+000C A480                              AND    A,#080H
+000E 88                                PUSH   A
+000F 9E                                LD     A,XH
+0010 A400                              AND    A,#000H
+0012 B703       F                      LD     ?BH,A
+0014 84                                POP    A
+0015 B704       F                      LD     ?BL,A
+0017 AE0080                            LDW    X,#00080H
+001A B302       F                      CPW    X,?BH.w
+001C 26E8                              JRNE   ?WHILE_0005
+001E         ?EPILOG_0005:
+001E 84                                POP    A
+001F 81                                RET    
+              ; c            unsigned char  (size=1).  parameter in AUTO
+
+              ; FUNCTION ?SerialPutChar (END)
+
+              ; FUNCTION ?SerialPutString (BEGIN)
+              ; Register-parameter s (XW) is relocated (auto)
+              ; SOURCE LINE # 228 
+0000 89                                PUSHW  X
+0001         ?WHILE_0007:
+              ; SOURCE LINE # 230 
+0001 1E01       F                      LDW    X,(001H,SP)   ; [ s ]
+0003 7D                                TNZ    (X)
+0004 270D                              JREQ   ?NXT_0055
+              ; SOURCE LINE # 232 
+0006 1E01       F                      LDW    X,(001H,SP)   ; [ s ]
+0008 F6                                LD     A,(X)
+0009 CD0000     F                      CALL   ?SerialPutChar
+              ; SOURCE LINE # 233 
+000C 1E01       F                      LDW    X,(001H,SP)   ; [ s ]
+000E 5C                                INCW   X
+000F 1F01       F                      LDW    (001H,SP),X   ; [ s ]
+0011 20EE                              JRA    ?WHILE_0007
+0013         ?NXT_0055:
+
+0013         ?EPILOG_0006:
+0013 85                                POPW   X
+0014 81                                RET    
+              ; s            pointer to (unsigned char   in )(size=2).  parameter in AUTO
+
+              ; FUNCTION ?SerialPutString (END)
+
+              ; FUNCTION ?GetInputString (BEGIN)
+              ; Register-parameter buffP (XW) is relocated (auto)
+              ; SOURCE LINE # 244 
+0000 89                                PUSHW  X
+0001 5203                              SUB    SP,#003H
+              ; SOURCE LINE # 246 
+0003 AE0000                            LDW    X,#00000H
+0006 1F01       F                      LDW    (001H,SP),X   ; [ bytes_read ]
+              ; SOURCE LINE # 247 
+0008 A600                              LD     A,#000H
+000A 6B03       F                      LD     (003H,SP),A   ; [ c ]
+000C         ?DO_0001:
+              ; SOURCE LINE # 250 
+000C CD0000     F                      CALL   ?GetKey
+000F 6B03       F                      LD     (003H,SP),A   ; [ c ]
+              ; SOURCE LINE # 251 
+0011 A60D                              LD     A,#00DH
+0013 1103       F                      CP     A,(003H,SP)   ; [ c ]
+0015 2602                              JRNE   ?NXT_0063
+              ; SOURCE LINE # 252 
+0017 204D                              JRA    ?NXT_0062
+0019         ?NXT_0063:
+              ; SOURCE LINE # 253 
+0019 A608                              LD     A,#008H
+001B 1103       F                      CP     A,(003H,SP)   ; [ c ]
+001D 2614                              JRNE   ?NXT_0064
+              ; SOURCE LINE # 255 
+001F AE0000                            LDW    X,#00000H
+0022 1301       F                      CPW    X,(001H,SP)   ; [ bytes_read ]
+0024 2E0B                              JRSGE  ?NXT_0065
+              ; SOURCE LINE # 257 
+0026 AE0000     F                      LDW    X,#HIGH(?STR?HYPERTERMINAL?BASE + 029H)
+0029 CD0000     F                      CALL   ?SerialPutString
+              ; SOURCE LINE # 258 
+002C 1E01       F                      LDW    X,(001H,SP)   ; [ bytes_read ]
+002E 5A                                DECW   X
+002F 1F01       F                      LDW    (001H,SP),X   ; [ bytes_read ]
+0031         ?NXT_0065:
+              ; SOURCE LINE # 260 
+0031 2031                              JRA    ?TEST_0001
+0033         ?NXT_0064:
+              ; SOURCE LINE # 262 
+0033 AE0080                            LDW    X,#00080H
+0036 1301       F                      CPW    X,(001H,SP)   ; [ bytes_read ]
+0038 2C0D                              JRSGT  ?NXT_0066
+              ; SOURCE LINE # 264 
+003A AE0000     F                      LDW    X,#HIGH(?STR?HYPERTERMINAL?BASE + 02DH)
+003D CD0000     F                      CALL   ?SerialPutString
+              ; SOURCE LINE # 265 
+0040 AE0000                            LDW    X,#00000H
+0043 1F01       F                      LDW    (001H,SP),X   ; [ bytes_read ]
+              ; SOURCE LINE # 266 
+0045 201D                              JRA    ?TEST_0001
+0047         ?NXT_0066:
+              ; SOURCE LINE # 268 
+0047 A620                              LD     A,#020H
+0049 1103       F                      CP     A,(003H,SP)   ; [ c ]
+004B 2217                              JRUGT  ?NXT_0067
+004D A67E                              LD     A,#07EH
+004F 1103       F                      CP     A,(003H,SP)   ; [ c ]
+0051 2511                              JRULT  ?NXT_0067
+0053         ?LAB_0048:
+              ; SOURCE LINE # 270 
+0053 1E01       F                      LDW    X,(001H,SP)   ; [ bytes_read ]
+0055 5C                                INCW   X
+0056 1F01       F                      LDW    (001H,SP),X   ; [ bytes_read ]
+0058 5A                                DECW   X
+0059 72FB04     F                      ADDW   X,(004H,SP)   ; [ buffP ]
+005C 7B03       F                      LD     A,(003H,SP)   ; [ c ]
+005E F7                                LD     (X),A
+              ; SOURCE LINE # 271 
+005F 7B03       F                      LD     A,(003H,SP)   ; [ c ]
+0061 CD0000     F                      CALL   ?SerialPutChar
+0064         ?NXT_0067:
+
+0064         ?TEST_0001:
+0064 20A6                              JRA    ?DO_0001
+0066         ?NXT_0062:
+              ; SOURCE LINE # 275 
+0066 AE0000     F                      LDW    X,#HIGH(?STR?HYPERTERMINAL?BASE + 04CH)
+0069 CD0000     F                      CALL   ?SerialPutString
+              ; SOURCE LINE # 276 
+006C 1E04       F                      LDW    X,(004H,SP)   ; [ buffP ]
+006E 72FB01     F                      ADDW   X,(001H,SP)   ; [ bytes_read ]
+0071 A600                              LD     A,#000H
+0073 F7                                LD     (X),A
+0074         ?EPILOG_0007:
+0074 5B05                              ADD    SP,#005H
+0076 81                                RET    
+              ; buffP        pointer to (unsigned char   in )(size=2).  parameter in AUTO
+              ; bytes_read   short  (size=2-Alg). Automatic variable  in AUTO
+              ; c            unsigned char  (size=1). Automatic variable  in AUTO
+
+              ; FUNCTION ?GetInputString (END)
+
+              ; FUNCTION ?Main_Menu (BEGIN)
+              ; SOURCE LINE # 287 
+0000 5295                              SUB    SP,#095H
+              ; SOURCE LINE # 292 
+0002 AE0000                            LDW    X,#00000H
+0005 1F8F       F                      LDW    (08FH,SP),X   ; [ freq_error ]
+0007         ?WHILE_0009:
+              ; SOURCE LINE # 298 
+0007 AE0000                            LDW    X,#00000H
+000A 1F8D       F                      LDW    (08DH,SP),X   ; [ bTreat ]
+              ; SOURCE LINE # 299 
+000C AE0000     F                      LDW    X,#HIGH(?STR?HYPERTERMINAL?BASE + 04FH)
+000F CD0000     F                      CALL   ?SerialPutString
+              ; SOURCE LINE # 300 
+0012 AE0000     F                      LDW    X,#HIGH(?STR?HYPERTERMINAL?BASE + 08EH)
+0015 CD0000     F                      CALL   ?SerialPutString
+              ; SOURCE LINE # 301 
+0018 AE0000     F                      LDW    X,#HIGH(?STR?HYPERTERMINAL?BASE + 0C9H)
+001B CD0000     F                      CALL   ?SerialPutString
+              ; SOURCE LINE # 302 
+001E AE0000     F                      LDW    X,#HIGH(?STR?HYPERTERMINAL?BASE + 0E4H)
+0021 CD0000     F                      CALL   ?SerialPutString
+              ; SOURCE LINE # 303 
+0024 AE0000     F                      LDW    X,#HIGH(?STR?HYPERTERMINAL?BASE + 0123H)
+0027 CD0000     F                      CALL   ?SerialPutString
+              ; SOURCE LINE # 304 
+002A AE0000     F                      LDW    X,#HIGH(?STR?HYPERTERMINAL?BASE + 0152H)
+002D CD0000     F                      CALL   ?SerialPutString
+              ; SOURCE LINE # 305 
+0030 AE0000     F                      LDW    X,#HIGH(?STR?HYPERTERMINAL?BASE + 0192H)
+0033 CD0000     F                      CALL   ?SerialPutString
+              ; SOURCE LINE # 306 
+0036 AE0000     F                      LDW    X,#HIGH(?STR?HYPERTERMINAL?BASE + 01A5H)
+0039 CD0000     F                      CALL   ?SerialPutString
+              ; SOURCE LINE # 307 
+003C AE0000     F                      LDW    X,#HIGH(?STR?HYPERTERMINAL?BASE + 01B9H)
+003F CD0000     F                      CALL   ?SerialPutString
+              ; SOURCE LINE # 308 
+0042 AE0000     F                      LDW    X,#HIGH(?STR?HYPERTERMINAL?BASE + 01CFH)
+0045 CD0000     F                      CALL   ?SerialPutString
+              ; SOURCE LINE # 309 
+0048 AE0000     F                      LDW    X,#HIGH(?STR?HYPERTERMINAL?BASE + 01E1H)
+004B CD0000     F                      CALL   ?SerialPutString
+              ; SOURCE LINE # 310 
+004E AE0000     F                      LDW    X,#HIGH(?STR?HYPERTERMINAL?BASE + 01F5H)
+0051 CD0000     F                      CALL   ?SerialPutString
+              ; SOURCE LINE # 311 
+0054 96           DNF                  LDW    X,SP
+0055 1C0001     F                      ADDW   X,#00001H
+0058 CD0000     F                      CALL   ?GetInputString
+              ; SOURCE LINE # 313 
+005B AE0000     F                      LDW    X,#HIGH(?STR?HYPERTERMINAL?BASE + 020AH)
+005E 89                                PUSHW  X
+005F 96           DNF                  LDW    X,SP
+0060 1C0003     F                      ADDW   X,#00003H
+0063 CD0000     F                      CALL   ?strcmp
+0066 5B02                              ADD    SP,#002H
+0068 5D                                TNZW   X
+0069 2616                              JRNE   ?NXT_0078
+              ; SOURCE LINE # 315 
+006B AE0001                            LDW    X,#00001H
+006E 1F8D       F                      LDW    (08DH,SP),X   ; [ bTreat ]
+              ; SOURCE LINE # 317 
+0070 AE0000                            LDW    X,#00000H
+0073 CD0000     F                      CALL   ?TIM3_Cmd
+              ; SOURCE LINE # 318 
+0076 AE0001                            LDW    X,#00001H
+0079 89                                PUSHW  X
+007A AE500F                            LDW    X,#0500FH
+007D CD0000     F                      CALL   ?GPIO_WriteLow
+0080 85                                POPW   X
+0081         ?NXT_0078:
+              ; SOURCE LINE # 321 
+0081 AE0000     F                      LDW    X,#HIGH(?STR?HYPERTERMINAL?BASE + 020CH)
+0084 89                                PUSHW  X
+0085 96           DNF                  LDW    X,SP
+0086 1C0003     F                      ADDW   X,#00003H
+0089 CD0000     F                      CALL   ?strcmp
+008C 5B02                              ADD    SP,#002H
+008E 5D                                TNZW   X
+008F 2616                              JRNE   ?NXT_0079
+              ; SOURCE LINE # 323 
+0091 AE0001                            LDW    X,#00001H
+0094 1F8D       F                      LDW    (08DH,SP),X   ; [ bTreat ]
+              ; SOURCE LINE # 325 
+0096 AE0000                            LDW    X,#00000H
+0099 CD0000     F                      CALL   ?TIM3_Cmd
+              ; SOURCE LINE # 326 
+009C AE0001                            LDW    X,#00001H
+009F 89                                PUSHW  X
+00A0 AE500F                            LDW    X,#0500FH
+00A3 CD0000     F                      CALL   ?GPIO_WriteHigh
+00A6 85                                POPW   X
+00A7         ?NXT_0079:
+              ; SOURCE LINE # 329 
+00A7 AE0000     F                      LDW    X,#HIGH(?STR?HYPERTERMINAL?BASE + 020EH)
+00AA 89                                PUSHW  X
+00AB 96           DNF                  LDW    X,SP
+00AC 1C0003     F                      ADDW   X,#00003H
+00AF CD0000     F                      CALL   ?strcmp
+00B2 5B02                              ADD    SP,#002H
+00B4 5D                                TNZW   X
+00B5 260B                              JRNE   ?NXT_0080
+              ; SOURCE LINE # 331 
+00B7 AE0001                            LDW    X,#00001H
+00BA 1F8D       F                      LDW    (08DH,SP),X   ; [ bTreat ]
+              ; SOURCE LINE # 333 
+00BC AE0001                            LDW    X,#00001H
+00BF CD0000     F                      CALL   ?TIM3_Cmd
+00C2         ?NXT_0080:
+              ; SOURCE LINE # 336 
+00C2 AE0000     F                      LDW    X,#HIGH(?STR?HYPERTERMINAL?BASE + 0210H)
+00C5 89                                PUSHW  X
+00C6 96           DNF                  LDW    X,SP
+00C7 1C0003     F                      ADDW   X,#00003H
+00CA CD0000     F                      CALL   ?strcmp
+00CD 5B02                              ADD    SP,#002H
+00CF 5D                                TNZW   X
+00D0 2703                              JREQ   ?LAB_0051
+00D2 CC0000     F                      JP     ?NXT_0081
+00D5         ?LAB_0051:
+              ; SOURCE LINE # 338 
+00D5 AE0001                            LDW    X,#00001H
+00D8 1F8D       F                      LDW    (08DH,SP),X   ; [ bTreat ]
+              ; SOURCE LINE # 339 
+00DA AE0000                            LDW    X,#00000H
+00DD 1F8F       F                      LDW    (08FH,SP),X   ; [ freq_error ]
+              ; SOURCE LINE # 340 
+00DF AE0000     F                      LDW    X,#HIGH(?STR?HYPERTERMINAL?BASE + 0212H)
+00E2 CD0000     F                      CALL   ?SerialPutString
+              ; SOURCE LINE # 341 
+00E5 AE0000     F                      LDW    X,#HIGH(?STR?HYPERTERMINAL?BASE + 0237H)
+00E8 CD0000     F                      CALL   ?SerialPutString
+              ; SOURCE LINE # 342 
+00EB AE0000     F                      LDW    X,#HIGH(?STR?HYPERTERMINAL?BASE + 0243H)
+00EE CD0000     F                      CALL   ?SerialPutString
+              ; SOURCE LINE # 343 
+00F1 AE0000     F                      LDW    X,#HIGH(?STR?HYPERTERMINAL?BASE + 024FH)
+00F4 CD0000     F                      CALL   ?SerialPutString
+              ; SOURCE LINE # 344 
+00F7 AE0000     F                      LDW    X,#HIGH(?STR?HYPERTERMINAL?BASE + 025BH)
+00FA CD0000     F                      CALL   ?SerialPutString
+              ; SOURCE LINE # 345 
+00FD 96           DNF                  LDW    X,SP
+00FE 1C0092     F                      ADDW   X,#00092H
+0101 CD0000     F                      CALL   ?GetIntegerInput
+              ; SOURCE LINE # 346 
+0104 A691       F                      LD     A,#091H
+0106 CD0000     F DNF                  CALL   ?C?mv4_isa2bc
+0109 BE03       F                      LDW    X,?BH
+010B A30000                            CPW    X,#00000H
+010E 260D                              JRNE   ?LAB_0050
+0110 BE05       F                      LDW    X,?CH
+0112 1D0001                            SUBW   X,#00001H
+0115 2708                              JREQ   ?CASE_0003
+0117 5A                                DECW   X
+0118 270B                              JREQ   ?CASE_0004
+011A 5A                                DECW   X
+011B 270E                              JREQ   ?CASE_0005
+011D         ?LAB_0050:
+011D 2012                              JRA    ?DEFAULT_0001
+011F         ?CASE_0003:
+              ; SOURCE LINE # 348 
+011F A600                              LD     A,#000H
+0121 6B91       F                      LD     (091H,SP),A   ; [ freq ]
+0123 2019                              JRA    ?NXT_0082
+0125         ?CASE_0004:
+              ; SOURCE LINE # 349 
+0125 A640                              LD     A,#040H
+0127 6B91       F                      LD     (091H,SP),A   ; [ freq ]
+0129 2013                              JRA    ?NXT_0082
+012B         ?CASE_0005:
+              ; SOURCE LINE # 350 
+012B A680                              LD     A,#080H
+012D 6B91       F                      LD     (091H,SP),A   ; [ freq ]
+012F 200D                              JRA    ?NXT_0082
+0131         ?DEFAULT_0001:
+              ; SOURCE LINE # 351 
+0131 AE0000     F                      LDW    X,#HIGH(?STR?HYPERTERMINAL?BASE + 0265H)
+0134 CD0000     F                      CALL   ?SerialPutString
+0137 AE0001                            LDW    X,#00001H
+013A 1F8F       F                      LDW    (08FH,SP),X   ; [ freq_error ]
+013C 2000                              JRA    ?NXT_0082
+013E         ?NXT_0082:
+              ; SOURCE LINE # 353 
+013E 1E8F       F                      LDW    X,(08FH,SP)   ; [ freq_error ]
+0140 2613                              JRNE   ?NXT_0083
+              ; SOURCE LINE # 355 
+0142 AE0000                            LDW    X,#00000H
+0145 CD0000     F                      CALL   ?BEEP_Cmd
+              ; SOURCE LINE # 356 
+0148 5F                                CLRW   X
+0149 7B91       F                      LD     A,(091H,SP)   ; [ freq ]
+014B 97                                LD     XL,A
+014C CD0000     F                      CALL   ?BEEP_Init
+              ; SOURCE LINE # 357 
+014F AE0001                            LDW    X,#00001H
+0152 CD0000     F                      CALL   ?BEEP_Cmd
+0155         ?NXT_0083:
+
+0155         ?NXT_0081:
+              ; SOURCE LINE # 361 
+0155 AE0000     F                      LDW    X,#HIGH(?STR?HYPERTERMINAL?BASE + 0278H)
+0158 89                                PUSHW  X
+0159 96           DNF                  LDW    X,SP
+015A 1C0003     F                      ADDW   X,#00003H
+015D CD0000     F                      CALL   ?strcmp
+0160 5B02                              ADD    SP,#002H
+0162 5D                                TNZW   X
+0163 260B                              JRNE   ?NXT_0084
+              ; SOURCE LINE # 363 
+0165 AE0001                            LDW    X,#00001H
+0168 1F8D       F                      LDW    (08DH,SP),X   ; [ bTreat ]
+              ; SOURCE LINE # 364 
+016A AE0000                            LDW    X,#00000H
+016D CD0000     F                      CALL   ?BEEP_Cmd
+0170         ?NXT_0084:
+              ; SOURCE LINE # 367 
+0170 1E8D       F                      LDW    X,(08DH,SP)   ; [ bTreat ]
+0172 2606                              JRNE   ?NXT_0085
+              ; SOURCE LINE # 369 
+0174 AE0000     F                      LDW    X,#HIGH(?STR?HYPERTERMINAL?BASE + 027AH)
+0177 CD0000     F                      CALL   ?SerialPutString
+017A         ?NXT_0085:
+017A CC0000     F                      JP     ?WHILE_0009
+017D         ?NXT_0077:
+
+017D         ?EPILOG_0008:
+017D 5B95                              ADD    SP,#095H
+017F 81                                RET    
+              ; choice       array of unsigned char  (size=70). Automatic variable  in AUTO
+              ; msg          array of unsigned char  (size=70). Automatic variable  in AUTO
+              ; bTreat       (size=2). Automatic variable  in AUTO
+              ; freq_error   (size=2). Automatic variable  in AUTO
+              ; freq         unsigned char  (size=1). Automatic variable  in AUTO
+              ; freq_choice  unsigned long  (size=4-Alg). Automatic variable  in AUTO
+
+              ; FUNCTION ?Main_Menu (END)
+
+RCSTM8 COMPILER V2.26.09.317
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+FALSE. . . . . . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+TRUE . . . . . . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+RESET. . . . . . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+SET. . . . . . . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+DISABLE. . . . . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+ENABLE . . . . . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+ERROR. . . . . . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+SUCCESS. . . . . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+GPIO_struct. . . . . . . . . . . . . . * TAG *  ----- STRUCT  -------     5
+  ODR. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000000H     1
+  IDR. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000001H     1
+  DDR. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000002H     1
+  CR1. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000003H     1
+  CR2. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000004H     1
+ADC1_struct. . . . . . . . . . . . . . * TAG *  ----- STRUCT  -------    48
+  DB0RH. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000000H     1
+  DB0RL. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000001H     1
+  DB1RH. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000002H     1
+  DB1RL. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000003H     1
+  DB2RH. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000004H     1
+  DB2RL. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000005H     1
+  DB3RH. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000006H     1
+  DB3RL. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000007H     1
+  DB4RH. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000008H     1
+  DB4RL. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000009H     1
+  DB5RH. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00000AH     1
+  DB5RL. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00000BH     1
+  DB6RH. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00000CH     1
+  DB6RL. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00000DH     1
+  DB7RH. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00000EH     1
+  DB7RL. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00000FH     1
+  DB8RH. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000010H     1
+  DB8RL. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000011H     1
+  DB9RH. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000012H     1
+  DB9RL. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000013H     1
+  RESERVED . . . . . . . . . . . . . .  MEMBER  -----   ARRAY   000014H    12
+  CSR. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000020H     1
+  CR1. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000021H     1
+  CR2. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000022H     1
+  CR3. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000023H     1
+  DRH. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000024H     1
+  DRL. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000025H     1
+  TDRH . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000026H     1
+  TDRL . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000027H     1
+  HTRH . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000028H     1
+  HTRL . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000029H     1
+  LTRH . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00002AH     1
+  LTRL . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00002BH     1
+  AWSRH. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00002CH     1
+  AWSRL. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00002DH     1
+  AWCRH. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00002EH     1
+  AWCRL. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00002FH     1
+AWU_struct . . . . . . . . . . . . . . * TAG *  ----- STRUCT  -------     3
+  CSR. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000000H     1
+  APR. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000001H     1
+  TBR. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000002H     1
+BEEP_struct. . . . . . . . . . . . . . * TAG *  ----- STRUCT  -------     1
+  CSR. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000000H     1
+CLK_struct . . . . . . . . . . . . . . * TAG *  ----- STRUCT  -------    14
+  ICKR . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000000H     1
+  ECKR . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000001H     1
+  RESERVED . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000002H     1
+  CMSR . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000003H     1
+  SWR. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000004H     1
+  SWCR . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000005H     1
+  CKDIVR . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000006H     1
+  PCKENR1. . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000007H     1
+  CSSR . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000008H     1
+  CCOR . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000009H     1
+  PCKENR2. . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00000AH     1
+  CANCCR . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00000BH     1
+  HSITRIMR . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00000CH     1
+  SWIMCCR. . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00000DH     1
+TIM1_struct. . . . . . . . . . . . . . * TAG *  ----- STRUCT  -------    32
+  CR1. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000000H     1
+  CR2. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000001H     1
+  SMCR . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000002H     1
+  ETR. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000003H     1
+  IER. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000004H     1
+  SR1. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000005H     1
+  SR2. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000006H     1
+  EGR. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000007H     1
+  CCMR1. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000008H     1
+  CCMR2. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000009H     1
+  CCMR3. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00000AH     1
+  CCMR4. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00000BH     1
+  CCER1. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00000CH     1
+  CCER2. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00000DH     1
+  CNTRH. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00000EH     1
+  CNTRL. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00000FH     1
+  PSCRH. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000010H     1
+  PSCRL. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000011H     1
+  ARRH . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000012H     1
+  ARRL . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000013H     1
+  RCR. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000014H     1
+  CCR1H. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000015H     1
+  CCR1L. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000016H     1
+  CCR2H. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000017H     1
+  CCR2L. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000018H     1
+  CCR3H. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000019H     1
+  CCR3L. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00001AH     1
+  CCR4H. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00001BH     1
+  CCR4L. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00001CH     1
+  BKR. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00001DH     1
+  DTR. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00001EH     1
+  OISR . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00001FH     1
+TIM2_struct. . . . . . . . . . . . . . * TAG *  ----- STRUCT  -------    21
+  CR1. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000000H     1
+  IER. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000001H     1
+  SR1. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000002H     1
+  SR2. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000003H     1
+  EGR. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000004H     1
+  CCMR1. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000005H     1
+  CCMR2. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000006H     1
+  CCMR3. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000007H     1
+  CCER1. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000008H     1
+  CCER2. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000009H     1
+  CNTRH. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00000AH     1
+  CNTRL. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00000BH     1
+  PSCR . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00000CH     1
+  ARRH . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00000DH     1
+  ARRL . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00000EH     1
+  CCR1H. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00000FH     1
+  CCR1L. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000010H     1
+  CCR2H. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000011H     1
+  CCR2L. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000012H     1
+  CCR3H. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000013H     1
+  CCR3L. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000014H     1
+TIM3_struct. . . . . . . . . . . . . . * TAG *  ----- STRUCT  -------    17
+  CR1. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000000H     1
+  IER. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000001H     1
+  SR1. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000002H     1
+  SR2. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000003H     1
+  EGR. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000004H     1
+  CCMR1. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000005H     1
+  CCMR2. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000006H     1
+  CCER1. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000007H     1
+  CNTRH. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000008H     1
+  CNTRL. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000009H     1
+  PSCR . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00000AH     1
+  ARRH . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00000BH     1
+  ARRL . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00000CH     1
+  CCR1H. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00000DH     1
+  CCR1L. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00000EH     1
+  CCR2H. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00000FH     1
+  CCR2L. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000010H     1
+TIM4_struct. . . . . . . . . . . . . . * TAG *  ----- STRUCT  -------     7
+  CR1. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000000H     1
+  IER. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000001H     1
+  SR1. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000002H     1
+  EGR. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000003H     1
+  CNTR . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000004H     1
+  PSCR . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000005H     1
+  ARR. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000006H     1
+TIM5_struct. . . . . . . . . . . . . . * TAG *  ----- STRUCT  -------    23
+  CR1. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000000H     1
+  CR2. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000001H     1
+  SMCR . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000002H     1
+  IER. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000003H     1
+  SR1. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000004H     1
+  SR2. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000005H     1
+  EGR. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000006H     1
+  CCMR1. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000007H     1
+  CCMR2. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000008H     1
+  CCMR3. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000009H     1
+  CCER1. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00000AH     1
+  CCER2. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00000BH     1
+  CNTRH. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00000CH     1
+  CNTRL. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00000DH     1
+  PSCR . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00000EH     1
+  ARRH . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00000FH     1
+  ARRL . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000010H     1
+  CCR1H. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000011H     1
+  CCR1L. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000012H     1
+  CCR2H. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000013H     1
+  CCR2L. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000014H     1
+  CCR3H. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000015H     1
+  CCR3L. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000016H     1
+TIM6_struct. . . . . . . . . . . . . . * TAG *  ----- STRUCT  -------     9
+  CR1. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000000H     1
+  CR2. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000001H     1
+  SMCR . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000002H     1
+  IER. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000003H     1
+  SR1. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000004H     1
+  EGR. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000005H     1
+  CNTR . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000006H     1
+  PSCR . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000007H     1
+  ARR. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000008H     1
+I2C_struct . . . . . . . . . . . . . . * TAG *  ----- STRUCT  -------    15
+  CR1. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000000H     1
+  CR2. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000001H     1
+  FREQR. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000002H     1
+  OARL . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000003H     1
+  OARH . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000004H     1
+  RESERVED1. . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000005H     1
+  DR . . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000006H     1
+  SR1. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000007H     1
+  SR2. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000008H     1
+  SR3. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000009H     1
+  ITR. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00000AH     1
+  CCRL . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00000BH     1
+  CCRH . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00000CH     1
+  TRISER . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00000DH     1
+  RESERVED2. . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00000EH     1
+ITC_struct . . . . . . . . . . . . . . * TAG *  ----- STRUCT  -------     8
+  ISPR1. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000000H     1
+  ISPR2. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000001H     1
+  ISPR3. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000002H     1
+  ISPR4. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000003H     1
+  ISPR5. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000004H     1
+  ISPR6. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000005H     1
+  ISPR7. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000006H     1
+  ISPR8. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000007H     1
+EXTI_struct. . . . . . . . . . . . . . * TAG *  ----- STRUCT  -------     2
+  CR1. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000000H     1
+  CR2. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000001H     1
+FLASH_struct . . . . . . . . . . . . . * TAG *  ----- STRUCT  -------    11
+  CR1. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000000H     1
+  CR2. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000001H     1
+  NCR2 . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000002H     1
+  FPR. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000003H     1
+  NFPR . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000004H     1
+  IAPSR. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000005H     1
+  RESERVED1. . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000006H     1
+  RESERVED2. . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000007H     1
+  PUKR . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000008H     1
+  RESERVED3. . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000009H     1
+  DUKR . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00000AH     1
+OPT_struct . . . . . . . . . . . . . . * TAG *  ----- STRUCT  -------    15
+  OPT0 . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000000H     1
+  OPT1 . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000001H     1
+  NOPT1. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000002H     1
+  OPT2 . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000003H     1
+  NOPT2. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000004H     1
+  OPT3 . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000005H     1
+  NOPT3. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000006H     1
+  OPT4 . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000007H     1
+  NOPT4. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000008H     1
+  OPT5 . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000009H     1
+  NOPT5. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00000AH     1
+  RESERVED1. . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00000BH     1
+  RESERVED2. . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00000CH     1
+  OPT7 . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00000DH     1
+  NOPT7. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00000EH     1
+IWDG_struct. . . . . . . . . . . . . . * TAG *  ----- STRUCT  -------     3
+  KR . . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000000H     1
+  PR . . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000001H     1
+  RLR. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000002H     1
+WWDG_struct. . . . . . . . . . . . . . * TAG *  ----- STRUCT  -------     2
+  CR . . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000000H     1
+  WR . . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000001H     1
+RST_struct . . . . . . . . . . . . . . * TAG *  ----- STRUCT  -------     1
+  SR . . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000000H     1
+SPI_struct . . . . . . . . . . . . . . * TAG *  ----- STRUCT  -------     8
+  CR1. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000000H     1
+  CR2. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000001H     1
+  ICR. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000002H     1
+  SR . . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000003H     1
+  DR . . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000004H     1
+  CRCPR. . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000005H     1
+  RXCRCR . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000006H     1
+  TXCRCR . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000007H     1
+SWIM_struct. . . . . . . . . . . . . . * TAG *  ----- STRUCT  -------     2
+  CSR. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000000H     1
+  DR . . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000001H     1
+UART1_struct . . . . . . . . . . . . . * TAG *  ----- STRUCT  -------    11
+  SR . . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000000H     1
+  DR . . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000001H     1
+  BRR1 . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000002H     1
+  BRR2 . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000003H     1
+  CR1. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000004H     1
+  CR2. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000005H     1
+  CR3. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000006H     1
+  CR4. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000007H     1
+  CR5. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000008H     1
+  GTR. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000009H     1
+  PSCR . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00000AH     1
+UART2_struct . . . . . . . . . . . . . * TAG *  ----- STRUCT  -------    12
+  SR . . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000000H     1
+  DR . . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000001H     1
+  BRR1 . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000002H     1
+  BRR2 . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000003H     1
+  CR1. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000004H     1
+  CR2. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000005H     1
+  CR3. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000006H     1
+  CR4. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000007H     1
+  CR5. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000008H     1
+  CR6. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000009H     1
+  GTR. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00000AH     1
+  PSCR . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  00000BH     1
+UART3_struct . . . . . . . . . . . . . * TAG *  ----- STRUCT  -------    10
+  SR . . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000000H     1
+  DR . . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000001H     1
+  BRR1 . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000002H     1
+  BRR2 . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000003H     1
+  CR1. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000004H     1
+  CR2. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000005H     1
+  CR3. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000006H     1
+  CR4. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000007H     1
+  RESERVED . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000008H     1
+  CR6. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000009H     1
+CFG_struct . . . . . . . . . . . . . . * TAG *  ----- STRUCT  -------     1
+  GCR. . . . . . . . . . . . . . . . .  MEMBER  -----   U_CHAR  000000H     1
+BEEP_FREQUENCY_1KHZ. . . . . . . . . . E_CONST  ----- INT      -------  2
+BEEP_FREQUENCY_2KHZ. . . . . . . . . . E_CONST  ----- INT      -------  2
+BEEP_FREQUENCY_4KHZ. . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_SWITCHMODE_MANUAL. . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_SWITCHMODE_AUTO. . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_CURRENTCLOCKSTATE_DISABLE. . . . . E_CONST  ----- INT      -------  2
+CLK_CURRENTCLOCKSTATE_ENABLE . . . . . E_CONST  ----- INT      -------  2
+CLK_CSSCONFIG_ENABLEWITHIT . . . . . . E_CONST  ----- INT      -------  2
+CLK_CSSCONFIG_ENABLE . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_CSSCONFIG_DISABLE. . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_SOURCE_HSI . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_SOURCE_LSI . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_SOURCE_HSE . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_HSITRIMVALUE_0 . . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_HSITRIMVALUE_1 . . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_HSITRIMVALUE_2 . . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_HSITRIMVALUE_3 . . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_HSITRIMVALUE_4 . . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_HSITRIMVALUE_5 . . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_HSITRIMVALUE_6 . . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_HSITRIMVALUE_7 . . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_OUTPUT_HSI . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_OUTPUT_LSI . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_OUTPUT_HSE . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_OUTPUT_CPU . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_OUTPUT_CPUDIV2 . . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_OUTPUT_CPUDIV4 . . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_OUTPUT_CPUDIV8 . . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_OUTPUT_CPUDIV16. . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_OUTPUT_CPUDIV32. . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_OUTPUT_CPUDIV64. . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_OUTPUT_HSIRC . . . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_OUTPUT_MASTER. . . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_OUTPUT_OTHERS. . . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_PERIPHERAL_I2C . . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_PERIPHERAL_SPI . . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_PERIPHERAL_UART1 . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_PERIPHERAL_UART2 . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_PERIPHERAL_UART3 . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_PERIPHERAL_TIMER6. . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_PERIPHERAL_TIMER4. . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_PERIPHERAL_TIMER5. . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_PERIPHERAL_TIMER2. . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_PERIPHERAL_TIMER3. . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_PERIPHERAL_TIMER1. . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_PERIPHERAL_AWU . . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_PERIPHERAL_ADC . . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_PERIPHERAL_CAN . . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_FLAG_LSIRDY. . . . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_FLAG_HSIRDY. . . . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_FLAG_HSERDY. . . . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_FLAG_SWIF. . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_FLAG_SWBSY . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_FLAG_CSSD. . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_FLAG_AUX . . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_FLAG_CCOBSY. . . . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_FLAG_CCORDY. . . . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_IT_CSSD. . . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_IT_SWIF. . . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_PRESCALER_HSIDIV1. . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_PRESCALER_HSIDIV2. . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_PRESCALER_HSIDIV4. . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_PRESCALER_HSIDIV8. . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_PRESCALER_CPUDIV1. . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_PRESCALER_CPUDIV2. . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_PRESCALER_CPUDIV4. . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_PRESCALER_CPUDIV8. . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_PRESCALER_CPUDIV16 . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_PRESCALER_CPUDIV32 . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_PRESCALER_CPUDIV64 . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_PRESCALER_CPUDIV128. . . . . . . . E_CONST  ----- INT      -------  2
+CLK_SWIMDIVIDER_2. . . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_SWIMDIVIDER_OTHER. . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_CANDIVIDER_1 . . . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_CANDIVIDER_2 . . . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_CANDIVIDER_3 . . . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_CANDIVIDER_4 . . . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_CANDIVIDER_5 . . . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_CANDIVIDER_6 . . . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_CANDIVIDER_7 . . . . . . . . . . . E_CONST  ----- INT      -------  2
+CLK_CANDIVIDER_8 . . . . . . . . . . . E_CONST  ----- INT      -------  2
+GPIO_MODE_IN_FL_NO_IT. . . . . . . . . E_CONST  ----- INT      -------  2
+GPIO_MODE_IN_PU_NO_IT. . . . . . . . . E_CONST  ----- INT      -------  2
+GPIO_MODE_IN_FL_IT . . . . . . . . . . E_CONST  ----- INT      -------  2
+GPIO_MODE_IN_PU_IT . . . . . . . . . . E_CONST  ----- INT      -------  2
+GPIO_MODE_OUT_OD_LOW_FAST. . . . . . . E_CONST  ----- INT      -------  2
+GPIO_MODE_OUT_PP_LOW_FAST. . . . . . . E_CONST  ----- INT      -------  2
+GPIO_MODE_OUT_OD_LOW_SLOW. . . . . . . E_CONST  ----- INT      -------  2
+GPIO_MODE_OUT_PP_LOW_SLOW. . . . . . . E_CONST  ----- INT      -------  2
+GPIO_MODE_OUT_OD_HIZ_FAST. . . . . . . E_CONST  ----- INT      -------  2
+GPIO_MODE_OUT_PP_HIGH_FAST . . . . . . E_CONST  ----- INT      -------  2
+GPIO_MODE_OUT_OD_HIZ_SLOW. . . . . . . E_CONST  ----- INT      -------  2
+GPIO_MODE_OUT_PP_HIGH_SLOW . . . . . . E_CONST  ----- INT      -------  2
+GPIO_PIN_0 . . . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+GPIO_PIN_1 . . . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+GPIO_PIN_2 . . . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+GPIO_PIN_3 . . . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+GPIO_PIN_4 . . . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+GPIO_PIN_5 . . . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+GPIO_PIN_6 . . . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+GPIO_PIN_7 . . . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+GPIO_PIN_LNIB. . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+GPIO_PIN_HNIB. . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+GPIO_PIN_ALL . . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_FORCEDACTION_ACTIVE . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_FORCEDACTION_INACTIVE . . . . . . E_CONST  ----- INT      -------  2
+TIM3_PRESCALER_1 . . . . . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_PRESCALER_2 . . . . . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_PRESCALER_4 . . . . . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_PRESCALER_8 . . . . . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_PRESCALER_16. . . . . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_PRESCALER_32. . . . . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_PRESCALER_64. . . . . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_PRESCALER_128 . . . . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_PRESCALER_256 . . . . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_PRESCALER_512 . . . . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_PRESCALER_1024. . . . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_PRESCALER_2048. . . . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_PRESCALER_4096. . . . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_PRESCALER_8192. . . . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_PRESCALER_16384 . . . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_PRESCALER_32768 . . . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_OCMODE_TIMING . . . . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_OCMODE_ACTIVE . . . . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_OCMODE_INACTIVE . . . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_OCMODE_TOGGLE . . . . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_OCMODE_PWM1 . . . . . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_OCMODE_PWM2 . . . . . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_OPMODE_SINGLE . . . . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_OPMODE_REPETITIVE . . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_CHANNEL_1 . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_CHANNEL_2 . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_OCPOLARITY_HIGH . . . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_OCPOLARITY_LOW. . . . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_OUTPUTSTATE_DISABLE . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_OUTPUTSTATE_ENABLE. . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_ICPOLARITY_RISING . . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_ICPOLARITY_FALLING. . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_ICSELECTION_DIRECTTI. . . . . . . E_CONST  ----- INT      -------  2
+TIM3_ICSELECTION_INDIRECTTI. . . . . . E_CONST  ----- INT      -------  2
+TIM3_ICSELECTION_TRGI. . . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_ICPSC_DIV1. . . . . . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_ICPSC_DIV2. . . . . . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_ICPSC_DIV4. . . . . . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_ICPSC_DIV8. . . . . . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_IT_UPDATE . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_IT_CC1. . . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_IT_CC2. . . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_PSCRELOADMODE_UPDATE. . . . . . . E_CONST  ----- INT      -------  2
+TIM3_PSCRELOADMODE_IMMEDIATE . . . . . E_CONST  ----- INT      -------  2
+TIM3_EVENTSOURCE_UPDATE. . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_EVENTSOURCE_CC1 . . . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_EVENTSOURCE_CC2 . . . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_UPDATESOURCE_GLOBAL . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_UPDATESOURCE_REGULAR. . . . . . . E_CONST  ----- INT      -------  2
+TIM3_FLAG_UPDATE . . . . . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_FLAG_CC1. . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_FLAG_CC2. . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_FLAG_CC1OF. . . . . . . . . . . . E_CONST  ----- INT      -------  2
+TIM3_FLAG_CC2OF. . . . . . . . . . . . E_CONST  ----- INT      -------  2
+UART2_IRDAMODE_NORMAL. . . . . . . . . E_CONST  ----- INT      -------  2
+UART2_IRDAMODE_LOWPOWER. . . . . . . . E_CONST  ----- INT      -------  2
+UART2_WAKEUP_IDLELINE. . . . . . . . . E_CONST  ----- INT      -------  2
+UART2_WAKEUP_ADDRESSMARK . . . . . . . E_CONST  ----- INT      -------  2
+UART2_LINBREAKDETECTIONLENGTH_10BITS . E_CONST  ----- INT      -------  2
+UART2_LINBREAKDETECTIONLENGTH_11BITS . E_CONST  ----- INT      -------  2
+UART2_STOPBITS_1 . . . . . . . . . . . E_CONST  ----- INT      -------  2
+UART2_STOPBITS_0_5 . . . . . . . . . . E_CONST  ----- INT      -------  2
+UART2_STOPBITS_2 . . . . . . . . . . . E_CONST  ----- INT      -------  2
+UART2_STOPBITS_1_5 . . . . . . . . . . E_CONST  ----- INT      -------  2
+UART2_PARITY_NO. . . . . . . . . . . . E_CONST  ----- INT      -------  2
+UART2_PARITY_EVEN. . . . . . . . . . . E_CONST  ----- INT      -------  2
+UART2_PARITY_ODD . . . . . . . . . . . E_CONST  ----- INT      -------  2
+UART2_LIN_MODE_MASTER. . . . . . . . . E_CONST  ----- INT      -------  2
+UART2_LIN_MODE_SLAVE . . . . . . . . . E_CONST  ----- INT      -------  2
+UART2_LIN_AUTOSYNC_DISABLE . . . . . . E_CONST  ----- INT      -------  2
+UART2_LIN_AUTOSYNC_ENABLE. . . . . . . E_CONST  ----- INT      -------  2
+UART2_LIN_DIVUP_LBRR1. . . . . . . . . E_CONST  ----- INT      -------  2
+UART2_LIN_DIVUP_NEXTRXNE . . . . . . . E_CONST  ----- INT      -------  2
+UART2_SYNCMODE_CLOCK_DISABLE . . . . . E_CONST  ----- INT      -------  2
+UART2_SYNCMODE_CLOCK_ENABLE. . . . . . E_CONST  ----- INT      -------  2
+UART2_SYNCMODE_CPOL_LOW. . . . . . . . E_CONST  ----- INT      -------  2
+UART2_SYNCMODE_CPOL_HIGH . . . . . . . E_CONST  ----- INT      -------  2
+UART2_SYNCMODE_CPHA_MIDDLE . . . . . . E_CONST  ----- INT      -------  2
+UART2_SYNCMODE_CPHA_BEGINING . . . . . E_CONST  ----- INT      -------  2
+UART2_SYNCMODE_LASTBIT_DISABLE . . . . E_CONST  ----- INT      -------  2
+UART2_SYNCMODE_LASTBIT_ENABLE. . . . . E_CONST  ----- INT      -------  2
+UART2_WORDLENGTH_8D. . . . . . . . . . E_CONST  ----- INT      -------  2
+UART2_WORDLENGTH_9D. . . . . . . . . . E_CONST  ----- INT      -------  2
+UART2_MODE_RX_ENABLE . . . . . . . . . E_CONST  ----- INT      -------  2
+UART2_MODE_TX_ENABLE . . . . . . . . . E_CONST  ----- INT      -------  2
+UART2_MODE_TX_DISABLE. . . . . . . . . E_CONST  ----- INT      -------  2
+UART2_MODE_RX_DISABLE. . . . . . . . . E_CONST  ----- INT      -------  2
+UART2_MODE_TXRX_ENABLE . . . . . . . . E_CONST  ----- INT      -------  2
+UART2_FLAG_TXE . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+UART2_FLAG_TC. . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+UART2_FLAG_RXNE. . . . . . . . . . . . E_CONST  ----- INT      -------  2
+UART2_FLAG_IDLE. . . . . . . . . . . . E_CONST  ----- INT      -------  2
+UART2_FLAG_OR_LHE. . . . . . . . . . . E_CONST  ----- INT      -------  2
+UART2_FLAG_NF. . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+UART2_FLAG_FE. . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+UART2_FLAG_PE. . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+UART2_FLAG_SBK . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+UART2_FLAG_LBDF. . . . . . . . . . . . E_CONST  ----- INT      -------  2
+UART2_FLAG_LHDF. . . . . . . . . . . . E_CONST  ----- INT      -------  2
+UART2_FLAG_LSF . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+UART2_IT_TXE . . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+UART2_IT_TC. . . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+UART2_IT_RXNE. . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+UART2_IT_IDLE. . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+UART2_IT_OR. . . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+UART2_IT_PE. . . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+UART2_IT_LBDF. . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+UART2_IT_LHDF. . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+UART2_IT_RXNE_OR . . . . . . . . . . . E_CONST  ----- INT      -------  2
+Int2Str. . . . . . . . . . . . . . . .  PUBLIC  CODE    PROC    ------- -----
+ str?328 . . . . . . . . . . . . . . .  PARAM    auto    PTR     000008H 2      
+ intnum?329. . . . . . . . . . . . . .  PARAM    auto     BASE    00000CH 4      
+  i?330. . . . . . . . . . . . . . . .  PUBLIC  auto    INT     000000H 2      
+  Div?332. . . . . . . . . . . . . . .  PUBLIC  auto    INT     000002H 2      
+  j?334. . . . . . . . . . . . . . . .  PUBLIC  auto    INT     000004H 2      
+  Status?336 . . . . . . . . . . . . .  PUBLIC  auto    INT     000006H 2      
+Str2Int. . . . . . . . . . . . . . . .  PUBLIC  CODE    PROC    ------- -----
+ inputstr?337. . . . . . . . . . . . .  PARAM    auto    PTR     000006H 2      
+ intnum?338. . . . . . . . . . . . . .  PARAM    auto    PTR     00000AH 2      
+  i?340. . . . . . . . . . . . . . . .  PUBLIC  auto    U_CHAR  000000H 1      
+  res?342. . . . . . . . . . . . . . .  PUBLIC  auto    U_CHAR  000001H 1      
+  val?344. . . . . . . . . . . . . . .  PUBLIC  auto     BASE    000002H 4      
+GetIntegerInput. . . . . . . . . . . .  PUBLIC  CODE    PROC    ------- -----
+ num?345 . . . . . . . . . . . . . . .  PARAM    auto    PTR     000010H 2      
+  inputstr?346 . . . . . . . . . . . .  PUBLIC  auto    ARRAY   000000H 16     
+SerialKeyPressed . . . . . . . . . . .  PUBLIC  CODE    PROC    ------- -----
+ key?347 . . . . . . . . . . . . . . .  PARAM    auto    PTR     000002H 2      
+  flag?348 . . . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+GetKey . . . . . . . . . . . . . . . .  PUBLIC  CODE    PROC    ------- -----
+  key?352. . . . . . . . . . . . . . .  PUBLIC  auto    U_CHAR  000000H 1      
+SerialPutChar. . . . . . . . . . . . .  PUBLIC  CODE    PROC    ------- -----
+ c?353 . . . . . . . . . . . . . . . .  PARAM    auto    U_CHAR  000000H 1      
+SerialPutString. . . . . . . . . . . .  PUBLIC  CODE    PROC    ------- -----
+ s?354 . . . . . . . . . . . . . . . .  PARAM    auto    PTR     000000H 2      
+GetInputString . . . . . . . . . . . .  PUBLIC  CODE    PROC    ------- -----
+ buffP?355 . . . . . . . . . . . . . .  PARAM    auto    PTR     000003H 2      
+  bytes_read?357 . . . . . . . . . . .  PUBLIC  auto    INT     000000H 2      
+  c?359. . . . . . . . . . . . . . . .  PUBLIC  auto    U_CHAR  000002H 1      
+Main_Menu. . . . . . . . . . . . . . .  PUBLIC  CODE    PROC    ------- -----
+  choice?362 . . . . . . . . . . . . .  PUBLIC  auto    ARRAY   000000H 70     
+  msg?363. . . . . . . . . . . . . . .  PUBLIC  auto    ARRAY   000046H 70     
+  bTreat?364 . . . . . . . . . . . . . E_CONST  ----- INT      -------  2
+  freq_error?366 . . . . . . . . . . . E_CONST  ----- INT      -------  2
+  freq?367 . . . . . . . . . . . . . .  PUBLIC  auto    U_CHAR  000090H 1      
+  freq_choice?368. . . . . . . . . . .  PUBLIC  auto     BASE    000091H 4      
+?CL. . . . . . . . . . . . . . . . . .  EXTERN  page0   U_CHAR  ------- -----
+?BL. . . . . . . . . . . . . . . . . .  EXTERN  page0   U_CHAR  ------- -----
+?BH. . . . . . . . . . . . . . . . . .  EXTERN  page0   U_CHAR  ------- -----
+?CH. . . . . . . . . . . . . . . . . .  EXTERN  page0   U_CHAR  ------- -----
+UART2_GetFlagStatus. . . . . . . . . .  EXTERN  CODE    PROC    ------- -----
+UART2_SendData8. . . . . . . . . . . .  EXTERN  CODE    PROC    ------- -----
+strcmp . . . . . . . . . . . . . . . .  EXTERN  CODE    PROC    ------- -----
+TIM3_Cmd . . . . . . . . . . . . . . .  EXTERN  CODE    PROC    ------- -----
+GPIO_WriteLow. . . . . . . . . . . . .  EXTERN  CODE    PROC    ------- -----
+GPIO_WriteHigh . . . . . . . . . . . .  EXTERN  CODE    PROC    ------- -----
+BEEP_Cmd . . . . . . . . . . . . . . .  EXTERN  CODE    PROC    ------- -----
+BEEP_Init. . . . . . . . . . . . . . .  EXTERN  CODE    PROC    ------- -----
+RCSTM8 COMPILER V2.26.09.317
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1499    ----
+   CONSTANT SIZE    =    652    ----
+   DATA SIZE        =   ----    ----
+   PAGE0 SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+RCSTM8 COMPILATION COMPLETE.  1 WARNING,  0 ERROR
