@@ -1,0 +1,12 @@
+src\app\main.c
+src\kernel\portdrv.h
+src\kernel\stm8s_conf.h
+src\kernel\stm8s_macro.h
+src\kernel\stm8s_map.h
+src\kernel\types.h
+src\kernel\portdrv.c
+src\kernel\stm8_interrupt_vector.c
+src\sensors\switch.h
+src\sensors\switch.c
+..\..\..\..\..\..\program files (x86)\cosmic\cxstm8\hstm8\mods0.h
+src\kernel\macros.h
