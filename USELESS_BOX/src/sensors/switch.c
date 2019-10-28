@@ -16,6 +16,7 @@
 #include "../kernel/macros.h"
 #include "../kernel/portdrv.h"
 #include "../sensors/switch.h"
+#include "../drivers/timer_1.h"
 
 // ----------------------------------------------------------------------------
 // GLOBAL VARIABLE DEFINITIONS.
@@ -130,6 +131,17 @@ void SwitchStatusReadAll(void)
   {
     SwitchStatus.asBit.boSwitch9 = ON;
   }  
+  
+  
+  //test switch 
+  if (SwitchStatus.asBit.boSwitch1)
+  {
+    _TIMER_3_PWM_DUTY_SET(1000); //1ms [OK]
+  }
+  else
+  {
+    _TIMER_3_PWM_DUTY_SET(4500);
+  }
 }
 
 

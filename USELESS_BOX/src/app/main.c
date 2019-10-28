@@ -10,6 +10,7 @@
 #include "../kernel/stm8s_map.h"
 #include "../kernel/portdrv.h"
 #include "../sensors/switch.h"
+#include "../drivers/timer_1.h"
 
 // ----------------------------------------------------------------------------
 // GLOBAL VARIABLE DEFINITIONS.
@@ -31,12 +32,12 @@
 // LOCAL VARIABLES.
 // ----------------------------------------------------------------------------
 
-main()
+void main()
 {
   sim();
   
   PortInit();
-  //_PD_PORT_B6_CONF();
+  Timer1Init();
   
   
   rim();
