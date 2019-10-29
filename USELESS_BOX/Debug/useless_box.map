@@ -1,5 +1,5 @@
 
-Map of Debug\useless_box.sm8 from link file Debug\useless_box.lkf - Mon Oct 28 14:46:55 2019
+Map of Debug\useless_box.sm8 from link file Debug\useless_box.lkf - Tue Oct 29 13:29:52 2019
 
 
                                --------
@@ -7,7 +7,7 @@ Map of Debug\useless_box.sm8 from link file Debug\useless_box.lkf - Mon Oct 28 1
                                --------
 
 start 00008080 end 00008080 length     0 segment .const
-start 00008083 end 00008245 length   450 segment .text
+start 00008083 end 0000823d length   442 segment .text
 start 00004000 end 00004000 length     0 segment .eeprom
 start 00000000 end 00000000 length     0 segment .bsct
 start 00000000 end 00000009 length     9 segment .ubsct
@@ -47,7 +47,7 @@ start 00000165 end 0000021a length   181 section .debug
 start 0000010e end 0000017f length   113 section .info.
 
 Debug\switch.o:
-start 00008192 end 00008244 length   178 section .text
+start 00008192 end 0000823c length   170 section .text
 start 00000000 end 00000003 length     3 section .ubsct
 start 0000021a end 00000518 length   766 section .debug
 start 0000017f end 000001ef length   112 section .info.
@@ -61,7 +61,7 @@ start 00000006 end 00000009 length     3 section .ubsct
 start 0000021d end 0000024b length    46 section .info.
 
 Debug\stm8_interrupt_vector.o:
-start 00008244 end 00008245 length     1 section .text
+start 0000823c end 0000823d length     1 section .text
 start 00000518 end 00000683 length   363 section .debug
 start 0000024b end 000002ca length   127 section .info.
 start 00008000 end 00008080 length   128 section .const
@@ -143,4 +143,4 @@ c_x                     00000003   defined in (C:\Program Files (x86)\COSMIC\CXS
                                    used in C:\Program Files (x86)\COSMIC\CXSTM8\Lib\crtsi0.sm8
 c_y                     00000006   defined in (C:\Program Files (x86)\COSMIC\CXSTM8\Lib\libm0.sm8)yreg.o section .ubsct
                                    used in C:\Program Files (x86)\COSMIC\CXSTM8\Lib\crtsi0.sm8
-f_NonHandledInterrupt   00008244   defined in Debug\stm8_interrupt_vector.o section .text
+f_NonHandledInterrupt   0000823c   defined in Debug\stm8_interrupt_vector.o section .text

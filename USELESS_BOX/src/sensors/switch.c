@@ -46,10 +46,12 @@ void SwitchStatusReadAll(void)
   if (_PD_PORT_B0_CHECK()) 
   {
     SwitchStatus.asBit.boSwitch1 = OFF;
+    _TIMER_3_PWM_DUTY_SET(_TIMER_3_DUTY_CLOSE); //1ms [OK]
   }
   else
   {
     SwitchStatus.asBit.boSwitch1 = ON;
+    _TIMER_3_PWM_DUTY_SET(_TIMER_3_DUTY_OPEN); //1ms [OK]
   }
   
   //SWITCH 2 [OK]
@@ -131,20 +133,7 @@ void SwitchStatusReadAll(void)
   {
     SwitchStatus.asBit.boSwitch9 = ON;
   }  
-  
-  
-  //test switch 
-  if (SwitchStatus.asBit.boSwitch1)
-  {
-    _TIMER_3_PWM_DUTY_SET(1000); //1ms [OK]
-  }
-  else
-  {
-    _TIMER_3_PWM_DUTY_SET(4500);
-  }
 }
-
-
 
 // ----------------------------------------------------------------------------
 // FUNCTION:

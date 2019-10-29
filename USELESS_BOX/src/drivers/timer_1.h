@@ -20,7 +20,11 @@
 #ifndef _TIMER_1_H_
 #define _TIMER_1_H_
 
-#define _TIMER_3_DUTY      (UI_16)2991  //Duty Cycle   1,5ms HIGH
+#define _TIMER_3_DUTY_IDLE      (UI_16)3000  //Duty Cycle   1,5ms HIGH
+#define _TIMER_3_DUTY_OPEN      (UI_16)4500  //Duty Cycle   1,5ms HIGH
+#define _TIMER_3_DUTY_CLOSE     (UI_16)1000  //Duty Cycle   1,5ms HIGH
+
+
 #define _TIMER_3_DUTY_OFF  (UI_16)0
 
 #define _TIMER_3_PWM_FREQ_SET(uiPwmFr) \
@@ -29,7 +33,7 @@
         TIM3->CCR1H =(UC_8)(uiPwm >> 8U);  TIM3->CCR1L = (UC_8)(uiPwm & 0x00FFU)
 
 //50 Hz
-#define _TIMER_3_ARR_4 (UI_16)39910    //TIM3->PSCR = 0x03U;
+#define _TIMER_3_ARR (UI_16)39910    //TIM3->PSCR = 0x03U;
 
 
 // ----------------------------------------------------------------------------

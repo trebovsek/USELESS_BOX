@@ -51,14 +51,7 @@ void Timer1Init(void)
   TIM3->CR1 |= 0x80U;
 
   // load the value for the frequency in ARR
-  //TIM3->ARRH = (UC_8)(_TIMER_3_ARR >> 8U);
-  //TIM3->ARRL = (UC_8)(_TIMER_3_ARR & 0x00FFU);
-  
-  _TIMER_3_PWM_FREQ_SET(_TIMER_3_ARR_4); //s tem nastavim frekvenco
-
-  //Set the Prescaler value
-  //TIM3->PSCR = 0x03U;
-
+  _TIMER_3_PWM_FREQ_SET(_TIMER_3_ARR); //s tem nastavim frekvenco
 
   //Select the Counter Mode
   TIM3->CR1 &= (UC_8)~0x10U; // up-counting mode
@@ -72,13 +65,7 @@ void Timer1Init(void)
 
   TIM3->CR1 |= 0x01U;
   
-  //Duty cycle init OFF
-  //_TIMER_3_PWM_DUTY_SET(1000); //1ms [OK]
-  
-  _TIMER_3_PWM_DUTY_SET(3000); //1,5 ms - middle
-  
-  //_TIMER_3_PWM_DUTY_SET(4500); //2,0 ms
-  
+  _TIMER_3_PWM_DUTY_SET(_TIMER_3_DUTY_IDLE);
 }
 
 // ----------------------------------------------------------------------------

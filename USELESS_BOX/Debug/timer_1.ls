@@ -15,23 +15,23 @@
   61  000c 35015327      	mov	21287,#1
   62                     ; 51   TIM3->CR1 |= 0x80U;
   64  0010 721e5320      	bset	21280,#7
-  65                     ; 57   _TIMER_3_PWM_FREQ_SET(_TIMER_3_ARR_4); //s tem nastavim frekvenco
+  65                     ; 54   _TIMER_3_PWM_FREQ_SET(_TIMER_3_ARR); //s tem nastavim frekvenco
   67  0014 359b532b      	mov	21291,#155
   70  0018 35e6532c      	mov	21292,#230
-  71                     ; 64   TIM3->CR1 &= (UC_8)~0x10U; // up-counting mode
+  71                     ; 57   TIM3->CR1 &= (UC_8)~0x10U; // up-counting mode
   73  001c 72195320      	bres	21280,#4
-  74                     ; 66   TIM3->IER &= 0x00U;
+  74                     ; 59   TIM3->IER &= 0x00U;
   76  0020 725f5321      	clr	21281
-  77                     ; 70   TIM3->CCR1H =  0x00U;
+  77                     ; 63   TIM3->CCR1H =  0x00U;
   79  0024 725f532d      	clr	21293
-  80                     ; 71   TIM3->CCR1L =  0x00U;
+  80                     ; 64   TIM3->CCR1L =  0x00U;
   82  0028 725f532e      	clr	21294
-  83                     ; 73   TIM3->CR1 |= 0x01U;
+  83                     ; 66   TIM3->CR1 |= 0x01U;
   85  002c 72105320      	bset	21280,#0
-  86                     ; 78   _TIMER_3_PWM_DUTY_SET(3000); //1,5 ms - middle
+  86                     ; 68   _TIMER_3_PWM_DUTY_SET(_TIMER_3_DUTY_IDLE);
   88  0030 350b532d      	mov	21293,#11
   91  0034 35b8532e      	mov	21294,#184
-  92                     ; 82 }
+  92                     ; 69 }
   95  0038 81            	ret
  108                     	xdef	_Timer1Init
  127                     	end
