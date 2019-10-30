@@ -32,6 +32,10 @@
 #define _TIMER_3_PWM_DUTY_SET(uiPwm) \
         TIM3->CCR1H =(UC_8)(uiPwm >> 8U);  TIM3->CCR1L = (UC_8)(uiPwm & 0x00FFU)
 
+#define _TIMER_32_PWM_DUTY_SET(uiPwm) \
+        TIM3->CCR2H =(UC_8)(uiPwm >> 8U);  TIM3->CCR2L = (UC_8)(uiPwm & 0x00FFU)
+
+
 //50 Hz
 #define _TIMER_3_ARR (UI_16)39910    //TIM3->PSCR = 0x03U;
 

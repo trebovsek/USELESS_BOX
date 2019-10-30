@@ -57,11 +57,15 @@ void SwitchStatusReadAll(void)
   //SWITCH 2 [OK]
   if (_PD_PORT_E6_CHECK())
   {
+
     SwitchStatus.asBit.boSwitch2 = OFF;
+    _TIMER_32_PWM_DUTY_SET(_TIMER_3_DUTY_CLOSE); //1ms [OK]
   }
   else
   {
     SwitchStatus.asBit.boSwitch2 = ON;
+    _TIMER_32_PWM_DUTY_SET(_TIMER_3_DUTY_OPEN); //1ms [OK]
+    
   }
   
   //SWITCH 3 [OK]

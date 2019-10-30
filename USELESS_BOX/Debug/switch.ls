@@ -25,99 +25,105 @@
   79                     ; 58   if (_PD_PORT_E6_CHECK())
   81  0021 c65015        	ld	a,20501
   82  0024 a540          	bcp	a,#64
-  83  0026 2706          	jreq	L52
-  84                     ; 60     SwitchStatus.asBit.boSwitch2 = OFF;
+  83  0026 270e          	jreq	L52
+  84                     ; 61     SwitchStatus.asBit.boSwitch2 = OFF;
   86  0028 72130000      	bres	_SwitchStatus,#1
-  88  002c 2004          	jra	L72
-  89  002e               L52:
-  90                     ; 64     SwitchStatus.asBit.boSwitch2 = ON;
-  92  002e 72120000      	bset	_SwitchStatus,#1
-  93  0032               L72:
-  94                     ; 68   if (_PD_PORT_B4_CHECK())
-  96  0032 c65006        	ld	a,20486
-  97  0035 a510          	bcp	a,#16
-  98  0037 2706          	jreq	L13
-  99                     ; 70     SwitchStatus.asBit.boSwitch3 = OFF;
- 101  0039 72150000      	bres	_SwitchStatus,#2
- 103  003d 2004          	jra	L33
- 104  003f               L13:
- 105                     ; 74     SwitchStatus.asBit.boSwitch3 = ON;
- 107  003f 72140000      	bset	_SwitchStatus,#2
- 108  0043               L33:
- 109                     ; 78   if (_PD_PORT_B2_CHECK())
- 111  0043 c65006        	ld	a,20486
- 112  0046 a504          	bcp	a,#4
- 113  0048 2706          	jreq	L53
- 114                     ; 80     SwitchStatus.asBit.boSwitch4 = OFF;
- 116  004a 72170000      	bres	_SwitchStatus,#3
- 118  004e 2004          	jra	L73
- 119  0050               L53:
- 120                     ; 84     SwitchStatus.asBit.boSwitch4 = ON;
- 122  0050 72160000      	bset	_SwitchStatus,#3
- 123  0054               L73:
- 124                     ; 88   if (_PD_PORT_B3_CHECK())
- 126  0054 c65006        	ld	a,20486
- 127  0057 a508          	bcp	a,#8
- 128  0059 2706          	jreq	L14
- 129                     ; 90     SwitchStatus.asBit.boSwitch5 = OFF;
- 131  005b 72190000      	bres	_SwitchStatus,#4
- 133  005f 2004          	jra	L34
- 134  0061               L14:
- 135                     ; 94     SwitchStatus.asBit.boSwitch5 = ON;
- 137  0061 72180000      	bset	_SwitchStatus,#4
- 138  0065               L34:
- 139                     ; 98   if (_PD_PORT_E7_CHECK())
- 141  0065 c65015        	ld	a,20501
- 142  0068 a580          	bcp	a,#128
- 143  006a 2706          	jreq	L54
- 144                     ; 100     SwitchStatus.asBit.boSwitch6 = OFF;
- 146  006c 721b0000      	bres	_SwitchStatus,#5
- 148  0070 2004          	jra	L74
- 149  0072               L54:
- 150                     ; 104     SwitchStatus.asBit.boSwitch6 = ON;
- 152  0072 721a0000      	bset	_SwitchStatus,#5
- 153  0076               L74:
- 154                     ; 108   if (_PD_PORT_B6_CHECK())
- 156  0076 c65006        	ld	a,20486
- 157  0079 a540          	bcp	a,#64
- 158  007b 2706          	jreq	L15
- 159                     ; 110     SwitchStatus.asBit.boSwitch7= OFF;
- 161  007d 721d0000      	bres	_SwitchStatus,#6
- 163  0081 2004          	jra	L35
- 164  0083               L15:
- 165                     ; 114     SwitchStatus.asBit.boSwitch7 = ON;
- 167  0083 721c0000      	bset	_SwitchStatus,#6
- 168  0087               L35:
- 169                     ; 118   if (_PD_PORT_B1_CHECK())
- 171  0087 c65006        	ld	a,20486
- 172  008a a502          	bcp	a,#2
- 173  008c 2706          	jreq	L55
- 174                     ; 120     SwitchStatus.asBit.boSwitch8 = OFF;
- 176  008e 721f0000      	bres	_SwitchStatus,#7
- 178  0092 2004          	jra	L75
- 179  0094               L55:
- 180                     ; 124     SwitchStatus.asBit.boSwitch8 = ON;
- 182  0094 721e0000      	bset	_SwitchStatus,#7
- 183  0098               L75:
- 184                     ; 128   if (_PD_PORT_B5_CHECK())
- 186  0098 c65006        	ld	a,20486
- 187  009b a520          	bcp	a,#32
- 188  009d 2706          	jreq	L16
- 189                     ; 130     SwitchStatus.asBit.boSwitch9 = OFF;
- 191  009f 72110001      	bres	_SwitchStatus+1,#0
- 193  00a3 2004          	jra	L36
- 194  00a5               L16:
- 195                     ; 134     SwitchStatus.asBit.boSwitch9 = ON;
- 197  00a5 72100001      	bset	_SwitchStatus+1,#0
- 198  00a9               L36:
- 199                     ; 136 }
- 202  00a9 81            	ret
- 391                     	xdef	_SwitchStatusReadAll
- 392                     	switch	.ubsct
- 393  0000               _SwitchStatus:
- 394  0000 0000          	ds.b	2
- 395                     	xdef	_SwitchStatus
- 396  0002               _gucSwitchState:
- 397  0002 00            	ds.b	1
- 398                     	xdef	_gucSwitchState
- 418                     	end
+  87                     ; 62     _TIMER_32_PWM_DUTY_SET(_TIMER_3_DUTY_CLOSE); //1ms [OK]
+  89  002c 3503532f      	mov	21295,#3
+  92  0030 35e85330      	mov	21296,#232
+  94  0034 200c          	jra	L72
+  95  0036               L52:
+  96                     ; 66     SwitchStatus.asBit.boSwitch2 = ON;
+  98  0036 72120000      	bset	_SwitchStatus,#1
+  99                     ; 67     _TIMER_32_PWM_DUTY_SET(_TIMER_3_DUTY_OPEN); //1ms [OK]
+ 101  003a 3511532f      	mov	21295,#17
+ 104  003e 35945330      	mov	21296,#148
+ 105  0042               L72:
+ 106                     ; 72   if (_PD_PORT_B4_CHECK())
+ 108  0042 c65006        	ld	a,20486
+ 109  0045 a510          	bcp	a,#16
+ 110  0047 2706          	jreq	L13
+ 111                     ; 74     SwitchStatus.asBit.boSwitch3 = OFF;
+ 113  0049 72150000      	bres	_SwitchStatus,#2
+ 115  004d 2004          	jra	L33
+ 116  004f               L13:
+ 117                     ; 78     SwitchStatus.asBit.boSwitch3 = ON;
+ 119  004f 72140000      	bset	_SwitchStatus,#2
+ 120  0053               L33:
+ 121                     ; 82   if (_PD_PORT_B2_CHECK())
+ 123  0053 c65006        	ld	a,20486
+ 124  0056 a504          	bcp	a,#4
+ 125  0058 2706          	jreq	L53
+ 126                     ; 84     SwitchStatus.asBit.boSwitch4 = OFF;
+ 128  005a 72170000      	bres	_SwitchStatus,#3
+ 130  005e 2004          	jra	L73
+ 131  0060               L53:
+ 132                     ; 88     SwitchStatus.asBit.boSwitch4 = ON;
+ 134  0060 72160000      	bset	_SwitchStatus,#3
+ 135  0064               L73:
+ 136                     ; 92   if (_PD_PORT_B3_CHECK())
+ 138  0064 c65006        	ld	a,20486
+ 139  0067 a508          	bcp	a,#8
+ 140  0069 2706          	jreq	L14
+ 141                     ; 94     SwitchStatus.asBit.boSwitch5 = OFF;
+ 143  006b 72190000      	bres	_SwitchStatus,#4
+ 145  006f 2004          	jra	L34
+ 146  0071               L14:
+ 147                     ; 98     SwitchStatus.asBit.boSwitch5 = ON;
+ 149  0071 72180000      	bset	_SwitchStatus,#4
+ 150  0075               L34:
+ 151                     ; 102   if (_PD_PORT_E7_CHECK())
+ 153  0075 c65015        	ld	a,20501
+ 154  0078 a580          	bcp	a,#128
+ 155  007a 2706          	jreq	L54
+ 156                     ; 104     SwitchStatus.asBit.boSwitch6 = OFF;
+ 158  007c 721b0000      	bres	_SwitchStatus,#5
+ 160  0080 2004          	jra	L74
+ 161  0082               L54:
+ 162                     ; 108     SwitchStatus.asBit.boSwitch6 = ON;
+ 164  0082 721a0000      	bset	_SwitchStatus,#5
+ 165  0086               L74:
+ 166                     ; 112   if (_PD_PORT_B6_CHECK())
+ 168  0086 c65006        	ld	a,20486
+ 169  0089 a540          	bcp	a,#64
+ 170  008b 2706          	jreq	L15
+ 171                     ; 114     SwitchStatus.asBit.boSwitch7= OFF;
+ 173  008d 721d0000      	bres	_SwitchStatus,#6
+ 175  0091 2004          	jra	L35
+ 176  0093               L15:
+ 177                     ; 118     SwitchStatus.asBit.boSwitch7 = ON;
+ 179  0093 721c0000      	bset	_SwitchStatus,#6
+ 180  0097               L35:
+ 181                     ; 122   if (_PD_PORT_B1_CHECK())
+ 183  0097 c65006        	ld	a,20486
+ 184  009a a502          	bcp	a,#2
+ 185  009c 2706          	jreq	L55
+ 186                     ; 124     SwitchStatus.asBit.boSwitch8 = OFF;
+ 188  009e 721f0000      	bres	_SwitchStatus,#7
+ 190  00a2 2004          	jra	L75
+ 191  00a4               L55:
+ 192                     ; 128     SwitchStatus.asBit.boSwitch8 = ON;
+ 194  00a4 721e0000      	bset	_SwitchStatus,#7
+ 195  00a8               L75:
+ 196                     ; 132   if (_PD_PORT_B5_CHECK())
+ 198  00a8 c65006        	ld	a,20486
+ 199  00ab a520          	bcp	a,#32
+ 200  00ad 2706          	jreq	L16
+ 201                     ; 134     SwitchStatus.asBit.boSwitch9 = OFF;
+ 203  00af 72110001      	bres	_SwitchStatus+1,#0
+ 205  00b3 2004          	jra	L36
+ 206  00b5               L16:
+ 207                     ; 138     SwitchStatus.asBit.boSwitch9 = ON;
+ 209  00b5 72100001      	bset	_SwitchStatus+1,#0
+ 210  00b9               L36:
+ 211                     ; 140 }
+ 214  00b9 81            	ret
+ 403                     	xdef	_SwitchStatusReadAll
+ 404                     	switch	.ubsct
+ 405  0000               _SwitchStatus:
+ 406  0000 0000          	ds.b	2
+ 407                     	xdef	_SwitchStatus
+ 408  0002               _gucSwitchState:
+ 409  0002 00            	ds.b	1
+ 410                     	xdef	_gucSwitchState
+ 430                     	end
