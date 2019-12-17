@@ -1,5 +1,5 @@
 
-Map of Debug\useless_box.sm8 from link file Debug\useless_box.lkf - Tue Dec 17 20:30:35 2019
+Map of Debug\useless_box.sm8 from link file Debug\useless_box.lkf - Tue Dec 17 22:01:05 2019
 
 
                                --------
@@ -15,8 +15,8 @@ start 00000009 end 00000009 length     0 segment .bit
 start 00000009 end 00000009 length     0 segment .share
 start 00000100 end 00000100 length     0 segment .data
 start 00000100 end 00000100 length     0 segment .bss
-start 00000000 end 00000300 length   768 segment .info.
-start 00000000 end 00000683 length  1667 segment .debug
+start 00000000 end 000003de length   990 segment .info.
+start 00000000 end 000007c4 length  1988 segment .debug
 start 00008000 end 00008080 length   128 segment .const
 start 00008080 end 00008083 length     3 segment .init
 
@@ -41,29 +41,38 @@ start 000080e0 end 00008119 length    57 section .text
 start 000000ae end 00000165 length   183 section .debug
 start 000000a0 end 0000010f length   111 section .info.
 
+Debug\macros.o:
+start ******** end ******** length     0 section .text *** removed ***
+start 00000165 end 00000262 length   253 section .debug
+start 0000010f end 0000017d length   110 section .info.
+
 Debug\portdrv.o:
 start 00008119 end 00008192 length   121 section .text
-start 00000165 end 0000021a length   181 section .debug
-start 0000010f end 0000017e length   111 section .info.
+start 00000262 end 00000317 length   181 section .debug
+start 0000017d end 000001ec length   111 section .info.
 
 Debug\switch.o:
 start 00008192 end 0000824c length   186 section .text
 start 00000000 end 00000003 length     3 section .ubsct
-start 0000021a end 00000518 length   766 section .debug
-start 0000017e end 000001ec length   110 section .info.
+start 00000317 end 00000615 length   766 section .debug
+start 000001ec end 0000025a length   110 section .info.
+
+Debug\template.o:
+start 00000615 end 00000659 length    68 section .debug
+start 0000025a end 000002ca length   112 section .info.
 
 (C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\lib\libm0.sm8)xreg.o:
 start 00000003 end 00000006 length     3 section .ubsct
-start 000001ec end 0000021b length    47 section .info.
+start 000002ca end 000002f9 length    47 section .info.
 
 (C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\lib\libm0.sm8)yreg.o:
 start 00000006 end 00000009 length     3 section .ubsct
-start 0000021b end 0000024a length    47 section .info.
+start 000002f9 end 00000328 length    47 section .info.
 
 Debug\stm8_interrupt_vector.o:
 start 0000824c end 0000824d length     1 section .text
-start 00000518 end 00000683 length   363 section .debug
-start 0000024a end 000002c7 length   125 section .info.
+start 00000659 end 000007c4 length   363 section .debug
+start 00000328 end 000003a5 length   125 section .info.
 start 00008000 end 00008080 length   128 section .const
 
 
@@ -113,6 +122,8 @@ Stack size: 10
                                Symbols
                                -------
 
+_GlobalIrqDisable       ********   *** removed from Debug\macros.o ***
+_GlobalIrqEnable        ********   *** removed from Debug\macros.o ***
 _PortInit               00008119   defined in Debug\portdrv.o section .text
                                    used in Debug\main.o
 _SwitchStatus           00000000   defined in Debug\switch.o section .ubsct

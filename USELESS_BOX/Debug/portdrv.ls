@@ -1,51 +1,51 @@
    1                     ; C Compiler for STM8 (COSMIC Software)
    2                     ; Parser V4.11.13 - 05 Feb 2019
    3                     ; Generator (Limited) V4.4.10 - 25 Sep 2019
-  42                     ; 19 void PortInit(void)
-  42                     ; 20 {
+  42                     ; 16 void PortInit(void)
+  42                     ; 17 {
   44                     	switch	.text
   45  0000               _PortInit:
-  49                     ; 21   _PD_PORT_B0_CONF();
+  49                     ; 18   _PD_PORT_B0_CONF();
   51  0000 72115007      	bres	20487,#0
   54  0004 72105008      	bset	20488,#0
   57  0008 72115009      	bres	20489,#0
-  58                     ; 22   _PD_PORT_B1_CONF();
+  58                     ; 19   _PD_PORT_B1_CONF();
   60  000c 72135007      	bres	20487,#1
   63  0010 72125008      	bset	20488,#1
   66  0014 72135009      	bres	20489,#1
-  67                     ; 23   _PD_PORT_B2_CONF();
+  67                     ; 20   _PD_PORT_B2_CONF();
   69  0018 72155007      	bres	20487,#2
   72  001c 72145008      	bset	20488,#2
   75  0020 72155009      	bres	20489,#2
-  76                     ; 24   _PD_PORT_B3_CONF();
+  76                     ; 21   _PD_PORT_B3_CONF();
   78  0024 72175007      	bres	20487,#3
   81  0028 72165008      	bset	20488,#3
   84  002c 72175009      	bres	20489,#3
-  85                     ; 25   _PD_PORT_B4_CONF();
+  85                     ; 22   _PD_PORT_B4_CONF();
   87  0030 72195007      	bres	20487,#4
   90  0034 72185008      	bset	20488,#4
   93  0038 72195009      	bres	20489,#4
-  94                     ; 26   _PD_PORT_B5_CONF();
+  94                     ; 23   _PD_PORT_B5_CONF();
   96  003c 721b5007      	bres	20487,#5
   99  0040 721a5008      	bset	20488,#5
  102  0044 721b5009      	bres	20489,#5
- 103                     ; 27   _PD_PORT_B6_CONF();
+ 103                     ; 24   _PD_PORT_B6_CONF();
  105  0048 721d5007      	bres	20487,#6
  108  004c 721c5008      	bset	20488,#6
  111  0050 721d5009      	bres	20489,#6
- 112                     ; 28   _PD_PORT_B7_CONF();
+ 112                     ; 25   _PD_PORT_B7_CONF();
  114  0054 721f5007      	bres	20487,#7
  117  0058 721e5008      	bset	20488,#7
  120  005c 721f5009      	bres	20489,#7
- 121                     ; 30   _PD_PORT_E6_CONF();
+ 121                     ; 27   _PD_PORT_E6_CONF();
  123  0060 721d5016      	bres	20502,#6
  126  0064 721c5017      	bset	20503,#6
  129  0068 721d5018      	bres	20504,#6
- 130                     ; 31   _PD_PORT_E7_CONF();
+ 130                     ; 28   _PD_PORT_E7_CONF();
  132  006c 721f5016      	bres	20502,#7
  135  0070 721e5017      	bset	20503,#7
  138  0074 721f5018      	bres	20504,#7
- 139                     ; 32 }
+ 139                     ; 29 }
  142  0078 81            	ret
  155                     	xdef	_PortInit
  174                     	end

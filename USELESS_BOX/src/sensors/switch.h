@@ -1,21 +1,18 @@
 // ----------------------------------------------------------------------------
-// PROJECT:           C-14P [C-FS600]
+// PROJECT:            USELESS BOX
 // ----------------------------------------------------------------------------
-// MODULE NAME:        reed.h
-// CREATION DATE:      2008/09/22
-// AUTHOR:             Dejan Usar
-// LAST CHANGED DATE:  2013/06/05
-// LAST CHANGED BY:    Dejan Usar
+// MODULE NAME:        
+// CREATION DATE:      
+// AUTHOR:             
+// LAST CHANGED DATE:  
+// LAST CHANGED BY:    
 // REVISION:           1.0
 // DESCRIPTION:
-//   This module is reading status of reeds.
-//    REED_RF, REED_FR
 // ----------------------------------------------------------------------------
-// Copyright (C) 2009 by Gorenje d.d.
 // All rights reserved.
 // ----------------------------------------------------------------------------
-//#ifndef _SWITCH_H_
-//#define _SWITCH_H_
+#ifndef _SWITCH_H_
+#define _SWITCH_H_
 
 // ----------------------------------------------------------------------------
 // GLOBAL CONSTANTS.
@@ -91,4 +88,4 @@ extern void SwitchStatusReadAll(void);
 // INTERRUPT DEFINITIONS.
 // ----------------------------------------------------------------------------
 
-//#endif // _SWITCH_H_
+#endif // _SWITCH_H_

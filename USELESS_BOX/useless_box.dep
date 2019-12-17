@@ -5,10 +5,13 @@ Keyword=ST7Project
 Number=1.3
 
 [Root.app (source).src\app\main.c.Config.0]
-ExternDep= src\app\main.c  "C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\HSTM8\mods0.h"  src\drivers\../kernel/stm8s_map.h src\drivers\../kernel/stm8s_conf.h  src\drivers\../kernel/types.h src\drivers\../kernel/stm8s_macro.h  src\drivers\../kernel/portdrv.h src\drivers\../kernel/macros.h  src\drivers\../sensors/switch.h src\drivers\../drivers/timer_3.h
+ExternDep= src\app\main.c  "C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\HSTM8\mods0.h"  src\drivers\../kernel/stm8s_map.h src\drivers\../kernel/stm8s_conf.h  src\drivers\../kernel/types.h src\drivers\../kernel/stm8s_macro.h  src\drivers\../kernel/portdrv.h src\drivers\../sensors/switch.h  src\drivers\../drivers/timer_3.h
 
 [Root.drivers (source).src\drivers\timer_3.c.Config.0]
-ExternDep= src\drivers\timer_3.c  "C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\HSTM8\mods0.h"  src\drivers\../kernel/stm8s_map.h src\drivers\../kernel/stm8s_conf.h  src\drivers\../kernel/types.h src\drivers\../kernel/stm8s_macro.h  src\drivers\../drivers/timer_3.h src\drivers\../kernel/kernel.h
+ExternDep= src\drivers\timer_3.c  "C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\HSTM8\mods0.h"  src\drivers\../kernel/stm8s_map.h src\drivers\../kernel/stm8s_conf.h  src\drivers\../kernel/types.h src\drivers\../kernel/stm8s_macro.h  src\drivers\../drivers/timer_3.h
+
+[Root.kernel (source).src\kernel\macros.c.Config.0]
+ExternDep= src\kernel\macros.c  "C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\HSTM8\mods0.h"  src\drivers\../kernel/macros.h
 
 [Root.kernel (source).src\kernel\portdrv.c.Config.0]
 ExternDep= src\kernel\portdrv.c  "C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\HSTM8\mods0.h"  src\drivers\../kernel/types.h src\drivers\../kernel/macros.h  src\drivers\../kernel/stm8s_map.h src\drivers\../kernel/stm8s_conf.h  src\drivers\../kernel/stm8s_macro.h src\drivers\../kernel/portdrv.h
@@ -18,3 +21,6 @@ ExternDep= src\kernel\stm8_interrupt_vector.c  "C:\Program Files (x86)\COSMIC\FS
 
 [Root.sensors (source).src\sensors\switch.c.Config.0]
 ExternDep= src\sensors\switch.c  "C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\HSTM8\mods0.h"  src\drivers\../kernel/types.h src\drivers\../kernel/stm8s_map.h  src\drivers\../kernel/stm8s_conf.h src\drivers\../kernel/stm8s_macro.h  src\drivers\../kernel/macros.h src\drivers\../kernel/portdrv.h  src\drivers\../sensors/switch.h src\drivers\../drivers/timer_3.h
+
+[Root.src_template.src_template\template.c.Config.0]
+ExternDep= src_template\template.c  "C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\HSTM8\mods0.h"

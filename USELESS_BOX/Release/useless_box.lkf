@@ -52,8 +52,10 @@ crtsi0.sm8
 #<BEGIN OBJECT_FILES>
 Release\main.o
 Release\timer_3.o
+Release\macros.o
 Release\portdrv.o
 Release\switch.o
+Release\template.o
 #<END OBJECT_FILES>
 
 

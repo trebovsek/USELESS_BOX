@@ -1,18 +1,16 @@
 // ----------------------------------------------------------------------------
-// PROJECT:            C-14P [C-FS600]
+// PROJECT:            USELESS BOX
 // ----------------------------------------------------------------------------
 // MODULE NAME:        types.h
-// CREATION DATE:      2007/02/28
-// AUTHOR:             Timotej Globacnik
+// CREATION DATE:      
+// AUTHOR:             
 // LAST CHANGED DATE:  --
-// LAST CHANGED BY:    Dejan Usar
+// LAST CHANGED BY:    
 // REVISION:           1.0
 // DESCRIPTION:
 //   Basic data types renamed to follow MISRA rules.
 //   Added NULL pointer definition.
-//   Minimum and maximum limits defined for each data type.
 // ----------------------------------------------------------------------------
-// Copyright (C) 2007 by Gorenje d.d.
 // All rights reserved.
 // ----------------------------------------------------------------------------
 #ifndef _TYPES_H_
@@ -43,15 +41,8 @@ typedef float SFLOAT_32;            // Signed float (32 bit).
 // 1 - byte volatile unsigned char
 typedef volatile unsigned char VUC_8; // Unsigned char (8-bit)
 
-
-
-
-
-
 // ----------------------------------------------------------------------------
 // GLOBAL CONSTANTS.
 // ----------------------------------------------------------------------------
-
-void _asm(void*);
 
 #endif // _TYPES_H_

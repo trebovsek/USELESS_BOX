@@ -1,11 +1,11 @@
 // ----------------------------------------------------------------------------
-// PROJECT:            C-14P [C-FS600]
+// PROJECT:            USELESS BOX
 // ----------------------------------------------------------------------------
 // MODULE NAME:        macros.h
-// CREATION DATE:      2007/02/28
-// AUTHOR:             Timotej Globacnik
-// LAST CHANGED DATE:  2009/02/28
-// LAST CHANGED BY:    Dejan Usar
+// CREATION DATE:     
+// AUTHOR:             
+// LAST CHANGED DATE:  
+// LAST CHANGED BY:    
 // REVISION:           1.0
 // DESCRIPTION:
 //   Commonly used macros and assembler instructions.

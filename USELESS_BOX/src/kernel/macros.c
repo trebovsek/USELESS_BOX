@@ -1,19 +1,15 @@
 // ----------------------------------------------------------------------------
-// PROJECT:           C-14P [C-FS600]
+// PROJECT:            USELESS BOX
 // ----------------------------------------------------------------------------
-// MODULE NAME:        macros.c
-// CREATION DATE:      2007/02/28
-// AUTHOR:             Timotej Globacnik
-// LAST CHANGED DATE:  2009/02/28
-// LAST CHANGED BY:    Dejan Usar
-// REVISION:           1.0
 // DESCRIPTION:
 //   Commonly used macros and assembler instructions.
 // ----------------------------------------------------------------------------
-// Copyright (C) 2007 by Gorenje d.d.
 // All rights reserved.
 // ----------------------------------------------------------------------------
 
+// ----------------------------------------------------------------------------
+// INCLUDED FILES.
+// ----------------------------------------------------------------------------
 #include "../kernel/macros.h"
 
 // ----------------------------------------------------------------------------
@@ -62,24 +58,4 @@ void GlobalIrqDisable(void)
   sim
   #pragma endasm
 }
-
-// ----------------------------------------------------------------------------
-// FUNCTION:
-//   void GlobalIrqGetStatus(void)
-// DESCRIPTION:
-//   Gets status of global interrupts.
-// INPUTS: --
-// OUTPUT:
-//   BOOL - status of I flag
-// ----------------------------------------------------------------------------
-//BoolT GlobalIrqGetStatus(void)
-//{
-/*  #pragma asm
-  stc flg, r0
-  and.w #64, r0
-  shl.w #-6H,r0
-  #pragma endasm*/
-//}
-
-
 
