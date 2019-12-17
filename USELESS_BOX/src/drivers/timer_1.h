@@ -1,24 +1,25 @@
 // ----------------------------------------------------------------------------
-// PROJECT:            C-14P [C-FS600]
+// PROJECT:            USELESS BOX
 // ----------------------------------------------------------------------------
 // MODULE NAME:        timer_3.h
-// CREATION DATE:      2008/04/23
-// AUTHOR:             Dejan Usar
-// LAST CHANGED DATE:  2013/07/01
-// LAST CHANGED BY:    Dejan Usar
+// CREATION DATE:      28/10/2019
+// AUTHOR:             Marko Trebovsek
+// LAST CHANGED DATE:
+// LAST CHANGED BY:
 // REVISION:           1.0
 // DESCRIPTION:
-//   Timer_3 module. PWM mode.
-// Used for driving Secop compresor XV72KA _COMPR_VS_XV72KA
-// Fixed 1,5ms on-time, Variable off-time (according to the required frequency)
+//   Timer_1 module. PWM mode.
+// Used for driving "Tower Pro MG90S Micro Servo" motor
+// and other servo (unkonwn name atm)
 //
-// ----------------------------------------------------------------------------
-// Copyright (C) 2013 by Gorenje d.d.
-// All rights reserved.
+// Frequency: 50Hz (20ms)
+// Duty cycles: - 1,0ms (all the way to the left)
+//              - 1,5ms (middle "90" degrees)
+//              - 2,0ms (all the way to the right)
 // ----------------------------------------------------------------------------
 
-#ifndef _TIMER_1_H_
-#define _TIMER_1_H_
+#ifndef _TIMER_3_H_
+#define _TIMER_3_H_
 
 #define _TIMER_3_DUTY_IDLE      (UI_16)3000  //Duty Cycle   1,5ms HIGH
 #define _TIMER_3_DUTY_OPEN      (UI_16)4500  //Duty Cycle   1,5ms HIGH
@@ -43,7 +44,7 @@
 // ----------------------------------------------------------------------------
 // INTERRUPT DEFINITIONS
 // ----------------------------------------------------------------------------
-extern void Timer1Init(void);
+extern void Timer3Init(void);
 
 // ----------------------------------------------------------------------------
 // CONTROL REGISTER(S)INITIALIZATION VALUES

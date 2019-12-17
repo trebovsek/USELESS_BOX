@@ -16,7 +16,6 @@
 #include "../kernel/stm8s_map.h"
 #include "../kernel/portdrv.h"
 
-
 void PortInit(void)
 {
   _PD_PORT_B0_CONF();

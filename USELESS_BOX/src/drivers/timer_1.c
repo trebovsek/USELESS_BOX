@@ -1,15 +1,17 @@
 // ----------------------------------------------------------------------------
 // PROJECT:            USELESS BOX
 // ----------------------------------------------------------------------------
-// MODULE NAME:        timer_1.c
+// MODULE NAME:        timer_3.c
 // CREATION DATE:      28/10/2019
-// AUTHOR:             Marko Trebovšek
+// AUTHOR:             Marko Trebovsek
 // LAST CHANGED DATE:
 // LAST CHANGED BY:
 // REVISION:           1.0
 // DESCRIPTION:
 //   Timer_1 module. PWM mode.
 // Used for driving "Tower Pro MG90S Micro Servo" motor
+// and other servo (unkonwn name atm)
+//
 // Frequency: 50Hz (20ms)
 // Duty cycles: - 1,0ms (all the way to the left)
 //              - 1,5ms (middle "90" degrees)
@@ -36,7 +38,7 @@
 // OUTPUT: --
 // ----------------------------------------------------------------------------
 
-void Timer1Init(void)
+void Timer3Init(void)
 {
   // Select the PWM mode in up-counting mode
   // Set the timer in order to output a PWM signal on CC1 (several registers have to be set)

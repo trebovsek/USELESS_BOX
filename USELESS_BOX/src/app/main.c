@@ -1,7 +1,15 @@
-/* MAIN.C file
- * 
- * Copyright (c) 2002-2005 STMicroelectronics
- */
+// ----------------------------------------------------------------------------
+// PROJECT:            USELESS BOX
+// ----------------------------------------------------------------------------
+// MODULE NAME:        main
+// CREATION DATE:      
+// AUTHOR:             
+// LAST CHANGED DATE:  
+// LAST CHANGED BY:    
+// REVISION:           
+// DESCRIPTION:
+//   Main module
+// ----------------------------------------------------------------------------
 
 #include "../kernel/stm8s_map.h"
 #include "../kernel/portdrv.h"
@@ -34,14 +42,14 @@
 
 void main()
 {
+	//disable interrupts
   sim();
-  
+	
   PortInit();
-  Timer1Init();
+  Timer3Init();
   
-  
+	//enable interrupts
   rim();
-  
   
 	while (1)
   {
