@@ -1,5 +1,5 @@
 
-Map of Debug\useless_box.sm8 from link file Debug\useless_box.lkf - Tue Dec 17 19:45:21 2019
+Map of Debug\useless_box.sm8 from link file Debug\useless_box.lkf - Tue Dec 17 20:30:35 2019
 
 
                                --------
@@ -36,7 +36,7 @@ start 000080d3 end 000080e0 length    13 section .text
 start 00000000 end 000000ae length   174 section .debug
 start 00000034 end 000000a0 length   108 section .info.
 
-Debug\timer_1.o:
+Debug\timer_3.o:
 start 000080e0 end 00008119 length    57 section .text
 start 000000ae end 00000165 length   183 section .debug
 start 000000a0 end 0000010f length   111 section .info.
@@ -83,7 +83,7 @@ f_NonHandledInterrupt  >    6   (6)
 Debug\switch.o:
 _SwitchStatusReadAll        2   (2)
 
-Debug\timer_1.o:
+Debug\timer_3.o:
 _Timer3Init                 2   (2)
 
 Stack size: 10
@@ -118,7 +118,7 @@ _PortInit               00008119   defined in Debug\portdrv.o section .text
 _SwitchStatus           00000000   defined in Debug\switch.o section .ubsct
 _SwitchStatusReadAll    00008192   defined in Debug\switch.o section .text
                                    used in Debug\main.o
-_Timer3Init             000080e0   defined in Debug\timer_1.o section .text
+_Timer3Init             000080e0   defined in Debug\timer_3.o section .text
                                    used in Debug\main.o
 __endmem                000005ff   defined in command file
                                    *** not used ***

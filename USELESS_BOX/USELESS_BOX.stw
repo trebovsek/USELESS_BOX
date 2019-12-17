@@ -6,3 +6,7 @@ Keyword=ST7Workspace-V0.7
 [Project0]
 Filename=useless_box.stp
 Dependencies=
+[Options]
+ActiveProject=useless_box
+ActiveConfig=Debug
+AddSortedElements=0

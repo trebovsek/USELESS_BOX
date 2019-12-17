@@ -16,7 +16,7 @@
 #include "../kernel/macros.h"
 #include "../kernel/portdrv.h"
 #include "../sensors/switch.h"
-#include "../drivers/timer_1.h"
+#include "../drivers/timer_3.h"
 
 // ----------------------------------------------------------------------------
 // GLOBAL VARIABLE DEFINITIONS.
@@ -57,7 +57,6 @@ void SwitchStatusReadAll(void)
   //SWITCH 2 [OK]
   if (_PD_PORT_E6_CHECK())
   {
-
     SwitchStatus.asBit.boSwitch2 = OFF;
     _TIMER_32_PWM_DUTY_SET(_TIMER_3_DUTY_CLOSE); //1ms [OK]
   }

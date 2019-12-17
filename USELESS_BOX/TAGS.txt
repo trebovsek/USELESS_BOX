@@ -88,7 +88,6 @@ BEEP_CSR_RESET_VALUE	src\kernel\stm8s_map.h	241;"	macro
 BEEP_TypeDef	src\kernel\stm8s_map.h	235;"	typedef	typeref:struct:BEEP_struct
 BEEP_struct	src\kernel\stm8s_map.h	231;"	struct
 BKR	src\kernel\stm8s_map.h	400;"	member	struct:TIM1_struct
-BOOL	src\kernel\types.h	29;"	typedef	typeref:enum:__anon10
 BRR1	src\kernel\stm8s_map.h	1354;"	member	struct:UART1_struct
 BRR1	src\kernel\stm8s_map.h	1452;"	member	struct:UART2_struct
 BRR1	src\kernel\stm8s_map.h	1561;"	member	struct:UART3_struct
@@ -103,7 +102,6 @@ BYTE_2	src\kernel\stm8s_macro.h	94;"	macro
 BYTE_3	src\kernel\stm8s_macro.h	95;"	macro
 BitClr	src\kernel\stm8s_macro.h	114;"	macro
 BitSet	src\kernel\stm8s_macro.h	115;"	macro
-BitStatus	src\kernel\types.h	37;"	typedef	typeref:enum:__anon11
 BitVal	src\kernel\stm8s_macro.h	116;"	macro
 CAN	src\kernel\stm8s_map.h	2051;"	macro
 CANCCR	src\kernel\stm8s_map.h	277;"	member	struct:CLK_struct
@@ -330,7 +328,6 @@ CLK_SWR_RESET_VALUE	src\kernel\stm8s_map.h	290;"	macro
 CLK_SWR_SWI	src\kernel\stm8s_map.h	321;"	macro
 CLK_TypeDef	src\kernel\stm8s_map.h	281;"	typedef	typeref:struct:CLK_struct
 CLK_struct	src\kernel\stm8s_map.h	264;"	struct
-CLOSED	src\sensors\switch.h	38;"	enumerator	enum:__anon14
 CMSR	src\kernel\stm8s_map.h	269;"	member	struct:CLK_struct
 CNTR	src\kernel\stm8s_map.h	821;"	member	struct:TIM4_struct
 CNTRH	src\kernel\stm8s_map.h	385;"	member	struct:TIM1_struct
@@ -384,7 +381,7 @@ CSR	src\kernel\stm8s_map.h	191;"	member	struct:AWU_struct
 CSR	src\kernel\stm8s_map.h	233;"	member	struct:BEEP_struct
 CSR	src\kernel\stm8s_map.h	68;"	member	struct:ADC1_struct
 CSSR	src\kernel\stm8s_map.h	274;"	member	struct:CLK_struct
-CheckSwitchInput	src\kernel\portdrv.h	172;"	prototype	signature:(void)
+CheckSwitchInput	src\kernel\portdrv.h	151;"	prototype	signature:(void)
 ChgBit	src\kernel\stm8s_macro.h	84;"	macro
 ClrBit	src\kernel\stm8s_macro.h	82;"	macro
 Config	src\kernel\stm8s_map.h	1766;"	member	union:__anon1::__anon2	typeref:struct:__anon1::__anon2::__anon8
@@ -410,7 +407,6 @@ DB9RH	src\kernel\stm8s_map.h	65;"	member	struct:ADC1_struct
 DB9RL	src\kernel\stm8s_map.h	66;"	member	struct:ADC1_struct
 DDR	src\kernel\stm8s_map.h	1062;"	member	struct:GPIO_struct
 DGR	src\kernel\stm8s_map.h	1658;"	member	struct:__anon1
-DISABLE	src\kernel\types.h	40;"	enumerator	enum:__anon12
 DM	src\kernel\stm8s_map.h	2183;"	macro
 DM_BaseAddress	src\kernel\stm8s_map.h	2040;"	macro
 DR	src\kernel\stm8s_map.h	1274;"	member	struct:SPI_struct
@@ -431,8 +427,6 @@ EGR	src\kernel\stm8s_map.h	586;"	member	struct:TIM2_struct
 EGR	src\kernel\stm8s_map.h	710;"	member	struct:TIM3_struct
 EGR	src\kernel\stm8s_map.h	820;"	member	struct:TIM4_struct
 EIER	src\kernel\stm8s_map.h	1753;"	member	struct:__anon1::__anon2::__anon8
-ENABLE	src\kernel\types.h	41;"	enumerator	enum:__anon12
-ERROR	src\kernel\types.h	48;"	enumerator	enum:__anon13
 ESR	src\kernel\stm8s_map.h	1752;"	member	struct:__anon1::__anon2::__anon8
 ETR	src\kernel\stm8s_map.h	374;"	member	struct:TIM1_struct
 EXTI	src\kernel\stm8s_map.h	2099;"	macro
@@ -447,7 +441,6 @@ EXTI_CR2_RESET_VALUE	src\kernel\stm8s_map.h	1031;"	macro
 EXTI_CR2_TLIS	src\kernel\stm8s_map.h	1046;"	macro
 EXTI_TypeDef	src\kernel\stm8s_map.h	1024;"	typedef	typeref:struct:EXTI_struct
 EXTI_struct	src\kernel\stm8s_map.h	1019;"	struct
-ErrorStatus	src\kernel\types.h	51;"	typedef	typeref:enum:__anon13
 F0R1	src\kernel\stm8s_map.h	1686;"	member	struct:__anon1::__anon2::__anon5
 F0R2	src\kernel\stm8s_map.h	1687;"	member	struct:__anon1::__anon2::__anon5
 F0R3	src\kernel\stm8s_map.h	1688;"	member	struct:__anon1::__anon2::__anon5
@@ -496,7 +489,6 @@ F5R5	src\kernel\stm8s_map.h	1743;"	member	struct:__anon1::__anon2::__anon7
 F5R6	src\kernel\stm8s_map.h	1744;"	member	struct:__anon1::__anon2::__anon7
 F5R7	src\kernel\stm8s_map.h	1745;"	member	struct:__anon1::__anon2::__anon7
 F5R8	src\kernel\stm8s_map.h	1746;"	member	struct:__anon1::__anon2::__anon7
-FALSE	src\kernel\types.h	27;"	enumerator	enum:__anon10
 FCR1	src\kernel\stm8s_map.h	1761;"	member	struct:__anon1::__anon2::__anon8
 FCR2	src\kernel\stm8s_map.h	1762;"	member	struct:__anon1::__anon2::__anon8
 FCR3	src\kernel\stm8s_map.h	1763;"	member	struct:__anon1::__anon2::__anon8
@@ -541,8 +533,6 @@ Filter	src\kernel\stm8s_map.h	1681;"	member	union:__anon1::__anon2	typeref:struc
 Filter01	src\kernel\stm8s_map.h	1704;"	member	union:__anon1::__anon2	typeref:struct:__anon1::__anon2::__anon5
 Filter23	src\kernel\stm8s_map.h	1726;"	member	union:__anon1::__anon2	typeref:struct:__anon1::__anon2::__anon6
 Filter45	src\kernel\stm8s_map.h	1748;"	member	union:__anon1::__anon2	typeref:struct:__anon1::__anon2::__anon7
-FlagStatus	src\kernel\types.h	37;"	typedef	typeref:enum:__anon11
-FunctionalState	src\kernel\types.h	43;"	typedef	typeref:enum:__anon12
 GCR	src\kernel\stm8s_map.h	1968;"	member	struct:CFG_struct
 GPIOA	src\kernel\stm8s_map.h	2055;"	macro
 GPIOA_BaseAddress	src\kernel\stm8s_map.h	2005;"	macro
@@ -656,7 +646,6 @@ ITC_SPRX_RESET_VALUE	src\kernel\stm8s_map.h	998;"	macro
 ITC_TypeDef	src\kernel\stm8s_map.h	992;"	typedef	typeref:struct:ITC_struct
 ITC_struct	src\kernel\stm8s_map.h	981;"	struct
 ITR	src\kernel\stm8s_map.h	886;"	member	struct:I2C_struct
-ITStatus	src\kernel\types.h	37;"	typedef	typeref:enum:__anon11
 IWDG	src\kernel\stm8s_map.h	2115;"	macro
 IWDG_BaseAddress	src\kernel\stm8s_map.h	2021;"	macro
 IWDG_PR_RESET_VALUE	src\kernel\stm8s_map.h	1193;"	macro
@@ -695,13 +684,13 @@ NOPT3	src\kernel\stm8s_map.h	1164;"	member	struct:OPT_struct
 NOPT4	src\kernel\stm8s_map.h	1166;"	member	struct:OPT_struct
 NOPT5	src\kernel\stm8s_map.h	1168;"	member	struct:OPT_struct
 NOPT7	src\kernel\stm8s_map.h	1172;"	member	struct:OPT_struct
-NULL	src\kernel\types.h	95;"	macro
 NonHandledInterrupt	src\kernel\stm8_interrupt_vector.c	12;"	function	signature:(void)
 OARH	src\kernel\stm8s_map.h	880;"	member	struct:I2C_struct
 OARL	src\kernel\stm8s_map.h	879;"	member	struct:I2C_struct
 ODR	src\kernel\stm8s_map.h	1060;"	member	struct:GPIO_struct
+OFF	src\sensors\switch.h	38;"	enumerator	enum:__anon10
 OISR	src\kernel\stm8s_map.h	402;"	member	struct:TIM1_struct
-OPENED	src\sensors\switch.h	37;"	enumerator	enum:__anon14
+ON	src\sensors\switch.h	37;"	enumerator	enum:__anon10
 OPT	src\kernel\stm8s_map.h	2095;"	macro
 OPT0	src\kernel\stm8s_map.h	1158;"	member	struct:OPT_struct
 OPT1	src\kernel\stm8s_map.h	1159;"	member	struct:OPT_struct
@@ -726,8 +715,8 @@ PSCRL	src\kernel\stm8s_map.h	388;"	member	struct:TIM1_struct
 PSR	src\kernel\stm8s_map.h	1659;"	member	struct:__anon1
 PUKR	src\kernel\stm8s_map.h	1096;"	member	struct:FLASH_struct
 Page	src\kernel\stm8s_map.h	1781;"	member	struct:__anon1	typeref:union:__anon1::__anon2
-PortInit	src\kernel\portdrv.c	20;"	function	signature:(void)
-PortInit	src\kernel\portdrv.h	171;"	prototype	signature:(void)
+PortInit	src\kernel\portdrv.c	19;"	function	signature:(void)
+PortInit	src\kernel\portdrv.h	150;"	prototype	signature:(void)
 RCR	src\kernel\stm8s_map.h	391;"	member	struct:TIM1_struct
 RECR	src\kernel\stm8s_map.h	1755;"	member	struct:__anon1::__anon2::__anon8
 RESERVED	src\kernel\stm8s_map.h	143;"	member	struct:ADC2_struct
@@ -741,7 +730,6 @@ RESERVED2	src\kernel\stm8s_map.h	1095;"	member	struct:FLASH_struct
 RESERVED2	src\kernel\stm8s_map.h	1170;"	member	struct:OPT_struct
 RESERVED2	src\kernel\stm8s_map.h	890;"	member	struct:I2C_struct
 RESERVED3	src\kernel\stm8s_map.h	1097;"	member	struct:FLASH_struct
-RESET	src\kernel\types.h	34;"	enumerator	enum:__anon11
 RFR	src\kernel\stm8s_map.h	1656;"	member	struct:__anon1
 RLR	src\kernel\stm8s_map.h	1185;"	member	struct:IWDG_struct
 RST	src\kernel\stm8s_map.h	2103;"	macro
@@ -757,11 +745,10 @@ RXCRCR	src\kernel\stm8s_map.h	1276;"	member	struct:SPI_struct
 Reserved1	src\kernel\stm8s_map.h	1758;"	member	struct:__anon1::__anon2::__anon8
 Reserved2	src\kernel\stm8s_map.h	1764;"	member	struct:__anon1::__anon2::__anon8
 RxFIFO	src\kernel\stm8s_map.h	1780;"	member	union:__anon1::__anon2	typeref:struct:__anon1::__anon2::__anon9
-SC_8	src\kernel\types.h	57;"	typedef
-SET	src\kernel\types.h	35;"	enumerator	enum:__anon11
-SFLOAT_32	src\kernel\types.h	66;"	typedef
-SI_16	src\kernel\types.h	60;"	typedef
-SL_32	src\kernel\types.h	63;"	typedef
+SC_8	src\kernel\types.h	34;"	typedef
+SFLOAT_32	src\kernel\types.h	43;"	typedef
+SI_16	src\kernel\types.h	37;"	typedef
+SL_32	src\kernel\types.h	40;"	typedef
 SMCR	src\kernel\stm8s_map.h	373;"	member	struct:TIM1_struct
 SPI	src\kernel\stm8s_map.h	2127;"	macro
 SPI_BaseAddress	src\kernel\stm8s_map.h	2024;"	macro
@@ -814,30 +801,30 @@ SR2	src\kernel\stm8s_map.h	585;"	member	struct:TIM2_struct
 SR2	src\kernel\stm8s_map.h	709;"	member	struct:TIM3_struct
 SR2	src\kernel\stm8s_map.h	884;"	member	struct:I2C_struct
 SR3	src\kernel\stm8s_map.h	885;"	member	struct:I2C_struct
-SUCCESS	src\kernel\types.h	49;"	enumerator	enum:__anon13
 SWCR	src\kernel\stm8s_map.h	271;"	member	struct:CLK_struct
 SWIM	src\kernel\stm8s_map.h	2179;"	macro
 SWIMCCR	src\kernel\stm8s_map.h	279;"	member	struct:CLK_struct
 SWIM_BaseAddress	src\kernel\stm8s_map.h	2039;"	macro
 SWIM_TypeDef	src\kernel\stm8s_map.h	1343;"	typedef	typeref:struct:SWIM_struct
 SWIM_struct	src\kernel\stm8s_map.h	1338;"	struct
-SWITCH_0	src\sensors\switch.h	43;"	enumerator	enum:__anon15
-SWITCH_1	src\sensors\switch.h	44;"	enumerator	enum:__anon15
-SWITCH_2	src\sensors\switch.h	45;"	enumerator	enum:__anon15
-SWITCH_3	src\sensors\switch.h	46;"	enumerator	enum:__anon15
-SWITCH_4	src\sensors\switch.h	47;"	enumerator	enum:__anon15
-SWITCH_5	src\sensors\switch.h	48;"	enumerator	enum:__anon15
-SWITCH_6	src\sensors\switch.h	49;"	enumerator	enum:__anon15
-SWITCH_7	src\sensors\switch.h	50;"	enumerator	enum:__anon15
-SWITCH_8	src\sensors\switch.h	51;"	enumerator	enum:__anon15
-SWITCH_9	src\sensors\switch.h	52;"	enumerator	enum:__anon15
-SWITCH_ALL	src\sensors\switch.h	53;"	enumerator	enum:__anon15
+SWITCH_0	src\sensors\switch.h	43;"	enumerator	enum:__anon11
+SWITCH_1	src\sensors\switch.h	44;"	enumerator	enum:__anon11
+SWITCH_2	src\sensors\switch.h	45;"	enumerator	enum:__anon11
+SWITCH_3	src\sensors\switch.h	46;"	enumerator	enum:__anon11
+SWITCH_4	src\sensors\switch.h	47;"	enumerator	enum:__anon11
+SWITCH_5	src\sensors\switch.h	48;"	enumerator	enum:__anon11
+SWITCH_6	src\sensors\switch.h	49;"	enumerator	enum:__anon11
+SWITCH_7	src\sensors\switch.h	50;"	enumerator	enum:__anon11
+SWITCH_8	src\sensors\switch.h	51;"	enumerator	enum:__anon11
+SWITCH_9	src\sensors\switch.h	52;"	enumerator	enum:__anon11
+SWITCH_ALL	src\sensors\switch.h	53;"	enumerator	enum:__anon11
 SWR	src\kernel\stm8s_map.h	270;"	member	struct:CLK_struct
 SetBit	src\kernel\stm8s_macro.h	81;"	macro
-SwitchStatus	src\sensors\switch.c	24;"	variable
-SwitchStatusReadAll	src\sensors\switch.c	42;"	function	signature:(void)
-SwitchStatusReadAll	src\sensors\switch.h	91;"	prototype	signature:(void)
-SwitchStatus_typeDef	src\sensors\switch.h	82;"	typedef	typeref:union:__anon16
+SwitchState_typeDef	src\sensors\switch.h	39;"	typedef	typeref:enum:__anon10
+SwitchStatus	src\sensors\switch.c	25;"	variable
+SwitchStatusReadAll	src\sensors\switch.c	43;"	function	signature:(void)
+SwitchStatusReadAll	src\sensors\switch.h	88;"	prototype	signature:(void)
+SwitchStatus_typeDef	src\sensors\switch.h	78;"	typedef	typeref:union:__anon12
 TBR	src\kernel\stm8s_map.h	193;"	member	struct:AWU_struct
 TDRH	src\kernel\stm8s_map.h	146;"	member	struct:ADC2_struct
 TDRH	src\kernel\stm8s_map.h	74;"	member	struct:ADC1_struct
@@ -1122,9 +1109,10 @@ TIM4_TypeDef	src\kernel\stm8s_map.h	825;"	typedef	typeref:struct:TIM4_struct
 TIM4_struct	src\kernel\stm8s_map.h	815;"	struct
 TPR	src\kernel\stm8s_map.h	1655;"	member	struct:__anon1
 TRISER	src\kernel\stm8s_map.h	889;"	member	struct:I2C_struct
-TRUE	src\kernel\types.h	28;"	enumerator	enum:__anon10
 TSR	src\kernel\stm8s_map.h	1654;"	member	struct:__anon1
 TXCRCR	src\kernel\stm8s_map.h	1277;"	member	struct:SPI_struct
+Timer3Init	src\drivers\timer_3.c	41;"	function	signature:(void)
+Timer3Init	src\drivers\timer_3.h	47;"	prototype	signature:(void)
 TxMailbox	src\kernel\stm8s_map.h	1675;"	member	union:__anon1::__anon2	typeref:struct:__anon1::__anon2::__anon3
 UART1	src\kernel\stm8s_map.h	2135;"	macro
 UART1_BRR1_DIVM	src\kernel\stm8s_map.h	1398;"	macro
@@ -1296,10 +1284,10 @@ UART3_SR_TC	src\kernel\stm8s_map.h	1594;"	macro
 UART3_SR_TXE	src\kernel\stm8s_map.h	1593;"	macro
 UART3_TypeDef	src\kernel\stm8s_map.h	1570;"	typedef	typeref:struct:UART3_struct
 UART3_struct	src\kernel\stm8s_map.h	1557;"	struct
-UC_8	src\kernel\types.h	58;"	typedef
-UI_16	src\kernel\types.h	61;"	typedef
-UL_32	src\kernel\types.h	64;"	typedef
-VUC_8	src\kernel\types.h	70;"	typedef
+UC_8	src\kernel\types.h	35;"	typedef
+UI_16	src\kernel\types.h	38;"	typedef
+UL_32	src\kernel\types.h	41;"	typedef
+VUC_8	src\kernel\types.h	45;"	typedef
 ValBit	src\kernel\stm8s_macro.h	90;"	macro
 WR	src\kernel\stm8s_map.h	1208;"	member	struct:WWDG_struct
 WWDG	src\kernel\stm8s_map.h	2111;"	macro
@@ -1337,104 +1325,113 @@ _GPIOG	src\kernel\stm8s_conf.h	76;"	macro
 _GPIOH	src\kernel\stm8s_conf.h	77;"	macro
 _GPIOI	src\kernel\stm8s_conf.h	78;"	macro
 _I2C	src\kernel\stm8s_conf.h	81;"	macro
-_IS_FUNCTIONALSTATE_OK	src\kernel\types.h	45;"	macro
 _ITC	src\kernel\stm8s_conf.h	84;"	macro
 _IWDG	src\kernel\stm8s_conf.h	87;"	macro
 _MACROS_H_	src\kernel\macros.h	17;"	macro
 _MskBit	src\kernel\macros.h	56;"	macro
 _OPT	src\kernel\stm8s_conf.h	67;"	macro
-_PD_PORT_B0_CHECK	src\kernel\portdrv.h	46;"	macro
-_PD_PORT_B0_CONF	src\kernel\portdrv.h	47;"	macro
-_PD_PORT_B1_CHECK	src\kernel\portdrv.h	49;"	macro
-_PD_PORT_B1_CONF	src\kernel\portdrv.h	50;"	macro
-_PD_PORT_B2_CHECK	src\kernel\portdrv.h	52;"	macro
-_PD_PORT_B2_CONF	src\kernel\portdrv.h	53;"	macro
-_PD_PORT_B3_CHECK	src\kernel\portdrv.h	55;"	macro
-_PD_PORT_B3_CONF	src\kernel\portdrv.h	56;"	macro
-_PD_PORT_B4_CHECK	src\kernel\portdrv.h	58;"	macro
-_PD_PORT_B4_CONF	src\kernel\portdrv.h	59;"	macro
-_PD_PORT_B5_CHECK	src\kernel\portdrv.h	61;"	macro
-_PD_PORT_B5_CONF	src\kernel\portdrv.h	62;"	macro
-_PD_PORT_B6_CHECK	src\kernel\portdrv.h	64;"	macro
-_PD_PORT_B6_CONF	src\kernel\portdrv.h	65;"	macro
-_PD_PORT_B7_CHECK	src\kernel\portdrv.h	67;"	macro
-_PD_PORT_B7_CONF	src\kernel\portdrv.h	68;"	macro
-_PORTDRV_H	src\kernel\portdrv.h	19;"	macro
-_PORT_B0	src\kernel\portdrv.h	36;"	macro
-_PORT_B1	src\kernel\portdrv.h	37;"	macro
-_PORT_B2	src\kernel\portdrv.h	38;"	macro
-_PORT_B3	src\kernel\portdrv.h	39;"	macro
-_PORT_B4	src\kernel\portdrv.h	40;"	macro
-_PORT_B5	src\kernel\portdrv.h	41;"	macro
-_PORT_B6	src\kernel\portdrv.h	42;"	macro
-_PORT_B7	src\kernel\portdrv.h	43;"	macro
+_PD_PORT_B0_CHECK	src\kernel\portdrv.h	41;"	macro
+_PD_PORT_B0_CONF	src\kernel\portdrv.h	42;"	macro
+_PD_PORT_B1_CHECK	src\kernel\portdrv.h	44;"	macro
+_PD_PORT_B1_CONF	src\kernel\portdrv.h	45;"	macro
+_PD_PORT_B2_CHECK	src\kernel\portdrv.h	47;"	macro
+_PD_PORT_B2_CONF	src\kernel\portdrv.h	48;"	macro
+_PD_PORT_B3_CHECK	src\kernel\portdrv.h	50;"	macro
+_PD_PORT_B3_CONF	src\kernel\portdrv.h	51;"	macro
+_PD_PORT_B4_CHECK	src\kernel\portdrv.h	53;"	macro
+_PD_PORT_B4_CONF	src\kernel\portdrv.h	54;"	macro
+_PD_PORT_B5_CHECK	src\kernel\portdrv.h	56;"	macro
+_PD_PORT_B5_CONF	src\kernel\portdrv.h	57;"	macro
+_PD_PORT_B6_CHECK	src\kernel\portdrv.h	59;"	macro
+_PD_PORT_B6_CONF	src\kernel\portdrv.h	60;"	macro
+_PD_PORT_B7_CHECK	src\kernel\portdrv.h	62;"	macro
+_PD_PORT_B7_CONF	src\kernel\portdrv.h	63;"	macro
+_PD_PORT_E6_CHECK	src\kernel\portdrv.h	102;"	macro
+_PD_PORT_E6_CONF	src\kernel\portdrv.h	103;"	macro
+_PD_PORT_E7_CHECK	src\kernel\portdrv.h	105;"	macro
+_PD_PORT_E7_CONF	src\kernel\portdrv.h	106;"	macro
+_PORTDRV_H	src\kernel\portdrv.h	14;"	macro
+_PORT_B0	src\kernel\portdrv.h	31;"	macro
+_PORT_B1	src\kernel\portdrv.h	32;"	macro
+_PORT_B2	src\kernel\portdrv.h	33;"	macro
+_PORT_B3	src\kernel\portdrv.h	34;"	macro
+_PORT_B4	src\kernel\portdrv.h	35;"	macro
+_PORT_B5	src\kernel\portdrv.h	36;"	macro
+_PORT_B6	src\kernel\portdrv.h	37;"	macro
+_PORT_B7	src\kernel\portdrv.h	38;"	macro
+_PORT_E0	src\kernel\portdrv.h	92;"	macro
+_PORT_E1	src\kernel\portdrv.h	93;"	macro
+_PORT_E2	src\kernel\portdrv.h	94;"	macro
+_PORT_E3	src\kernel\portdrv.h	95;"	macro
+_PORT_E4	src\kernel\portdrv.h	96;"	macro
+_PORT_E5	src\kernel\portdrv.h	97;"	macro
+_PORT_E6	src\kernel\portdrv.h	98;"	macro
+_PORT_E7	src\kernel\portdrv.h	99;"	macro
 _RAISONANCE_	src\kernel\stm8s_macro.h	28;"	macro
 _RAISONANCE_	src\kernel\stm8s_macro.h	32;"	macro
 _RST	src\kernel\stm8s_conf.h	93;"	macro
-_SC_8_MAX	src\kernel\types.h	78;"	macro
-_SC_8_MIN	src\kernel\types.h	77;"	macro
-_SI_16_MAX	src\kernel\types.h	84;"	macro
-_SI_16_MIN	src\kernel\types.h	83;"	macro
-_SL_32_MAX	src\kernel\types.h	90;"	macro
-_SL_32_MIN	src\kernel\types.h	89;"	macro
 _SPI	src\kernel\stm8s_conf.h	96;"	macro
 _TIM1	src\kernel\stm8s_conf.h	99;"	macro
 _TIM2	src\kernel\stm8s_conf.h	102;"	macro
 _TIM3	src\kernel\stm8s_conf.h	105;"	macro
 _TIM4	src\kernel\stm8s_conf.h	108;"	macro
+_TIMER_32_PWM_DUTY_SET	src\drivers\timer_3.h	36;"	macro
+_TIMER_3_ARR	src\drivers\timer_3.h	41;"	macro
+_TIMER_3_DUTY_CLOSE	src\drivers\timer_3.h	26;"	macro
+_TIMER_3_DUTY_IDLE	src\drivers\timer_3.h	24;"	macro
+_TIMER_3_DUTY_OFF	src\drivers\timer_3.h	29;"	macro
+_TIMER_3_DUTY_OPEN	src\drivers\timer_3.h	25;"	macro
+_TIMER_3_H_	src\drivers\timer_3.h	22;"	macro
+_TIMER_3_PWM_DUTY_SET	src\drivers\timer_3.h	33;"	macro
+_TIMER_3_PWM_FREQ_SET	src\drivers\timer_3.h	31;"	macro
 _TYPES_H_	src\kernel\types.h	19;"	macro
 _UART1	src\kernel\stm8s_conf.h	111;"	macro
 _UART2	src\kernel\stm8s_conf.h	112;"	macro
 _UART3	src\kernel\stm8s_conf.h	113;"	macro
-_UC_8_MAX	src\kernel\types.h	81;"	macro
-_UC_8_MIN	src\kernel\types.h	80;"	macro
 _UC_BINV	src\kernel\macros.h	37;"	macro
 _UC_BRES	src\kernel\macros.h	35;"	macro
 _UC_BSET	src\kernel\macros.h	33;"	macro
 _UC_BTST	src\kernel\macros.h	39;"	macro
-_UI_16_MAX	src\kernel\types.h	87;"	macro
-_UI_16_MIN	src\kernel\types.h	86;"	macro
 _UI_BRES	src\kernel\macros.h	44;"	macro
 _UI_BSET	src\kernel\macros.h	42;"	macro
 _UI_BTST	src\kernel\macros.h	47;"	macro
-_UL_32_MAX	src\kernel\types.h	93;"	macro
-_UL_32_MIN	src\kernel\types.h	92;"	macro
 _ValBit	src\kernel\macros.h	59;"	macro
 _WWDG	src\kernel\stm8s_conf.h	116;"	macro
-__MODS0__	..\..\..\..\..\..\program files (x86)\cosmic\cxstm8\hstm8\mods0.h	11;"	macro
+__MODS0__	..\..\..\..\..\..\program files (x86)\cosmic\fse_compilers\cxstm8\hstm8\mods0.h	11;"	macro
 __STM8S_CONF_H	src\kernel\stm8s_conf.h	24;"	macro
 __STM8S_MACRO_H	src\kernel\stm8s_macro.h	24;"	macro
 __STM8S_MAP_H	src\kernel\stm8s_map.h	24;"	macro
-_asm	src\kernel\types.h	97;"	prototype	signature:(void*)
+_asm	src\kernel\types.h	51;"	prototype	signature:(void*)
 _stext	src\kernel\stm8_interrupt_vector.c	20;"	prototype	file:
 _vectab	src\kernel\stm8_interrupt_vector.c	22;"	variable
-asBit	src\sensors\switch.h	80;"	member	union:__anon16	typeref:struct:__anon16::__anon17
-asByte	src\sensors\switch.h	81;"	member	union:__anon16
+asBit	src\sensors\switch.h	76;"	member	union:__anon12	typeref:struct:__anon12::__anon13
+asByte	src\sensors\switch.h	77;"	member	union:__anon12
 assert_failed	src\kernel\stm8s_conf.h	141;"	prototype	signature:(void)
 assert_failed	src\kernel\stm8s_conf.h	144;"	prototype	signature:(u8 *file, u16 line)
 assert_param	src\kernel\stm8s_conf.h	142;"	macro
 assert_param	src\kernel\stm8s_conf.h	145;"	macro
 assert_param	src\kernel\stm8s_conf.h	148;"	macro
-boSwitch1	src\sensors\switch.h	69;"	member	struct:__anon16::__anon17
-boSwitch2	src\sensors\switch.h	70;"	member	struct:__anon16::__anon17
-boSwitch3	src\sensors\switch.h	71;"	member	struct:__anon16::__anon17
-boSwitch4	src\sensors\switch.h	72;"	member	struct:__anon16::__anon17
-boSwitch5	src\sensors\switch.h	73;"	member	struct:__anon16::__anon17
-boSwitch6	src\sensors\switch.h	74;"	member	struct:__anon16::__anon17
-boSwitch7	src\sensors\switch.h	75;"	member	struct:__anon16::__anon17
-boSwitch8	src\sensors\switch.h	76;"	member	struct:__anon16::__anon17
-boSwitch9	src\sensors\switch.h	77;"	member	struct:__anon16::__anon17
+boSwitch1	src\sensors\switch.h	65;"	member	struct:__anon12::__anon13
+boSwitch2	src\sensors\switch.h	66;"	member	struct:__anon12::__anon13
+boSwitch3	src\sensors\switch.h	67;"	member	struct:__anon12::__anon13
+boSwitch4	src\sensors\switch.h	68;"	member	struct:__anon12::__anon13
+boSwitch5	src\sensors\switch.h	69;"	member	struct:__anon12::__anon13
+boSwitch6	src\sensors\switch.h	70;"	member	struct:__anon12::__anon13
+boSwitch7	src\sensors\switch.h	71;"	member	struct:__anon12::__anon13
+boSwitch8	src\sensors\switch.h	72;"	member	struct:__anon12::__anon13
+boSwitch9	src\sensors\switch.h	73;"	member	struct:__anon12::__anon13
 disableInterrupts	src\kernel\stm8s_macro.h	46;"	macro
 disableInterrupts	src\kernel\stm8s_macro.h	55;"	macro
 enableInterrupts	src\kernel\stm8s_macro.h	45;"	macro
 enableInterrupts	src\kernel\stm8s_macro.h	54;"	macro
+gucSwitchState	src\sensors\switch.c	26;"	variable
 halt	src\kernel\stm8s_macro.h	52;"	macro
 halt	src\kernel\stm8s_macro.h	64;"	macro
 interrupt_handler	src\kernel\stm8_interrupt_vector.c	9;"	member	struct:interrupt_vector	file:
 interrupt_handler_t	src\kernel\stm8_interrupt_vector.c	5;"	typedef	file:
 interrupt_instruction	src\kernel\stm8_interrupt_vector.c	8;"	member	struct:interrupt_vector	file:
 interrupt_vector	src\kernel\stm8_interrupt_vector.c	7;"	struct	file:
-main	src\app\main.c	34;"	function
+main	src\app\main.c	43;"	function
 nop	src\kernel\stm8s_macro.h	49;"	macro
 nop	src\kernel\stm8s_macro.h	58;"	macro
 ret	src\kernel\stm8s_macro.h	62;"	macro
@@ -1444,6 +1441,6 @@ sim	src\kernel\stm8s_macro.h	48;"	macro
 sim	src\kernel\stm8s_macro.h	57;"	macro
 trap	src\kernel\stm8s_macro.h	50;"	macro
 trap	src\kernel\stm8s_macro.h	59;"	macro
-ucReserved	src\sensors\switch.h	79;"	member	struct:__anon16::__anon17
+ucReserved	src\sensors\switch.h	75;"	member	struct:__anon12::__anon13
 wfi	src\kernel\stm8s_macro.h	51;"	macro
 wfi	src\kernel\stm8s_macro.h	60;"	macro

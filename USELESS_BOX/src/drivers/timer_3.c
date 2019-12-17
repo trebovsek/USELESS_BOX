@@ -18,7 +18,7 @@
 //              - 2,0ms (all the way to the right)
 // ----------------------------------------------------------------------------
 #include "../kernel/stm8s_map.h"
-#include "../drivers/timer_1.h"
+#include "../drivers/timer_3.h"
 #include "../kernel/kernel.h"
 
 // ----------------------------------------------------------------------------
@@ -42,13 +42,13 @@ void Timer3Init(void)
 {
   // Select the PWM mode in up-counting mode
   // Set the timer in order to output a PWM signal on CC1 (several registers have to be set)
-  TIM3->CCMR1 = 0x68U;  //0/*reserved*/110/*PWM mode1*/1/*preload register enabe*/0/*no fast OC*/00
+  TIM3->CCMR1 = 0x68U;
   
   //Duty cycles
   TIM3->CCR1H = 0x00U; 
   TIM3->CCR1L = 0x00U;
 
-  TIM3->CCER1 = 0x01U; //0001*CC1 enable*0001*CC2 enable*
+  TIM3->CCER1 = 0x01U;
 
   //Enable TIM3 peripheral Preload register on ARR
   TIM3->CR1 |= 0x80U;
@@ -77,37 +77,4 @@ void Timer3Init(void)
   _TIMER_32_PWM_DUTY_SET(_TIMER_3_DUTY_IDLE);
 
 }
-
-// ----------------------------------------------------------------------------
-// FUNCTION:
-//   void Timer3Reset(void)
-// DESCRIPTION:
-//   Reset of Timer 3.
-// INPUTS: --
-// OUTPUT: --
-// ----------------------------------------------------------------------------
-/*
-void Timer3Reset(void)
-{
-  TIM3->CCMR1 = 0x00U;
-  TIM3->CCMR2 = 0x00U;
-
-  TIM3->CCR1H = 0x00U;
-  TIM3->CCR1L = 0x00U;
-
-  TIM3->CCER1= 0x00U;
-
-  TIM3->CR1 = 0x00U;
-
-  // load the value for the frequency in ARR
-  TIM3->ARRH = (UC_8) 0xFFU;
-  TIM3->ARRL = (UC_8) 0xFFU;
-
-  //Set the Prescaler value
-  TIM3->PSCR = 0x00U;
-
-  //Disable the Interrupt sources
-  TIM3->IER &= 0x00U;
-}
-*/
 

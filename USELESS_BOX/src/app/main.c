@@ -18,7 +18,7 @@
 #include "../kernel/stm8s_map.h"
 #include "../kernel/portdrv.h"
 #include "../sensors/switch.h"
-#include "../drivers/timer_1.h"
+#include "../drivers/timer_3.h"
 
 // ----------------------------------------------------------------------------
 // GLOBAL VARIABLE DEFINITIONS.
