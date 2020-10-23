@@ -83,7 +83,7 @@ String.100.0=STM8S105C6
 
 [Root.Config.0.Settings.3]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 -isrc\drivers  +warn +mods0 -customDebCompat -customOpt-no -customC-pp -customLst -l -isrc\sensors -isrc\kernel $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 -isrc\app  -isrc\drivers  +warn +mods0 -customDebCompat -customOpt-no -customC-pp -customLst -l -isrc\sensors -isrc\kernel $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
 String.6.0=2019,10,25,12,39,8
@@ -165,7 +165,7 @@ String.100.0=STM8S105C6
 
 [Root.Config.1.Settings.3]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 -isrc\drivers  -isrc\sensors  -isrc\kernel  +mods0 -customC-pp $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile) 
+String.3.0=cxstm8 -isrc\app  -isrc\drivers  -isrc\sensors  -isrc\kernel  +mods0 -customC-pp $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile) 
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
 String.6.0=2019,10,25,9,18,25
@@ -218,6 +218,7 @@ String.6.0=2019,10,25,9,18,25
 [Root.app (header)]
 ElemType=Folder
 PathName=app (header)
+Child=Root.app (header).src\app\buffer.h
 Next=Root.app (source)
 Config.0=Root.app (header).Config.0
 Config.1=Root.app (header).Config.1
@@ -242,7 +243,7 @@ Int.1=0
 
 [Root.app (header).Config.0.Settings.1]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 -isrc\drivers  +warn +mods0 -customDebCompat -customOpt-no -customC-pp -customLst -l -isrc\sensors -isrc\kernel $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 -isrc\app  -isrc\drivers  +warn +mods0 -customDebCompat -customOpt-no -customC-pp -customLst -l -isrc\sensors -isrc\kernel $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
 String.6.0=2019,10,25,12,39,8
@@ -269,7 +270,7 @@ Int.1=0
 
 [Root.app (header).Config.1.Settings.1]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 -isrc\drivers  -isrc\sensors  -isrc\kernel  +mods0 -customC-pp $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile) 
+String.3.0=cxstm8 -isrc\app  -isrc\drivers  -isrc\sensors  -isrc\kernel  +mods0 -customC-pp $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile) 
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
 String.6.0=2019,10,25,9,18,25
@@ -288,10 +289,14 @@ String.4.0=
 String.5.0=
 String.6.0=2019,10,25,9,18,25
 
+[Root.app (header).src\app\buffer.h]
+ElemType=File
+PathName=src\app\buffer.h
+
 [Root.app (source)]
 ElemType=Folder
 PathName=app (source)
-Child=Root.app (source).src\app\main.c
+Child=Root.app (source).src\app\buffer.c
 Next=Root.drivers (header)
 Config.0=Root.app (source).Config.0
 Config.1=Root.app (source).Config.1
@@ -316,7 +321,7 @@ Int.1=0
 
 [Root.app (source).Config.0.Settings.1]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 -isrc\drivers  +warn +mods0 -customDebCompat -customOpt-no -customC-pp -customLst -l -isrc\sensors -isrc\kernel $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 -isrc\app  -isrc\drivers  +warn +mods0 -customDebCompat -customOpt-no -customC-pp -customLst -l -isrc\sensors -isrc\kernel $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
 String.6.0=2019,10,25,12,39,8
@@ -343,7 +348,7 @@ Int.1=0
 
 [Root.app (source).Config.1.Settings.1]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 -isrc\drivers  -isrc\sensors  -isrc\kernel  +mods0 -customC-pp $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile) 
+String.3.0=cxstm8 -isrc\app  -isrc\drivers  -isrc\sensors  -isrc\kernel  +mods0 -customC-pp $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile) 
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
 String.6.0=2019,10,25,9,18,25
@@ -361,6 +366,11 @@ String.3.0=
 String.4.0=
 String.5.0=
 String.6.0=2019,10,25,9,18,25
+
+[Root.app (source).src\app\buffer.c]
+ElemType=File
+PathName=src\app\buffer.c
+Next=Root.app (source).src\app\main.c
 
 [Root.app (source).src\app\main.c]
 ElemType=File
@@ -394,7 +404,7 @@ Int.1=0
 
 [Root.drivers (header).Config.0.Settings.1]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 -isrc\drivers  +warn +mods0 -customDebCompat -customOpt-no -customC-pp -customLst -l -isrc\sensors -isrc\kernel $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 -isrc\app  -isrc\drivers  +warn +mods0 -customDebCompat -customOpt-no -customC-pp -customLst -l -isrc\sensors -isrc\kernel $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
 String.6.0=2019,10,25,12,39,8
@@ -421,7 +431,7 @@ Int.1=0
 
 [Root.drivers (header).Config.1.Settings.1]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 -isrc\drivers  -isrc\sensors  -isrc\kernel  +mods0 -customC-pp $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile) 
+String.3.0=cxstm8 -isrc\app  -isrc\drivers  -isrc\sensors  -isrc\kernel  +mods0 -customC-pp $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile) 
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
 String.6.0=2019,10,25,9,18,25
@@ -472,7 +482,7 @@ Int.1=0
 
 [Root.drivers (source).Config.0.Settings.1]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 -isrc\drivers  +warn +mods0 -customDebCompat -customOpt-no -customC-pp -customLst -l -isrc\sensors -isrc\kernel $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 -isrc\app  -isrc\drivers  +warn +mods0 -customDebCompat -customOpt-no -customC-pp -customLst -l -isrc\sensors -isrc\kernel $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
 String.6.0=2019,10,25,12,39,8
@@ -499,7 +509,7 @@ Int.1=0
 
 [Root.drivers (source).Config.1.Settings.1]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 -isrc\drivers  -isrc\sensors  -isrc\kernel  +mods0 -customC-pp $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile) 
+String.3.0=cxstm8 -isrc\app  -isrc\drivers  -isrc\sensors  -isrc\kernel  +mods0 -customC-pp $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile) 
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
 String.6.0=2019,10,25,9,18,25
@@ -550,7 +560,7 @@ Int.1=0
 
 [Root.kernel (header).Config.0.Settings.1]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 -isrc\drivers  +warn +mods0 -customDebCompat -customOpt-no -customC-pp -customLst -l -isrc\sensors -isrc\kernel $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 -isrc\app  -isrc\drivers  +warn +mods0 -customDebCompat -customOpt-no -customC-pp -customLst -l -isrc\sensors -isrc\kernel $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
 String.6.0=2019,10,25,12,39,8
@@ -577,7 +587,7 @@ Int.1=0
 
 [Root.kernel (header).Config.1.Settings.1]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 -isrc\drivers  -isrc\sensors  -isrc\kernel  +mods0 -customC-pp $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile) 
+String.3.0=cxstm8 -isrc\app  -isrc\drivers  -isrc\sensors  -isrc\kernel  +mods0 -customC-pp $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile) 
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
 String.6.0=2019,10,25,9,18,25
@@ -648,7 +658,7 @@ Int.1=0
 
 [Root.kernel (source).Config.0.Settings.1]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 -isrc\drivers  +warn +mods0 -customDebCompat -customOpt-no -customC-pp -customLst -l -isrc\sensors -isrc\kernel $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 -isrc\app  -isrc\drivers  +warn +mods0 -customDebCompat -customOpt-no -customC-pp -customLst -l -isrc\sensors -isrc\kernel $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
 String.6.0=2019,10,25,12,39,8
@@ -675,7 +685,7 @@ Int.1=0
 
 [Root.kernel (source).Config.1.Settings.1]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 -isrc\drivers  -isrc\sensors  -isrc\kernel  +mods0 -customC-pp $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile) 
+String.3.0=cxstm8 -isrc\app  -isrc\drivers  -isrc\sensors  -isrc\kernel  +mods0 -customC-pp $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile) 
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
 String.6.0=2019,10,25,9,18,25
@@ -731,7 +741,7 @@ Int.1=0
 
 [Root.sensors (header).Config.0.Settings.1]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 -isrc\drivers  +warn +mods0 -customDebCompat -customOpt-no -customC-pp -customLst -l -isrc\sensors -isrc\kernel $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 -isrc\app  -isrc\drivers  +warn +mods0 -customDebCompat -customOpt-no -customC-pp -customLst -l -isrc\sensors -isrc\kernel $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
 String.6.0=2019,10,25,12,39,8
@@ -758,7 +768,7 @@ Int.1=0
 
 [Root.sensors (header).Config.1.Settings.1]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 -isrc\drivers  -isrc\sensors  -isrc\kernel  +mods0 -customC-pp $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile) 
+String.3.0=cxstm8 -isrc\app  -isrc\drivers  -isrc\sensors  -isrc\kernel  +mods0 -customC-pp $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile) 
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
 String.6.0=2019,10,25,9,18,25
@@ -808,7 +818,7 @@ Int.1=0
 
 [Root.sensors (source).Config.0.Settings.1]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 -isrc\drivers  +warn +mods0 -customDebCompat -customOpt-no -customC-pp -customLst -l -isrc\sensors -isrc\kernel $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 -isrc\app  -isrc\drivers  +warn +mods0 -customDebCompat -customOpt-no -customC-pp -customLst -l -isrc\sensors -isrc\kernel $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
 String.6.0=2019,10,25,12,39,8
@@ -835,7 +845,7 @@ Int.1=0
 
 [Root.sensors (source).Config.1.Settings.1]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 -isrc\drivers  -isrc\sensors  -isrc\kernel  +mods0 -customC-pp $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile) 
+String.3.0=cxstm8 -isrc\app  -isrc\drivers  -isrc\sensors  -isrc\kernel  +mods0 -customC-pp $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile) 
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
 String.6.0=2019,10,25,9,18,25

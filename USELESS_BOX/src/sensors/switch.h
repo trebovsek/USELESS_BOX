@@ -72,28 +72,6 @@ extern strSwitchState Switch[SWITCH_ALL];
 // ----------------------------------------------------------------------------
 // GLOBAL VARIABLES.
 // ----------------------------------------------------------------------------
-typedef union
-{
-  struct
-  {
-    SwitchState_typeDef boSwitch1  : 1;
-    BOOL boSwitch2  : 1;
-    BOOL boSwitch3  : 1;
-    BOOL boSwitch4  : 1;
-    BOOL boSwitch5  : 1;
-    BOOL boSwitch6  : 1;
-    BOOL boSwitch7  : 1;
-    BOOL boSwitch8  : 1;
-    BOOL boSwitch9  : 1;
-    
-    UC_8 ucReserved : 7;
-  }asBit;
-  UC_8 asByte[2];
-}SwitchStatus_typeDef;
-
-
-extern SwitchStatus_typeDef SwitchStatus;
-extern SwitchState_typeDef SwitchState; //ON/OFF
 
 // ----------------------------------------------------------------------------
 // GLOBAL FUNCTIONS.

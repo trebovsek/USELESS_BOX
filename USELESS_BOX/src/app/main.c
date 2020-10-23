@@ -55,5 +55,9 @@ void main()
 	while (1)
   {
     SwitchStatusReadAll();
+    
+    //nekako dati state oz. aktivna stikala v neko vrsto/buffer
+    BufferAddActiveSwitch();
+    
   }
 }

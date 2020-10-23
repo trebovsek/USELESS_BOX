@@ -43,11 +43,6 @@ typedef float SFLOAT_32;            // Signed float (32 bit).
 // 1 - byte volatile unsigned char
 typedef volatile unsigned char VUC_8; // Unsigned char (8-bit)
 
-
-
-
-
-
 // ----------------------------------------------------------------------------
 // GLOBAL CONSTANTS.
 // ----------------------------------------------------------------------------
