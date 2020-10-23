@@ -29,19 +29,25 @@
 // GLOBAL TYPES.
 // ----------------------------------------------------------------------------
 
-//structure table for data of DAMPER timer counters
-
-
+//SWITCH_ON or SWITCH_OFF state
 typedef enum
 {
-  ON    = 0x01,
-  OFF   = 0x00
+  SWITCH_STATE_OFF   = (UC_8)0x00,
+  SWITCH_STATE_ON    = (UC_8)0x01
 }SwitchState_typeDef;
+
+//SWITCHING_OFF state (is already in switching off mode?)
+typedef enum
+{
+  SWITCHING_OFF_IDLE        = (UC_8)0x00,
+  SWITCHING_OFF_REQUEST     = (UC_8)0x01,
+  SWITCHING_OFF_IN_PROGRESS = (UC_8)0x02
+}SwitchingOffMode_typeDef;
+
 
 enum
 {
-  SWITCH_0       = (UC_8)0x00U,    // Appliance Refrigarator REED.
-  SWITCH_1,       
+  SWITCH_1        = (UC_8)0x00U,
   SWITCH_2,       
   SWITCH_3,       
   SWITCH_4,       
@@ -53,7 +59,15 @@ enum
   SWITCH_ALL
 };
 
+typedef struct
+{
+  SwitchState_typeDef       SwitchState;       //ON/OFF STATE
+  SwitchingOffMode_typeDef  SwitchingOFF;    //is SWITCH in progress for autooff?
+  //buffer!!!
+  
+}strSwitchState;
 
+extern strSwitchState Switch[SWITCH_ALL];
 
 // ----------------------------------------------------------------------------
 // GLOBAL VARIABLES.
@@ -62,7 +76,7 @@ typedef union
 {
   struct
   {
-    BOOL boSwitch1  : 1;
+    SwitchState_typeDef boSwitch1  : 1;
     BOOL boSwitch2  : 1;
     BOOL boSwitch3  : 1;
     BOOL boSwitch4  : 1;
@@ -77,14 +91,15 @@ typedef union
   UC_8 asByte[2];
 }SwitchStatus_typeDef;
 
-extern SwitchState_typeDef gucSwitchState; //ON/OFF
-extern SwitchStatus_typeDef SwitchStatus;
 
+extern SwitchStatus_typeDef SwitchStatus;
+extern SwitchState_typeDef SwitchState; //ON/OFF
 
 // ----------------------------------------------------------------------------
 // GLOBAL FUNCTIONS.
 // ----------------------------------------------------------------------------
 
+extern void SwitchInit(void);
 extern void SwitchStatusReadAll(void);
 
 // ----------------------------------------------------------------------------

@@ -47,6 +47,7 @@ void main()
 	
   PortInit();
   Timer3Init();
+  SwitchInit();
   
 	//enable interrupts
   rim();

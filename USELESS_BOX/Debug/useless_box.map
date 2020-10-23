@@ -1,5 +1,5 @@
 
-Map of Debug\useless_box.sm8 from link file Debug\useless_box.lkf - Tue Dec 17 20:30:35 2019
+Map of Debug\useless_box.sm8 from link file Debug\useless_box.lkf - Fri Oct 23 12:06:54 2020
 
 
                                --------
@@ -7,16 +7,16 @@ Map of Debug\useless_box.sm8 from link file Debug\useless_box.lkf - Tue Dec 17 2
                                --------
 
 start 00008080 end 00008080 length     0 segment .const
-start 00008083 end 0000824d length   458 segment .text
+start 00008083 end 00008239 length   438 segment .text
 start 00004000 end 00004000 length     0 segment .eeprom
 start 00000000 end 00000000 length     0 segment .bsct
-start 00000000 end 00000009 length     9 segment .ubsct
-start 00000009 end 00000009 length     0 segment .bit
-start 00000009 end 00000009 length     0 segment .share
+start 00000000 end 0000001b length    27 segment .ubsct
+start 0000001b end 0000001b length     0 segment .bit
+start 0000001b end 0000001b length     0 segment .share
 start 00000100 end 00000100 length     0 segment .data
 start 00000100 end 00000100 length     0 segment .bss
-start 00000000 end 00000300 length   768 segment .info.
-start 00000000 end 00000683 length  1667 segment .debug
+start 00000000 end 00000303 length   771 segment .info.
+start 00000000 end 000007f9 length  2041 segment .debug
 start 00008000 end 00008080 length   128 segment .const
 start 00008080 end 00008083 length     3 segment .init
 
@@ -25,45 +25,45 @@ start 00008080 end 00008083 length     3 segment .init
                                Modules
                                -------
 
-C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\lib\crtsi0.sm8:
+C:\Program Files (x86)\COSMIC\CXSTM8\Lib\crtsi0.sm8:
 start 00008083 end 000080d3 length    80 section .text
 start 00000100 end 00000100 length     0 section .bss
 start 00000000 end 00000000 length     0 section .ubsct
-start 00000000 end 00000034 length    52 section .info.
+start 00000000 end 0000002f length    47 section .info.
 
 Debug\main.o:
-start 000080d3 end 000080e0 length    13 section .text
+start 000080d3 end 000080e3 length    16 section .text
 start 00000000 end 000000ae length   174 section .debug
-start 00000034 end 000000a0 length   108 section .info.
+start 0000002f end 0000009d length   110 section .info.
 
 Debug\timer_3.o:
-start 000080e0 end 00008119 length    57 section .text
+start 000080e3 end 0000811c length    57 section .text
 start 000000ae end 00000165 length   183 section .debug
-start 000000a0 end 0000010f length   111 section .info.
+start 0000009d end 0000010e length   113 section .info.
 
 Debug\portdrv.o:
-start 00008119 end 00008192 length   121 section .text
+start 0000811c end 00008195 length   121 section .text
 start 00000165 end 0000021a length   181 section .debug
-start 0000010f end 0000017e length   111 section .info.
+start 0000010e end 0000017f length   113 section .info.
 
 Debug\switch.o:
-start 00008192 end 0000824c length   186 section .text
-start 00000000 end 00000003 length     3 section .ubsct
-start 0000021a end 00000518 length   766 section .debug
-start 0000017e end 000001ec length   110 section .info.
+start 00008195 end 00008238 length   163 section .text
+start 00000000 end 00000015 length    21 section .ubsct
+start 0000021a end 0000068e length  1140 section .debug
+start 0000017f end 000001ef length   112 section .info.
 
-(C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\lib\libm0.sm8)xreg.o:
-start 00000003 end 00000006 length     3 section .ubsct
-start 000001ec end 0000021b length    47 section .info.
+(C:\Program Files (x86)\COSMIC\CXSTM8\Lib\libm0.sm8)xreg.o:
+start 00000015 end 00000018 length     3 section .ubsct
+start 000001ef end 0000021d length    46 section .info.
 
-(C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\lib\libm0.sm8)yreg.o:
-start 00000006 end 00000009 length     3 section .ubsct
-start 0000021b end 0000024a length    47 section .info.
+(C:\Program Files (x86)\COSMIC\CXSTM8\Lib\libm0.sm8)yreg.o:
+start 00000018 end 0000001b length     3 section .ubsct
+start 0000021d end 0000024b length    46 section .info.
 
 Debug\stm8_interrupt_vector.o:
-start 0000824c end 0000824d length     1 section .text
-start 00000518 end 00000683 length   363 section .debug
-start 0000024a end 000002c7 length   125 section .info.
+start 00008238 end 00008239 length     1 section .text
+start 0000068e end 000007f9 length   363 section .debug
+start 0000024b end 000002ca length   127 section .info.
 start 00008000 end 00008080 length   128 section .const
 
 
@@ -72,7 +72,7 @@ start 00008000 end 00008080 length   128 section .const
                              -----------
 
 Debug\main.o:
-_main                  >    4   (2)
+_main                  >    5   (2)
 
 Debug\portdrv.o:
 _PortInit                   2   (2)
@@ -81,12 +81,13 @@ Debug\stm8_interrupt_vector.o:
 f_NonHandledInterrupt  >    6   (6)
 
 Debug\switch.o:
+_SwitchInit                 3   (3)
 _SwitchStatusReadAll        2   (2)
 
 Debug\timer_3.o:
 _Timer3Init                 2   (2)
 
-Stack size: 10
+Stack size: 11
 
 
                               ---------
@@ -96,16 +97,19 @@ Stack size: 10
 
    2 > _main: (2)
    3      + _PortInit: (2)
-   4      + _SwitchStatusReadAll: (2)
-   5      + _Timer3Init: (2)
+   4      + _SwitchInit: (3)
+   5      + _SwitchStatusReadAll: (2)
+   6      + _Timer3Init: (2)
        
-   6 > f_NonHandledInterrupt: (6)
+   7 > f_NonHandledInterrupt: (6)
 
-   7   _PortInit --> 3
+   8   _PortInit --> 3
 
-   8   _SwitchStatusReadAll --> 4
+   9   _SwitchInit --> 4
 
-   9   _Timer3Init --> 5
+  10   _SwitchStatusReadAll --> 5
+
+  11   _Timer3Init --> 6
 
 
 
@@ -113,34 +117,37 @@ Stack size: 10
                                Symbols
                                -------
 
-_PortInit               00008119   defined in Debug\portdrv.o section .text
+_PortInit               0000811c   defined in Debug\portdrv.o section .text
                                    used in Debug\main.o
-_SwitchStatus           00000000   defined in Debug\switch.o section .ubsct
-_SwitchStatusReadAll    00008192   defined in Debug\switch.o section .text
+_Switch                 00000003   defined in Debug\switch.o section .ubsct
+_SwitchInit             00008195   defined in Debug\switch.o section .text
                                    used in Debug\main.o
-_Timer3Init             000080e0   defined in Debug\timer_3.o section .text
+_SwitchStatus           00000001   defined in Debug\switch.o section .ubsct
+_SwitchStatusReadAll    000081b0   defined in Debug\switch.o section .text
+                                   used in Debug\main.o
+_Timer3Init             000080e3   defined in Debug\timer_3.o section .text
                                    used in Debug\main.o
 __endmem                000005ff   defined in command file
                                    *** not used ***
-__endzp                 00000009   defined in command file section .ubsct
-                                   used in C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\lib\crtsi0.sm8
+__endzp                 0000001b   defined in command file section .ubsct
+                                   used in C:\Program Files (x86)\COSMIC\CXSTM8\Lib\crtsi0.sm8
 __idesc__               00008080   defined in linker section .init
-                                   used in C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\lib\crtsi0.sm8
+                                   used in C:\Program Files (x86)\COSMIC\CXSTM8\Lib\crtsi0.sm8
 __memory                00000100   defined in command file section .bss
-                                   used in C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\lib\crtsi0.sm8
+                                   used in C:\Program Files (x86)\COSMIC\CXSTM8\Lib\crtsi0.sm8
 __stack                 000007ff   defined in command file
-                                   used in C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\lib\crtsi0.sm8
+                                   used in C:\Program Files (x86)\COSMIC\CXSTM8\Lib\crtsi0.sm8
 __startmem              00000100   defined in command file section .bss
                                    *** not used ***
-__stext                 00008083   defined in C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\lib\crtsi0.sm8 section .text
+__stext                 00008083   defined in C:\Program Files (x86)\COSMIC\CXSTM8\Lib\crtsi0.sm8 section .text
                                    used in Debug\stm8_interrupt_vector.o
 __vectab                00008000   defined in Debug\stm8_interrupt_vector.o section .const
-_exit                   000080d1   defined in C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\lib\crtsi0.sm8 section .text
-_gucSwitchState         00000002   defined in Debug\switch.o section .ubsct
+_exit                   000080d1   defined in C:\Program Files (x86)\COSMIC\CXSTM8\Lib\crtsi0.sm8 section .text
+_gucSwitchState         00000000   defined in Debug\switch.o section .ubsct
 _main                   000080d3   defined in Debug\main.o section .text
-                                   used in C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\lib\crtsi0.sm8
-c_x                     00000003   defined in (C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\lib\libm0.sm8)xreg.o section .ubsct
-                                   used in C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\lib\crtsi0.sm8
-c_y                     00000006   defined in (C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\lib\libm0.sm8)yreg.o section .ubsct
-                                   used in C:\Program Files (x86)\COSMIC\FSE_Compilers\CXSTM8\lib\crtsi0.sm8
-f_NonHandledInterrupt   0000824c   defined in Debug\stm8_interrupt_vector.o section .text
+                                   used in C:\Program Files (x86)\COSMIC\CXSTM8\Lib\crtsi0.sm8
+c_x                     00000015   defined in (C:\Program Files (x86)\COSMIC\CXSTM8\Lib\libm0.sm8)xreg.o section .ubsct
+                                   used in C:\Program Files (x86)\COSMIC\CXSTM8\Lib\crtsi0.sm8
+c_y                     00000018   defined in (C:\Program Files (x86)\COSMIC\CXSTM8\Lib\libm0.sm8)yreg.o section .ubsct
+                                   used in C:\Program Files (x86)\COSMIC\CXSTM8\Lib\crtsi0.sm8
+f_NonHandledInterrupt   00008238   defined in Debug\stm8_interrupt_vector.o section .text
