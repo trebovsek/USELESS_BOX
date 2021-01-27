@@ -22,8 +22,8 @@
 #define _TIMER_3_H_
 
 #define _TIMER_3_DUTY_IDLE      (UI_16)3000  //Duty Cycle   1,5ms HIGH
-#define _TIMER_3_DUTY_OPEN      (UI_16)4500  //Duty Cycle   1,5ms HIGH
-#define _TIMER_3_DUTY_CLOSE     (UI_16)1000  //Duty Cycle   1,5ms HIGH
+#define _TIMER_3_DUTY_OPEN      (UI_16)5000  //Duty Cycle   1,5ms HIGH
+#define _TIMER_3_DUTY_CLOSE     (UI_16)2200  //Duty Cycle   1,5ms HIGH
 
 
 #define _TIMER_3_DUTY_OFF  (UI_16)0

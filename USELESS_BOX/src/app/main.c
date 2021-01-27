@@ -19,6 +19,7 @@
 #include "../kernel/portdrv.h"
 #include "../sensors/switch.h"
 #include "../drivers/timer_3.h"
+#include "../app/buffer.h"
 
 // ----------------------------------------------------------------------------
 // GLOBAL VARIABLE DEFINITIONS.
@@ -57,7 +58,9 @@ void main()
     SwitchStatusReadAll();
     
     //nekako dati state oz. aktivna stikala v neko vrsto/buffer
-    BufferAddActiveSwitch();
+    BufferAddElement();
     
+    //DeaktivateActiveSwitch();
+
   }
 }
