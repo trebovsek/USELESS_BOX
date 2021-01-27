@@ -74,7 +74,8 @@ void Timer3Init(void)
   TIM3->CCER1 |= 0x10U; //1000*CC2 enable*0001*CC2 enable*
 
   //chanel 2 or 3, above configuration for chanel 1
-  _TIMER_32_PWM_DUTY_SET(_TIMER_3_DUTY_IDLE);
+
+  //_TIMER_32_PWM_DUTY_SET(_TIMER_3_DUTY_IDLE);
 
 }
 
