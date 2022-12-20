@@ -55,7 +55,7 @@ void main()
   
 	while (1)
   {
-    SwitchStatusReadAll();
+    SwitchStatusReadAll(); 
     
     //nekako dati state oz. aktivna stikala v neko vrsto/buffer
     BufferAddElement();
