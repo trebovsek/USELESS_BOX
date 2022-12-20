@@ -76,13 +76,13 @@ void SwitchStatusReadAll(void)
     Switch[SWITCH_1].SwitchState = SWITCH_STATE_OFF;
     Switch[SWITCH_1].SwitchingOFF = SWITCHING_OFF_IDLE;
     
-    //_TIMER_3_PWM_DUTY_SET(_TIMER_3_DUTY_CLOSE); //1ms [OK]
+    _TIMER_3_PWM_DUTY_SET(_TIMER_3_DUTY_CLOSE); //1ms [OK]
   }
   else
   {
     Switch[SWITCH_1].SwitchState = SWITCH_STATE_ON;
     Switch[SWITCH_1].SwitchingOFF = SWITCHING_OFF_REQUEST;
-    //_TIMER_3_PWM_DUTY_SET(_TIMER_3_DUTY_OPEN); //1ms [OK]
+    _TIMER_3_PWM_DUTY_SET(_TIMER_3_DUTY_OPEN); //1ms [OK]
   }
   
   //SWITCH 2 [OK]
