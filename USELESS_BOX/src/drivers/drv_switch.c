@@ -28,9 +28,10 @@ static const switch_s_t stSwitch[SWITCH_ALL] = {
   {GPIOB, 3},   //SWITCH_ID_5
   {GPIOE, 7},   //SWITCH_ID_6
   {GPIOB, 6},   //SWITCH_ID_7
-  {GPIOB, 1}    //SWITCH_ID_8
-};
+  {GPIOB, 1},   //SWITCH_ID_8
+  {GPIOB, 5}    //SWITCH_ID_9
 
+};
 
 void drv_switch_init(void)
 {
