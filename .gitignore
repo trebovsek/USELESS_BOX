@@ -1,0 +1,12 @@
+/USELESS_BOX/Debug/*.elf
+/USELESS_BOX/Debug/*.lkf
+/USELESS_BOX/Debug/*.ls
+/USELESS_BOX/Debug/*.map
+/USELESS_BOX/Debug/*.o
+/USELESS_BOX/Debug/*.s19
+/USELESS_BOX/Debug/*.sm8
+/USELESS_BOX/Release/*.elf
+/USELESS_BOX/Release/*.lkf
+/USELESS_BOX/Release/*.o
+/USELESS_BOX/Release/*.s19
+/USELESS_BOX/Release/*.sm8
