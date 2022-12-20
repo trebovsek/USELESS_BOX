@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "types.h": "c",
+        "app_switch.h": "c",
+        "stdint.h": "c"
+    }
+}

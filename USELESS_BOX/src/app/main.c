@@ -17,8 +17,13 @@
 #include "../kernel/macros.h"
 #include "../kernel/stm8s_map.h"
 #include "../kernel/portdrv.h"
-#include "../sensors/switch.h"
 #include "../drivers/timer_3.h"
+
+#include "../app/app_switch.h"
+
+#include "../drivers/drv_switch.h"
+#include "../drivers/drv_arm_motor.h"
+
 
 // ----------------------------------------------------------------------------
 // GLOBAL VARIABLE DEFINITIONS.
@@ -45,16 +50,20 @@ void main()
 	//disable interrupts
   sim();
 	
-  PortInit();
+  drv_switch_init();
+  drv_arm_motor_init();
+
+  //PortInit();
   Timer3Init();
-  SwitchInit();
+  //SwitchInit();
   
 	//enable interrupts
   rim();
   
 	while (1)
   {
-    SwitchStatusReadAll(); 
+    app_switch_handle();
+    //SwitchStatusReadAll(); 
     
     //nekako dati state oz. aktivna stikala v neko vrsto/buffer
     //BufferAddElement();
