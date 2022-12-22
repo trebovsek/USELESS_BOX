@@ -54,7 +54,7 @@ void main()
   drv_arm_motor_init();
 
   //PortInit();
-  Timer3Init();
+  timer_3_init();
   //SwitchInit();
   
 	//enable interrupts

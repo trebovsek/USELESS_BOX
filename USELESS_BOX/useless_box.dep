@@ -4,20 +4,44 @@
 Keyword=ST7Project
 Number=1.3
 
-[Root.app (source).src\app\buffer.c.Config.0]
-ExternDep= src\app\buffer.c  "C:\Program Files (x86)\COSMIC\CXSTM8\Hstm8\mods0.h"  src\app\../kernel/types.h src\app\../kernel/stm8s_map.h  src\app\../kernel/stm8s_conf.h src\app\../kernel/stm8s_macro.h  src\app\../sensors/switch.h
+[Root.app (source).src\app\app_switch.c.Config.0]
+ExternDep= src\app\app_switch.c  "C:\Program Files (x86)\COSMIC\CXSTM8\Hstm8\mods0.h" src\app\../common.h  src\app\../kernel/types.h src\app\../drivers/timer_3.h  src\app\../drivers/drv_switch.h src\app\../app/app_switch.h
+
+[Root.app (source).src\app\arm.c.Config.0]
+ExternDep= src\app\arm.c "C:\Program Files (x86)\COSMIC\CXSTM8\Hstm8\mods0.h"
+
+[Root.app (source).src\app\door.c.Config.0]
+ExternDep= src\app\door.c  "C:\Program Files (x86)\COSMIC\CXSTM8\Hstm8\mods0.h"
 
 [Root.app (source).src\app\main.c.Config.0]
+ExternDep= src\app\main.c  "C:\Program Files (x86)\COSMIC\CXSTM8\Hstm8\mods0.h"  src\app\../kernel/stm8s_map.h src\app\../kernel/stm8s_conf.h  src\app\../kernel/types.h src\app\../kernel/stm8s_macro.h  src\app\../kernel/portdrv.h src\app\../kernel/macros.h  src\app\../drivers/timer_3.h src\app\../app/app_switch.h  src\app\../drivers/drv_switch.h src\app\../drivers/drv_arm_motor.h
+
+[Root.app (source).src\app\main.c.Config.1]
 ExternDep= src\app\main.c  "C:\Program Files (x86)\COSMIC\CXSTM8\Hstm8\mods0.h"  src\app\../kernel/stm8s_map.h src\app\../kernel/stm8s_conf.h  src\app\../kernel/types.h src\app\../kernel/stm8s_macro.h  src\app\../kernel/portdrv.h src\app\../kernel/macros.h  src\app\../sensors/switch.h src\app\../drivers/timer_3.h  src\app\../app/buffer.h
 
+[Root.drivers (source).src\drivers\drv_arm_motor.c.Config.0]
+ExternDep= src\drivers\drv_arm_motor.c  "C:\Program Files (x86)\COSMIC\CXSTM8\Hstm8\mods0.h"
+
+[Root.drivers (source).src\drivers\drv_door_motor.c.Config.0]
+ExternDep= src\drivers\drv_door_motor.c  "C:\Program Files (x86)\COSMIC\CXSTM8\Hstm8\mods0.h"
+
+[Root.drivers (source).src\drivers\drv_switch.c.Config.0]
+ExternDep= src\drivers\drv_switch.c  "C:\Program Files (x86)\COSMIC\CXSTM8\Hstm8\mods0.h"  src\app\../kernel/macros.h src\app\../kernel/stm8s_map.h  src\app\../kernel/stm8s_conf.h src\app\../kernel/types.h  src\app\../kernel/stm8s_macro.h src\app\../common.h  src\app\../drivers/drv_switch.h
+
 [Root.drivers (source).src\drivers\timer_3.c.Config.0]
+ExternDep= src\drivers\timer_3.c  "C:\Program Files (x86)\COSMIC\CXSTM8\Hstm8\mods0.h"  src\app\../kernel/stm8s_map.h src\app\../kernel/stm8s_conf.h  src\app\../kernel/types.h src\app\../kernel/stm8s_macro.h  src\app\../drivers/timer_3.h src\app\../kernel/kernel.h
+
+[Root.drivers (source).src\drivers\timer_3.c.Config.1]
 ExternDep= src\drivers\timer_3.c  "C:\Program Files (x86)\COSMIC\CXSTM8\Hstm8\mods0.h"  src\app\../kernel/stm8s_map.h src\app\../kernel/stm8s_conf.h  src\app\../kernel/types.h src\app\../kernel/stm8s_macro.h  src\app\../drivers/timer_3.h src\app\../kernel/kernel.h
 
 [Root.kernel (source).src\kernel\portdrv.c.Config.0]
 ExternDep= src\kernel\portdrv.c  "C:\Program Files (x86)\COSMIC\CXSTM8\Hstm8\mods0.h"  src\app\../kernel/types.h src\app\../kernel/macros.h  src\app\../kernel/stm8s_map.h src\app\../kernel/stm8s_conf.h  src\app\../kernel/stm8s_macro.h src\app\../kernel/portdrv.h
 
+[Root.kernel (source).src\kernel\portdrv.c.Config.1]
+ExternDep= src\kernel\portdrv.c  "C:\Program Files (x86)\COSMIC\CXSTM8\Hstm8\mods0.h"  src\app\../kernel/types.h src\app\../kernel/macros.h  src\app\../kernel/stm8s_map.h src\app\../kernel/stm8s_conf.h  src\app\../kernel/stm8s_macro.h src\app\../kernel/portdrv.h
+
 [Root.kernel (source).src\kernel\stm8_interrupt_vector.c.Config.0]
 ExternDep= src\kernel\stm8_interrupt_vector.c  "C:\Program Files (x86)\COSMIC\CXSTM8\Hstm8\mods0.h"
 
-[Root.sensors (source).src\sensors\switch.c.Config.0]
-ExternDep= src\sensors\switch.c  "C:\Program Files (x86)\COSMIC\CXSTM8\Hstm8\mods0.h"  src\app\../kernel/types.h src\app\../kernel/stm8s_map.h  src\app\../kernel/stm8s_conf.h src\app\../kernel/stm8s_macro.h  src\app\../kernel/macros.h src\app\../kernel/portdrv.h  src\app\../sensors/switch.h src\app\../drivers/timer_3.h
+[Root.kernel (source).src\kernel\stm8_interrupt_vector.c.Config.1]
+ExternDep= src\kernel\stm8_interrupt_vector.c  "C:\Program Files (x86)\COSMIC\CXSTM8\Hstm8\mods0.h"

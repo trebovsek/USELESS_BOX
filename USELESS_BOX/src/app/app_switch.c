@@ -11,8 +11,7 @@
 
 #include "../common.h"
 #include "../kernel/types.h"
-
-
+#include "../drivers/timer_3.h"
 #include "../drivers/drv_switch.h"
 #include "../app/app_switch.h"
 
@@ -44,6 +43,30 @@ void app_switch_handle(void)
     for (switch_id = 0; switch_id < SWITCH_ALL; switch_id++)
     {
         //read switch status
-        stSwitch[switch_id].state_cur = drv_switch_status(switch_id);
+        stSwitch[switch_id].state_cur = (switch_state_e_t)drv_switch_status(switch_id);
+    }
+
+    /* test of arm handle */
+    if (stSwitch[SWITCH_ID_1].state_cur == SWITCH_STATE_ON)
+    {
+        //lid_open
+        timer_door_pwm_set(_TIMER_3_DUTY_OPEN);   
+    }
+    else
+    {
+        //lid_close
+        timer_door_pwm_set(_TIMER_3_DUTY_CLOSE);
+    }
+
+    /* test of arm handle */
+    if (stSwitch[SWITCH_ID_2].state_cur == SWITCH_STATE_ON)
+    {
+        //arm_close
+        timer_arm_pwm_set(_TIMER_DUTY_OPEN);
+    }
+    else
+    {
+        //lid_open
+        timer_arm_pwm_set(_TIMER_DUTY_CLOSE);
     }
 }
