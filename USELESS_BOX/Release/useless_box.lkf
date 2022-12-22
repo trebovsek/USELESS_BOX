@@ -58,7 +58,6 @@ Release\drv_arm_motor.o
 Release\drv_door_motor.o
 Release\drv_switch.o
 Release\timer_3.o
-Release\portdrv.o
 #<END OBJECT_FILES>
 
 

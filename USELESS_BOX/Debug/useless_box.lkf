@@ -58,7 +58,6 @@ Debug\drv_arm_motor.o
 Debug\drv_door_motor.o
 Debug\drv_switch.o
 Debug\timer_3.o
-Debug\portdrv.o
 #<END OBJECT_FILES>
 
 

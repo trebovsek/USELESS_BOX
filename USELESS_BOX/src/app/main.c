@@ -12,18 +12,15 @@
 // ----------------------------------------------------------------------------
 
 #include "../kernel/stm8s_map.h"
-#include "../kernel/portdrv.h"
 #include "../kernel/types.h"
 #include "../kernel/macros.h"
 #include "../kernel/stm8s_map.h"
-#include "../kernel/portdrv.h"
+
 #include "../drivers/timer_3.h"
-
-#include "../app/app_switch.h"
-
 #include "../drivers/drv_switch.h"
 #include "../drivers/drv_arm_motor.h"
 
+#include "../app/app_switch.h"
 
 // ----------------------------------------------------------------------------
 // GLOBAL VARIABLE DEFINITIONS.
