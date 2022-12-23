@@ -54,6 +54,7 @@ Release\app_switch.o
 Release\arm.o
 Release\door.o
 Release\main.o
+Release\drv_stepper.o
 Release\drv_arm_motor.o
 Release\drv_door_motor.o
 Release\drv_switch.o

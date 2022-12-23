@@ -26,6 +26,32 @@ typedef enum _switch_id_e_t
     SWITCH_ALL      = 9u
 }switch_id_e_t;
 
+typedef enum _stepper_e_t
+{
+    STEPPER_INFO_STEP   = 0u,
+    STEPPER_INFO_DIR    = 1u,
+    STEPPER_INFO_ENABLE = 2u,
+    STEPPER_INFO_ALL    = 3u
+}stepper_e_t;
+
+typedef enum _stepper_dir_e_t
+{
+    STEPPER_DIR_CW  = 0u,
+    STEPPER_DIR_CCW = 1u
+}stepper_dir_e_t;
+
+typedef enum _stepper_step_e_t
+{
+    STEPPER_STEP_OFF    = 0u,
+    STEPPER_STEP_ON     = 1u
+}steepper_step_e_t;
+
+typedef enum _stepper_enable_e_t
+{
+    STEPPER_DISABLED    = 0u,
+    STEPPER_ENABLED     = 1u
+}stepper_enable_e_t;
+
 typedef enum _switch_state_e_t
 {
     SWITCH_STATE_OFF    = 0u,

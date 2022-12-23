@@ -14,13 +14,13 @@
 #include "../common.h"
 #include "../drivers/drv_switch.h"
 
-typedef struct _switch_s_t
+typedef struct _port_pin_s_t
 {
     GPIO_TypeDef *p_port;
     int pin;
-}switch_s_t;
+}port_pin_s_t;
 
-static const switch_s_t stSwitch[SWITCH_ALL] = {
+static const port_pin_s_t stSwitch[SWITCH_ALL] = {
   {GPIOB, 0},   //SWITCH_ID_1
   {GPIOE, 6},   //SWITCH_ID_2
   {GPIOB, 4},   //SWITCH_ID_3
@@ -38,9 +38,9 @@ void drv_switch_init(void)
     int switch_id = 0;
     for (switch_id = 0; switch_id < SWITCH_ALL; switch_id++)
     {
-        _UC_BRES(stSwitch[switch_id].p_port->DDR, stSwitch[switch_id].pin);     //INPUT
-        _UC_BSET(stSwitch[switch_id].p_port->CR1, stSwitch[switch_id].pin);     //PUUL-UP
-        _UC_BRES(stSwitch[switch_id].p_port->CR2, stSwitch[switch_id].pin);    //NO INTERRUPT
+        _UC_BRES(stSwitch[switch_id].p_port->DDR, stSwitch[switch_id].pin); //INPUT
+        _UC_BSET(stSwitch[switch_id].p_port->CR1, stSwitch[switch_id].pin); //PUUL-UP
+        _UC_BRES(stSwitch[switch_id].p_port->CR2, stSwitch[switch_id].pin); //NO INTERRUPT
     }
 }
 

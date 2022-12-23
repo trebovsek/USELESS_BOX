@@ -440,7 +440,7 @@ PathName=src\app\main.c
 [Root.drivers (header)]
 ElemType=Folder
 PathName=drivers (header)
-Child=Root.drivers (header).src\drivers\drv_arm_motor.h
+Child=Root.drivers (header).src\drivers\drv_stepper.h
 Next=Root.drivers (source)
 Config.0=Root.drivers (header).Config.0
 Config.1=Root.drivers (header).Config.1
@@ -511,6 +511,11 @@ String.4.0=
 String.5.0=
 String.6.0=2019,10,25,9,18,25
 
+[Root.drivers (header).src\drivers\drv_stepper.h]
+ElemType=File
+PathName=src\drivers\drv_stepper.h
+Next=Root.drivers (header).src\drivers\drv_arm_motor.h
+
 [Root.drivers (header).src\drivers\drv_arm_motor.h]
 ElemType=File
 PathName=src\drivers\drv_arm_motor.h
@@ -533,7 +538,7 @@ PathName=src\drivers\timer_3.h
 [Root.drivers (source)]
 ElemType=Folder
 PathName=drivers (source)
-Child=Root.drivers (source).src\drivers\drv_arm_motor.c
+Child=Root.drivers (source).src\drivers\drv_stepper.c
 Next=Root.kernel (header)
 Config.0=Root.drivers (source).Config.0
 Config.1=Root.drivers (source).Config.1
@@ -604,6 +609,11 @@ String.4.0=
 String.5.0=
 String.6.0=2019,10,25,9,18,25
 
+[Root.drivers (source).src\drivers\drv_stepper.c]
+ElemType=File
+PathName=src\drivers\drv_stepper.c
+Next=Root.drivers (source).src\drivers\drv_arm_motor.c
+
 [Root.drivers (source).src\drivers\drv_arm_motor.c]
 ElemType=File
 PathName=src\drivers\drv_arm_motor.c
@@ -626,7 +636,7 @@ PathName=src\drivers\timer_3.c
 [Root.kernel (header)]
 ElemType=Folder
 PathName=kernel (header)
-Child=Root.kernel (header).src\kernel\portdrv.h
+Child=Root.kernel (header).src\kernel\stm8s_conf.h
 Next=Root.kernel (source)
 Config.0=Root.kernel (header).Config.0
 Config.1=Root.kernel (header).Config.1
@@ -697,11 +707,6 @@ String.4.0=
 String.5.0=
 String.6.0=2019,10,25,9,18,25
 
-[Root.kernel (header).src\kernel\portdrv.h]
-ElemType=File
-PathName=src\kernel\portdrv.h
-Next=Root.kernel (header).src\kernel\stm8s_conf.h
-
 [Root.kernel (header).src\kernel\stm8s_conf.h]
 ElemType=File
 PathName=src\kernel\stm8s_conf.h
@@ -724,7 +729,7 @@ PathName=src\kernel\types.h
 [Root.kernel (source)]
 ElemType=Folder
 PathName=kernel (source)
-Child=Root.kernel (source).src\kernel\portdrv.c
+Child=Root.kernel (source).src\kernel\stm8_interrupt_vector.c
 Config.0=Root.kernel (source).Config.0
 Config.1=Root.kernel (source).Config.1
 
@@ -793,11 +798,6 @@ String.3.0=
 String.4.0=
 String.5.0=
 String.6.0=2019,10,25,9,18,25
-
-[Root.kernel (source).src\kernel\portdrv.c]
-ElemType=File
-PathName=src\kernel\portdrv.c
-Next=Root.kernel (source).src\kernel\stm8_interrupt_vector.c
 
 [Root.kernel (source).src\kernel\stm8_interrupt_vector.c]
 ElemType=File
