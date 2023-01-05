@@ -48,7 +48,7 @@ void app_switch_handle(void)
         stSwitch[switch_id].state_cur = (switch_state_e_t)drv_switch_status(switch_id);
     }
 
-    /* test of arm handle */
+    /* test of lid handle */
     if (stSwitch[SWITCH_ID_1].state_cur == SWITCH_STATE_ON)
     {
         //lid_open
@@ -68,7 +68,7 @@ void app_switch_handle(void)
     }
     else
     {
-        //lid_open
+        //arm_open
         timer_arm_pwm_set(_TIMER_DUTY_CLOSE);
     }
 
