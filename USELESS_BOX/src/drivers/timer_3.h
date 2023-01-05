@@ -19,16 +19,14 @@
 #ifndef _TIMER_3_H_
 #define _TIMER_3_H_
 
-#define _TIMER_3_DUTY_IDLE      (UI_16)3000  //Duty Cycle   1,5ms HIGH
-#define _TIMER_3_DUTY_OPEN      (UI_16)5000  //Duty Cycle   1,5ms HIGH
-#define _TIMER_3_DUTY_CLOSE     (UI_16)2200  //Duty Cycle   1,5ms HIGH
+#define _TIMER_3_DUTY_IDLE      (UI_16)3000
+#define _TIMER_3_DUTY_OPEN      (UI_16)5000
+#define _TIMER_3_DUTY_CLOSE     (UI_16)2200
 
 #define _TIMER_DUTY_IDLE      (UI_16)3000
 #define _TIMER_DUTY_OPEN      (UI_16)4200
 #define _TIMER_DUTY_CLOSE     (UI_16)2100
 
-#define _TIMER_3_PWM_FREQ_SET(uiPwmFr) \
-      TIM3->ARRH = (UC_8)(uiPwmFr >> 8U); TIM3->ARRL = (UC_8)(uiPwmFr & 0x00FFU)
 #define _TIMER_3_PWM_DUTY_SET(uiPwm) \
         TIM3->CCR1H =(UC_8)(uiPwm >> 8U);  TIM3->CCR1L = (UC_8)(uiPwm & 0x00FFU)
 
@@ -42,8 +40,5 @@
 extern void timer_3_init(void);
 extern void timer_door_pwm_set(UI_16 timer_duty);
 extern void timer_arm_pwm_set(UI_16 timer_duty);
-// ----------------------------------------------------------------------------
-// CONTROL REGISTER(S)INITIALIZATION VALUES
-// ----------------------------------------------------------------------------
 
 #endif //_TIMER_3_H

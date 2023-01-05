@@ -1,5 +1,5 @@
 [Last Settings]
-Hardware=RLINK
+Hardware=ST-LINK
 PROTOCOL=SWIM
 Port=USB
 DEVICE=STM8S105x6

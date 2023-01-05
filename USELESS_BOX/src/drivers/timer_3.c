@@ -22,21 +22,34 @@
 
 void timer_3_init(void)
 {
-  // Select the PWM mode in up-counting mode
-  // Set the timer in order to output a PWM signal on CC1 (several registers have to be set)
-  TIM3->CCMR1 = 0x68U;
+  //TIM3_CH1 on port D2 [PD2] - DOOR!
+  //Capture/compare mode register 1 (TIMx_CCMR1)
+  TIM3->CCMR1 |= 0x08U;   //OC1PE: Output compare 1 preload enable
+  TIM3->CCMR1 |= 0x60U;   //OC1M[2:0]: Output compare 1 mode -> (110) pwm mode
   
-  //Duty cycles
+  //TIM3_CH2 on port D0 [PD0] - ARM!
+  //Capture/compare mode register 2 (TIMx_CCMR2)
+  TIM3->CCMR2 |= 0x08U;   //OC2PE: Output compare 2 preload enable
+  TIM3->CCMR2 |= 0x60U;   //OC2M[2:0]: Output compare 2 mode -> (110) pwm mode
+  
+  //Duty cycles 
+  //Capture/compare register 1 high and low (TIMx_CCR1H and TIMx_CCR1L)
   TIM3->CCR1H = 0x00U; 
   TIM3->CCR1L = 0x00U;
 
-  TIM3->CCER1 = 0x01U;
+  //Capture/compare register 2 high and low (TIMx_CCR2H and TIMx_CCR2L)
+  TIM3->CCR2H = 0x00U; 
+  TIM3->CCR2L = 0x00U;
 
-  //Enable TIM3 peripheral Preload register on ARR
-  TIM3->CR1 |= 0x80U;
+  //Capture/compare enable register 1 (TIMx_CCER1)
+  TIM3->CCER1 |= 0x01U;   //CC1E: Capture/Compare 1 output Enable.
+  TIM3->CCER1 |= 0x10U;   //CC2E: Capture/compare 2 output enable
+
+  TIM3->CR1 |= 0x80U;     //ARPE: Auto-reload preload enable
 
   // load the value for the frequency in ARR
-  _TIMER_3_PWM_FREQ_SET(_TIMER_3_ARR); //s tem nastavim frekvenco
+  TIM3->ARRH = (UC_8)(_TIMER_3_ARR >> 8U);      //ARR[15:8]: Auto-reload value (MSB)
+  TIM3->ARRL = (UC_8)(_TIMER_3_ARR & 0x00FFU);  //ARR[7:0]: Auto-reload value (LSB)
 
   //Select the Counter Mode
   TIM3->CR1 &= (UC_8)~0x10U; // up-counting mode
@@ -46,9 +59,6 @@ void timer_3_init(void)
   
   //Counter Enable
   TIM3->CR1 |= 0x01U;
-  
-  TIM3->CCMR2 = 0x68U;  //0/*reserved*/110/*PWM mode1*/1/*preload register enabe*/0/*no fast OC*/00
-  TIM3->CCER1 |= 0x10U; //1000*CC2 enable*0001*CC2 enable*
 }
 
 extern void timer_door_pwm_set(UI_16 timer_duty)
